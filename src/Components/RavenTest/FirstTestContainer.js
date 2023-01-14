@@ -9,20 +9,22 @@ import { useState } from 'react';
 import FirstTestHeader from './FirstTestHeader';
 import FirstTestInstructions from './FirstTestInstructions';
 import FirstTest from './FirstTest';
+import FirstTestResult from './FirstTestResult';
 
 const theme = crtcTheme();
 
 export default function FirstTestContainer() {
-  const quizStates = ['instructions', 'quiz', 'result']; {/* For Reference; these aren't used as enums */}
-  const [quizScreen, setQuizScreen] = useState('instructions');
+  // eslint-disable-next-line no-lone-blocks
+  const quizStates = ['instructions', 'quiz', 'result']; {/* For Reference; these aren't used as enums */ }
+  const [quizScreen, setQuizScreen] = useState('result');
 
   function renderBasedOnState(){
     if (quizScreen === 'instructions')
       return <FirstTestInstructions setQuizScreen={setQuizScreen} />
     else if (quizScreen === 'quiz')
       return <FirstTest />
-    else if (quizScreen ===' result')
-      return <h1>RESULT</h1>
+    else if (quizScreen === 'result')
+      return <FirstTestResult />
   }
 
   return (
