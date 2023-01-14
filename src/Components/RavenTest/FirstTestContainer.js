@@ -5,12 +5,26 @@ import { CssBaseline, Grid, Typography } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import StyledEngineProvider from "@mui/material/StyledEngineProvider";
-import TimerOutlinedIcon from '@mui/icons-material/TimerOutlined';
-import Button from '@mui/material/Button';
+import { useState } from 'react';
+import FirstTestHeader from './FirstTestHeader';
+import FirstTestInstructions from './FirstTestInstructions';
+import FirstTest from './FirstTest';
 
 const theme = crtcTheme();
 
 export default function FirstTestContainer() {
+  const quizStates = ['instructions', 'quiz', 'result']; {/* For Reference; these aren't used as enums */}
+  const [quizScreen, setQuizScreen] = useState('instructions');
+
+  function renderBasedOnState(){
+    if (quizScreen === 'instructions')
+      return <FirstTestInstructions setQuizScreen={setQuizScreen} />
+    else if (quizScreen === 'quiz')
+      return <FirstTest />
+    else if (quizScreen ===' result')
+      return <h1>RESULT</h1>
+  }
+
   return (
     <StyledEngineProvider injectFirst>
       <ThemeProvider theme={theme}>
@@ -18,24 +32,8 @@ export default function FirstTestContainer() {
         <Box display="flex" sx={{minHeight: '100vh', width: '100%' }}> {/* Body start */}
 
           <Grid container display='flex' direction='column'>
-
-            <Grid item sx={{order:1}}>
-              <AppBar className='crtcHeader'>
-                <Typography component='h1' variant='h6'>Creative Reasoning Test</Typography>
-
-                <Box sx={{ flexGrow: 0.98 }} />
-
-                <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '6px', mr: '10px' }}>
-                  <TimerOutlinedIcon />
-                  <Typography component='h1' variant='h6' id='testTimer'>480s</Typography>
-                </Box>
-              </AppBar>
-            </Grid>
-
-
-            <Grid item flexGrow={1} sx={{order:2}}>
-              <Box className='genericContainer'>Content here lmao</Box>
-            </Grid>
+            <FirstTestHeader />
+            {renderBasedOnState()}
 
           </Grid>
         </Box> {/* Body end */}
