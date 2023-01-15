@@ -16,7 +16,7 @@ const theme = crtcTheme();
 export default function FirstTestContainer() {
   // eslint-disable-next-line no-lone-blocks
   const quizStates = ['instructions', 'quiz', 'result']; {/* For Reference; these aren't used as enums */ }
-  const [quizScreen, setQuizScreen] = useState('result');
+  const [quizScreen, setQuizScreen] = useState('instructions');
 
   function renderBasedOnState(){
     if (quizScreen === 'instructions')

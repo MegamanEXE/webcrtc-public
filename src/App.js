@@ -7,6 +7,7 @@ import LayoutTest from "./Components/LayoutTest";
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
 import "@fontsource/roboto";
+import AdminContainer from "./Components/Admin/AdminContainer";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           <Route path="/ForgotPassword" element={<ForgotPassword />} />
           <Route path="/FirstTest" element={<FirstTest />} />
           <Route path="/FirstTestContainer" element={<FirstTestContainer />} />
+          <Route path="/Admin" element={<AdminContainer />} />
           <Route path="/LayoutTest" element={<LayoutTest />} />
         </Routes>
       </BrowserRouter>
