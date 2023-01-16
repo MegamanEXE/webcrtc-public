@@ -71,7 +71,7 @@ export default function AdminContainer() {
             </Toolbar>
           </AppBar>
 
-          {/* MENU */}
+          {/* SIDEBAR */}
           <Drawer
             sx={{width: drawerWidth, 
               flexShrink: 0, 

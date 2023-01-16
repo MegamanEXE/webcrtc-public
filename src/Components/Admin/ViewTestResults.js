@@ -1,8 +1,6 @@
+/* eslint-disable no-lone-blocks */
 import Box from '@mui/material/Box';
-import { Button, Typography } from '@mui/material';
-import { ThemeProvider } from '@mui/material/styles';
-import Drawer from '@mui/material/Drawer';
-import CssBaseline from '@mui/material/CssBaseline';
+import Typography from '@mui/material/Typography';
 import { DataGrid, GridToolbar, GridToolbarContainer, GridToolbarColumnsButton, GridToolbarFilterButton, GridToolbarDensitySelector, GridToolbarQuickFilter } from '@mui/x-data-grid';
 import mockResultData from '../../data/mockTestResults.json'
 import { Link } from 'react-router-dom';
@@ -43,6 +41,7 @@ export default function ViewTestResults() {
   ]
   return (
     <Box className='ViewResultsContainer'>
+      <Typography variant="h6">View Test Results</Typography>
       <Box height={'84vh'} sx={{'& .MuiDataGrid-columnHeaderTitle':{fontWeight:600} }}>
         <DataGrid 
           rows={mockResultData} 

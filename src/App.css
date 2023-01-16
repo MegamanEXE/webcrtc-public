@@ -260,10 +260,37 @@ body {
   font-weight: bold;
 }
 
-.ViewResultsContainer a,
+.viewResultsContainer a,
 a:visited,
 a:hover,
 a:active {
   color: inherit;
+}
+
+.clientsContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+}
+
+.listSubheader{
+  background-color:#1E1E1E;
+  padding: 1.5%;
+}
+
+.listShadow{
+  background: #FFFFFF;
+ 
+  box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px rgba(0, 0, 0, 0.14), 0px 1px 3px rgba(0, 0, 0, 0.12);
+  border-radius: 4px;
+}
+
+.userDetailsCard {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  background: #FFFFFF;
 }
 
