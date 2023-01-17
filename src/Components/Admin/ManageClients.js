@@ -13,10 +13,14 @@ import { useEffect, useState } from 'react';
 import { styled } from '@mui/material/styles';
 
 import mockUserData from '../../data/mockUserData.json'
+import { json, Link } from 'react-router-dom';
 
 export default function ManageClients() {
   let clients = [`Dexter's Lab`, 'Bare Bears', 'Amazing World', 'Gravity Falls'];
   const candidatesSTATIC = ['Dexter', 'Dee Dee', 'Mandark'];
+
+
+  const [DATA, setDATA] = useState([]);
 
   const [selectedClient, setSelectedClient] = useState("");
   const [stateClients, setStateClients] = useState([]);
@@ -24,6 +28,10 @@ export default function ManageClients() {
   const [addClientTextField, setAddClientTextField] = useState('');
   const [selectedUser, setSelectedUser] = useState({}); {/* uses the entire data row */}
 
+  //Read data from whereever
+  useEffect(()=>{
+    setDATA(mockUserData);
+  },[]);
 
   const handleListItemClick = (client) => {
     setSelectedClient(client);
@@ -65,32 +73,62 @@ export default function ManageClients() {
   //Returns unique client names from JSON data
   useEffect(()=>{
     const generateClientNames = () => {
-      return [...new Set(mockUserData.map(d => d['client']))]
+      return [...new Set(DATA.map(d => d['client']))]
     }
 
     setStateClients(generateClientNames());
-  },[]);
+  },[DATA]);
 
   //Returns users under selected client name
   useEffect(()=>{
     const generateCandidates = () => {
-      let c = mockUserData.filter((r) => r["client"] === selectedClient);
-      return c;
+      return DATA.filter((r) => r["client"] === selectedClient);
     }
     setCandidates(generateCandidates());
-  },[candidates, selectedClient]);
+  },[candidates, selectedClient, DATA]);
 
   const generateCandidatesList = () => {
     return candidates.map((c)=><ListItemButton key={c["id"]} onClick={()=>setSelectedUser(c)}>{c["name"]}</ListItemButton>);
   }
 
+  // TODO: Problem child, test-IDs annoyed JSON.parse()
+  const generateDetails = () => {
+    return <TableBody>
+      <TableRow>
+        <TableCell align='right' style={{ width: '35%', fontWeight: 'bold' }}>Age:</TableCell>
+        <TableCell>{selectedUser["age"]}</TableCell>
+      </TableRow>
+      <TableRow>
+        <TableCell align='right' style={{ width: '35%', fontWeight: 'bold' }}>Occupation:</TableCell>
+        <TableCell>{selectedUser["occupation"]}</TableCell>
+      </TableRow>
+      <TableRow>
+        <TableCell align='right' style={{ width: '35%', fontWeight: 'bold' }}>Education Level:</TableCell>
+        <TableCell>{selectedUser["education-level"]}</TableCell>
+      </TableRow>
+      <TableRow>
+        <TableCell align='right' style={{ width: '35%', fontWeight: 'bold' }}>Country:</TableCell>
+        <TableCell>{selectedUser["country"]}</TableCell>
+      </TableRow>
+      <TableRow>
+        <TableCell align='right' style={{ width: '35%', fontWeight: 'bold' }}>Test IDs:</TableCell>
+        <TableCell>{selectedUser["test-IDs"]}</TableCell> 
+      </TableRow>
+    </TableBody>
+  }
+  
+  const deleteCurrentUser = () => {
+    console.log(`Deleting ${selectedUser["name"]}`);
+    setDATA(DATA.filter(r=>r["id"]!==selectedUser["id"]));
+  }
+
   return (
     <Box className='clientsContainer'>
       <Typography variant="h6">Manage Clients</Typography>
-      
+  
       <Box width='100%' height="83.4vh" display='flex' flexDirection='row' gap={2} >
       {/* LIST 1 */}
-        <Box display='flex' flexDirection='column' flexGrow='0.7'  >
+        <Box display='flex' flexDirection='column' width="30%"  >
 
           <List
             className='listShadow'
@@ -119,7 +157,7 @@ export default function ManageClients() {
         </Box>
         
         {/* LIST 2 */}
-        <Box display='flex' flexGrow='1'>
+        <Box display='flex' width="30%">
           <List
             className='listShadow'
             sx={{ width: '100%', overflow:'auto' }}
@@ -134,40 +172,19 @@ export default function ManageClients() {
         </Box>
 
         {/* LIST 3 */}
-        <Box display='flex' flexGrow='1.5' className='userDetailsCard'>
+        <Box display='flex' width="30%" className='userDetailsCard'>
           <Card sx={{width:'100%'}} >
-            <CardHeader title="Dexter" />
+            <CardHeader title={selectedUser["name"]} />
             <CardContent>
               <TableContainer>
                 <Table size='small' sx={{ '& .MuiTableCell-root': { border: 0, py:0.2, px:0.5 } }}>
-                  <TableBody>
-                    <TableRow>
-                      <TableCell align='right' style={{ width: '35%', fontWeight: 'bold' }}>Age:</TableCell>
-                      <TableCell>10</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell align='right' style={{ width: '35%', fontWeight: 'bold' }}>Occupation:</TableCell>
-                      <TableCell>Student/Scientist</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell align='right' style={{ width: '35%', fontWeight: 'bold' }}>Education Level:</TableCell>
-                      <TableCell>Grades 1-6</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell align='right' style={{ width: '35%', fontWeight: 'bold' }}>Country:</TableCell>
-                      <TableCell>America</TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell align='right' style={{ width: '35%', fontWeight: 'bold' }}>Test IDs:</TableCell>
-                      <TableCell>1, 2, 3</TableCell>
-                    </TableRow>
-                  </TableBody>
+                    {generateDetails()}
                 </Table>
               </TableContainer>
               
             </CardContent>
             <CardActions disableSpacing >
-              <Button size="small" color="error" sx={{ marginLeft: 'auto' }}><DeleteForeverIcon /> Delete User</Button>
+              <Button size="small" color="error" onClick={()=>deleteCurrentUser()} sx={{ marginLeft: 'auto' }}><DeleteForeverIcon /> Delete User</Button>
             </CardActions>
           </Card>
         </Box>
