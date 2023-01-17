@@ -16,14 +16,14 @@ import mockUserData from '../../data/mockUserData.json'
 import { json, Link } from 'react-router-dom';
 
 export default function ManageClients() {
-  let clients = [`Dexter's Lab`, 'Bare Bears', 'Amazing World', 'Gravity Falls'];
-  const candidatesSTATIC = ['Dexter', 'Dee Dee', 'Mandark'];
+  // let clients = [`Dexter's Lab`, 'Bare Bears', 'Amazing World', 'Gravity Falls'];
+  // const candidatesSTATIC = ['Dexter', 'Dee Dee', 'Mandark'];
 
 
   const [DATA, setDATA] = useState([]);
 
   const [selectedClient, setSelectedClient] = useState("");
-  const [stateClients, setStateClients] = useState([]);
+  const [clients, setClients] = useState([]);
   const [candidates, setCandidates] = useState([]);
   const [addClientTextField, setAddClientTextField] = useState('');
   const [selectedUser, setSelectedUser] = useState({}); {/* uses the entire data row */}
@@ -44,7 +44,7 @@ export default function ManageClients() {
 
   const handleAddClient = (e) => {
     if(e.key === 'Enter'){
-      setStateClients([...stateClients, addClientTextField]);
+      setClients([...clients, addClientTextField]);
       console.log(`Adding ${addClientTextField}`);
       setAddClientTextField('');
       
@@ -52,7 +52,7 @@ export default function ManageClients() {
   }
 
   const selectableItems = () => {
-    return stateClients.map((client, index) => (
+    return clients.map((client, index) => (
       <ListItem
         key={client}
         secondaryAction={selectedClient === client && (<IconButton edge="end" onClick={() => handleDeleteClient(client, index)}><DeleteForeverIcon /></IconButton>)}
@@ -76,7 +76,7 @@ export default function ManageClients() {
       return [...new Set(DATA.map(d => d['client']))]
     }
 
-    setStateClients(generateClientNames());
+    setClients(generateClientNames().sort());
   },[DATA]);
 
   //Returns users under selected client name
