@@ -12,14 +12,14 @@ const Debugger = () => {
   useEffect(() => {
     function foo() {
       let ticked = [];
-      for (const [k, v] of Object.entries(DATA2[1]["components"])) {
-        // console.log(`${k} ${v}`);
-        if(DATA2[1]["components"][k].enabled === true){
+      for (const [k, v] of Object.entries(DATA2[1]["components"]["Lines"]["shapes"])) {
+        if (DATA2[1]["components"]["Lines"]["shapes"][k] === true) {
+          console.log(`${k} ${v}`)
           ticked.push(k);
-          
+
         }
       }
-      console.log(ticked)
+      //console.log(ticked)
     }
 
     foo()

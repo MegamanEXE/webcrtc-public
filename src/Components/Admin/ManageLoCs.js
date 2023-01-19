@@ -1,4 +1,6 @@
 /* eslint-disable no-lone-blocks */
+// NOTE: This component is an abomination and valuable lessons were learnt.
+// I asked only to not be judged on how I approached this
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import List from '@mui/material/List';
@@ -9,10 +11,9 @@ import { Button, Checkbox, Divider, ListItemButton, ListItemIcon, TextField } fr
 import IconButton from '@mui/material/IconButton';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useState } from 'react';
 
 import componentLibraries from '../../data/componentLibraries.json'
-import { render } from '@testing-library/react';
 
 export default function ManageLoCs() {
   const [DATA, setDATA] = useState([]);
@@ -29,14 +30,6 @@ export default function ManageLoCs() {
   const [subcomponents, setSubcomponents] = useState([]);
   const [subcomponentChecked, setSubcomponentChecked] = useState([]);
 
-
-  //Force update hack? Not in use atm
-  const [, updateState] = useState();
-  const forceUpdate = useCallback(() => updateState({}), []);
-
-  const didMount = useRef(false); //detect initial renders
-
-
   //Read data from whereever
   useEffect(()=>{
     setDATA(componentLibraries);
@@ -52,7 +45,7 @@ export default function ManageLoCs() {
   }, [DATA]);
 
   const markEnabledComponents = () => {
-    if (selectedLoC === undefined || selectedLoC["components"] === undefined) return; {/* starting to hate React at this point */}
+    if (selectedLoC === undefined || selectedLoC["components"] === undefined) return; //starting to hate React at this point 
     let ticked = [];
     for (const [k, v] of Object.entries(selectedLoC["components"])) {
       if (selectedLoC["components"][k].enabled === true) {
@@ -60,34 +53,30 @@ export default function ManageLoCs() {
       }
     }
     setComponentChecked(ticked);
-  
+  }
+
+  const markEnabledSubcomponents = (c) => { //Slightly different, relies on handleComponentClicked() 
+    let ticked = [];
+    for (const [k, v] of Object.entries(selectedLoC["components"][c]["shapes"])) {
+      if (selectedLoC["components"][c]["shapes"][k] === true) {
+        ticked.push(k);
+      }
+    }
+    setSubcomponentChecked(ticked);
   }
 
   const handleListItemClick = (loc) => {
     setSelectedLoCName(loc);
-
   };
 
-  useEffect(() => {
-    setSelectedLoC(DATA.find((r) => (r["loc_name"] === selectedLoCName)));
-  }, [selectedLoCName, selectedLoC]);
+  useEffect(() => { setSelectedLoC(DATA.find((r) => (r["loc_name"] === selectedLoCName)));}, [selectedLoCName, selectedLoC]);
+  useEffect(()=>{ markEnabledComponents();},[selectedLoC]);
 
-  useEffect(()=>{
-    if (!didMount.current) {
-      didMount.current = true;
-      return;
-    }
-
-    markEnabledComponents();
-  },[selectedLoC]);
-
-
-  const handleDeleteLoC = (name, id) => {
-    console.log(`Deleting id:${id}, ${name}`)
+  const handleDeleteLoC = (name, idx) => {
+    console.log(`Deleting id:${idx}, ${name}`);
+    setDATA(DATA.filter(r => r["loc_name"] !== name));
     
   }
-
-  
 
   const handleAddClient = (e) => {
     if(e.key === 'Enter'){
@@ -144,7 +133,9 @@ export default function ManageLoCs() {
 
     const handleComponentClicked = (c) => {
       setSelectedComponent(c);
-      setSubcomponents(Object.keys(selectedLoC["components"][c]["shapes"])); {/* Name and shame this heckin line of code that consumed half a day of my life */}
+      setSubcomponents(Object.keys(selectedLoC["components"][c]["shapes"])); // Name and shame this heckin line of code that consumed half a day of my life
+      markEnabledSubcomponents(c);
+      
     }
 
     
@@ -206,11 +197,6 @@ export default function ManageLoCs() {
         </ListItemButton>
       </ListItem>)
     )
-  }
-  
-  const deleteCurrentUser = () => {
-    console.log(`Deleting ${selectedComponent["name"]}`);
-    setDATA(DATA.filter(r=>r["id"]!==selectedComponent["id"]));
   }
 
   return (
