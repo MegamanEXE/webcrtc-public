@@ -9,9 +9,10 @@ import { Button, Checkbox, Divider, ListItemButton, ListItemIcon, TextField } fr
 import IconButton from '@mui/material/IconButton';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import componentLibraries from '../../data/componentLibraries.json'
+import { render } from '@testing-library/react';
 
 export default function ManageLoCs() {
   const [DATA, setDATA] = useState([]);
@@ -28,6 +29,14 @@ export default function ManageLoCs() {
   const [subcomponents, setSubcomponents] = useState([]);
   const [subcomponentChecked, setSubcomponentChecked] = useState([]);
 
+
+  //Force update hack? Not in use atm
+  const [, updateState] = useState();
+  const forceUpdate = useCallback(() => updateState({}), []);
+
+  const didMount = useRef(false); //detect initial renders
+
+
   //Read data from whereever
   useEffect(()=>{
     setDATA(componentLibraries);
@@ -42,13 +51,35 @@ export default function ManageLoCs() {
     setLoCs(generateLoCNames());
   }, [DATA]);
 
+  const markEnabledComponents = () => {
+    if (selectedLoC === undefined || selectedLoC["components"] === undefined) return; {/* starting to hate React at this point */}
+    let ticked = [];
+    for (const [k, v] of Object.entries(selectedLoC["components"])) {
+      if (selectedLoC["components"][k].enabled === true) {
+        ticked.push(k);
+      }
+    }
+    setComponentChecked(ticked);
+  
+  }
+
   const handleListItemClick = (loc) => {
     setSelectedLoCName(loc);
-    
+
   };
 
-  useEffect(() => { setSelectedLoC(DATA.find(r => r["loc_name"] === selectedLoCName)); },[selectedLoCName]);
+  useEffect(() => {
+    setSelectedLoC(DATA.find((r) => (r["loc_name"] === selectedLoCName)));
+  }, [selectedLoCName, selectedLoC]);
 
+  useEffect(()=>{
+    if (!didMount.current) {
+      didMount.current = true;
+      return;
+    }
+
+    markEnabledComponents();
+  },[selectedLoC]);
 
 
   const handleDeleteLoC = (name, id) => {
@@ -116,6 +147,8 @@ export default function ManageLoCs() {
       setSubcomponents(Object.keys(selectedLoC["components"][c]["shapes"])); {/* Name and shame this heckin line of code that consumed half a day of my life */}
     }
 
+    
+
     return components.map((c) => (
       <ListItem key={c} disablePadding>
         <ListItemButton onClick={()=>handleComponentClicked(c)} dense>
@@ -138,13 +171,6 @@ export default function ManageLoCs() {
 
 
   //Returns Sub-components under selected LoC
-  const populateSubcomponentList = () =>{
-    let sc = Object.keys(selectedLoC["components"][selectedComponent]["shapes"]);
-    setSubcomponents(sc);
-  }
-
-  useEffect(()=>{},[]);
-  //Checkbox handling#2
   const generateSubcomponentsList = () => {
     const handleToggle = (value) => () => {
       const currentIndex = subcomponentChecked.indexOf(value);
