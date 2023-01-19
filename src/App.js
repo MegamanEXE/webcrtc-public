@@ -8,6 +8,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
 import "@fontsource/roboto";
 import AdminContainer from "./Components/Admin/AdminContainer";
+import Debugger from "./Components/Admin/Debugger";
 
 function App() {
   return (
@@ -20,7 +21,7 @@ function App() {
           <Route path="/FirstTest" element={<FirstTest />} />
           <Route path="/FirstTestContainer" element={<FirstTestContainer />} />
           <Route path="/Admin" element={<AdminContainer />} />
-          <Route path="/LayoutTest" element={<LayoutTest />} />
+          <Route path="/Debug" element={<Debugger />} />
         </Routes>
       </BrowserRouter>
     </>

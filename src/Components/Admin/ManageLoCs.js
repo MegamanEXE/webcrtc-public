@@ -5,64 +5,81 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import ListSubheader from '@mui/material/ListSubheader';
-import { Button, Card, CardActions, CardContent, CardHeader, Divider, ListItemButton, Paper, Table, TableBody, TableCell, TableContainer, TableRow, TextField } from '@mui/material';
+import { Button, Checkbox, Divider, ListItemButton, ListItemIcon, TextField } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { useEffect, useState } from 'react';
-import { styled } from '@mui/material/styles';
 
-import mockUserData from '../../data/mockUserData.json'
-import { json, Link } from 'react-router-dom';
+import componentLibraries from '../../data/componentLibraries.json'
 
 export default function ManageLoCs() {
-  // let clients = [`Dexter's Lab`, 'Bare Bears', 'Amazing World', 'Gravity Falls'];
-  // const candidatesSTATIC = ['Dexter', 'Dee Dee', 'Mandark'];
-
-
   const [DATA, setDATA] = useState([]);
 
-  const [selectedClient, setSelectedClient] = useState("");
-  const [clients, setClients] = useState([]);
-  const [candidates, setCandidates] = useState([]);
-  const [addClientTextField, setAddClientTextField] = useState('');
-  const [selectedUser, setSelectedUser] = useState({}); {/* uses the entire data row */}
+  const [LoCs, setLoCs] = useState([]);
+  const [selectedLoCName, setSelectedLoCName] = useState("");
+  const [selectedLoC, setSelectedLoC] = useState({});{/* only relevant row at a time */}
+  const [addLoCTextField, setAddLoCTextField] = useState('');
+
+  const [components, setComponents] = useState([]);
+  const [selectedComponent, setSelectedComponent] = useState({}); 
+  const [componentChecked, setComponentChecked] = useState([]);
+
+  const [subcomponents, setSubcomponents] = useState([]);
+  const [subcomponentChecked, setSubcomponentChecked] = useState([]);
 
   //Read data from whereever
   useEffect(()=>{
-    setDATA(mockUserData);
+    setDATA(componentLibraries);
   },[]);
 
-  const handleListItemClick = (client) => {
-    setSelectedClient(client);
+  //Get LoC names
+  useEffect(() => {
+    const generateLoCNames = () => {
+      return [...new Set(DATA.map(d => d['loc_name']))]
+    }
+
+    setLoCs(generateLoCNames());
+  }, [DATA]);
+
+  const handleListItemClick = (loc) => {
+    setSelectedLoCName(loc);
+    
   };
 
-  const handleDeleteClient = (name, id) => {
+  useEffect(() => { setSelectedLoC(DATA.find(r => r["loc_name"] === selectedLoCName)); },[selectedLoCName]);
+
+
+
+  const handleDeleteLoC = (name, id) => {
     console.log(`Deleting id:${id}, ${name}`)
     
   }
 
+  
+
   const handleAddClient = (e) => {
     if(e.key === 'Enter'){
-      setClients([...clients, addClientTextField]);
-      console.log(`Adding ${addClientTextField}`);
-      setAddClientTextField('');
+      setLoCs([...LoCs, addLoCTextField]);
+      console.log(`Adding ${addLoCTextField}`);
+      setAddLoCTextField('');
       
     }
   }
 
+  //Populates first list
   const selectableItems = () => {
-    return clients.map((client, index) => (
+    return LoCs.map((loc, index) => (
       <ListItem
-        key={client}
-        secondaryAction={selectedClient === client && (<IconButton edge="end" onClick={() => handleDeleteClient(client, index)}><DeleteForeverIcon /></IconButton>)}
+        key={loc}
+        secondaryAction={selectedLoCName === loc && (<IconButton edge="end" onClick={() => handleDeleteLoC(loc, index)}><DeleteForeverIcon /></IconButton>)}
         disablePadding
       >
         <ListItemButton
-          onClick={(event) => handleListItemClick(client)}
-          selected={selectedClient === client}
+          onClick={(event) => handleListItemClick(loc)}
+          selected={selectedLoCName === loc}
         >
-          {client}
+          {loc}
         </ListItemButton>
       </ListItem>
     ));
@@ -70,56 +87,104 @@ export default function ManageLoCs() {
     ;
   }
 
-  //Returns unique client names from JSON data
-  useEffect(()=>{
-    const generateClientNames = () => {
-      return [...new Set(DATA.map(d => d['client']))]
+  //Returns Components under selected LoC
+  useEffect(() => {
+    const generateComponents = () => {
+      let c = DATA.find(r => r["loc_name"] === selectedLoCName);
+      if (c === undefined) { return []; }
+      return Object.keys(c["components"]);
+    }
+    setComponents(generateComponents());
+  }, [DATA, selectedLoCName]);
+
+  const generateComponentsList = () => {
+    const handleToggle = (value) => () => {
+      const currentIndex = componentChecked.indexOf(value);
+      const newChecked = [...componentChecked];
+
+      if (currentIndex === -1) {
+        newChecked.push(value);
+      } else {
+        newChecked.splice(currentIndex, 1);
+      }
+
+      setComponentChecked(newChecked);
+    };
+
+    const handleComponentClicked = (c) => {
+      setSelectedComponent(c);
+      setSubcomponents(Object.keys(selectedLoC["components"][c]["shapes"])); {/* Name and shame this heckin line of code that consumed half a day of my life */}
     }
 
-    setClients(generateClientNames().sort());
-  },[DATA]);
+    return components.map((c) => (
+      <ListItem key={c} disablePadding>
+        <ListItemButton onClick={()=>handleComponentClicked(c)} dense>
+          <ListItemIcon>
+            <Checkbox
+              edge="start"
+              onClick={handleToggle(c)}
+              checked={componentChecked.indexOf(c) !== -1}
+              inputProps={{ 'aria-labelledby': `label-${c}` }}
+            />
+          </ListItemIcon>
 
-  //Returns users under selected client name
-  useEffect(()=>{
-    const generateCandidates = () => {
-      return DATA.filter((r) => r["client"] === selectedClient);
-    }
-    setCandidates(generateCandidates());
-  },[candidates, selectedClient, DATA]);
+          <ListItemText id={`label-${c}`} primary={c} />
 
-  const generateCandidatesList = () => {
-    return candidates.map((c)=><ListItemButton key={c["id"]} onClick={()=>setSelectedUser(c)}>{c["name"]}</ListItemButton>);
+        </ListItemButton>
+      </ListItem>)
+    )
   }
 
-  // TODO: Problem child, test-IDs annoyed JSON.parse()
-  const generateDetails = () => {
-    return <TableBody>
-      <TableRow>
-        <TableCell align='right' style={{ width: '35%', fontWeight: 'bold' }}>Age:</TableCell>
-        <TableCell>{selectedUser["age"]}</TableCell>
-      </TableRow>
-      <TableRow>
-        <TableCell align='right' style={{ width: '35%', fontWeight: 'bold' }}>Occupation:</TableCell>
-        <TableCell>{selectedUser["occupation"]}</TableCell>
-      </TableRow>
-      <TableRow>
-        <TableCell align='right' style={{ width: '35%', fontWeight: 'bold' }}>Education Level:</TableCell>
-        <TableCell>{selectedUser["education-level"]}</TableCell>
-      </TableRow>
-      <TableRow>
-        <TableCell align='right' style={{ width: '35%', fontWeight: 'bold' }}>Country:</TableCell>
-        <TableCell>{selectedUser["country"]}</TableCell>
-      </TableRow>
-      <TableRow>
-        <TableCell align='right' style={{ width: '35%', fontWeight: 'bold' }}>Test IDs:</TableCell>
-        <TableCell>{selectedUser["test-IDs"]}</TableCell> 
-      </TableRow>
-    </TableBody>
+
+
+  //Returns Sub-components under selected LoC
+  const populateSubcomponentList = () =>{
+    let sc = Object.keys(selectedLoC["components"][selectedComponent]["shapes"]);
+    setSubcomponents(sc);
+  }
+
+  useEffect(()=>{},[]);
+  //Checkbox handling#2
+  const generateSubcomponentsList = () => {
+    const handleToggle = (value) => () => {
+      const currentIndex = subcomponentChecked.indexOf(value);
+      const newChecked = [...subcomponentChecked];
+
+      if (currentIndex === -1) {
+        newChecked.push(value);
+      } else {
+        newChecked.splice(currentIndex, 1);
+      }
+
+      setSubcomponentChecked(newChecked);
+    };
+    
+
+    return subcomponents.map((c) => (
+      <ListItem key={c} disablePadding>
+        <ListItemButton
+          onClick={handleToggle(c)}
+        >
+          <ListItemIcon>
+            <Checkbox
+              edge="start"
+              checked={subcomponentChecked.indexOf(c) !== -1}
+              tabIndex={-1}
+              disableRipple
+              inputProps={{ 'aria-labelledby': `label-${c}` }}
+            />
+          </ListItemIcon>
+
+          <ListItemText id={`label-${c}`} primary={c} />
+
+        </ListItemButton>
+      </ListItem>)
+    )
   }
   
   const deleteCurrentUser = () => {
-    console.log(`Deleting ${selectedUser["name"]}`);
-    setDATA(DATA.filter(r=>r["id"]!==selectedUser["id"]));
+    console.log(`Deleting ${selectedComponent["name"]}`);
+    setDATA(DATA.filter(r=>r["id"]!==selectedComponent["id"]));
   }
 
   return (
@@ -137,7 +202,6 @@ export default function ManageLoCs() {
               <ListSubheader className='listSubheader'><Typography variant='h6' fontWeight='bold' color='white'>Component Libraries</Typography></ListSubheader>
             }
           >
-            
             {selectableItems()}
             
           </List>
@@ -145,12 +209,12 @@ export default function ManageLoCs() {
           <Box display='flex'>
           <TextField
             id="new-client"
-            label="Add new client"
-            value={addClientTextField}
+            label="Add new Component Library"
+            value={addLoCTextField}
             size='small'
             margin='dense'
             InputProps={{ endAdornment: <IconButton ><AddCircleIcon /></IconButton> }}
-            onChange = {(e)=>setAddClientTextField(e.target.value)}
+            onChange = {(e)=>setAddLoCTextField(e.target.value)}
             onKeyPress = {handleAddClient}
             
             fullWidth /></Box>
@@ -163,30 +227,26 @@ export default function ManageLoCs() {
             sx={{ width: '100%', overflow:'auto' }}
             component="nav"
             subheader={
-              <ListSubheader component="div">Candidates at {selectedClient}</ListSubheader>
+              <ListSubheader component="div">Components in {selectedLoCName}</ListSubheader>
             }
           >
-              {generateCandidatesList()}
+              {generateComponentsList()}
               
             </List>
         </Box>
 
         {/* LIST 3 */}
-        <Box display='flex' width="30%" className='userDetailsCard'>
-          <Card sx={{width:'100%'}} >
-            <CardHeader title={selectedUser["name"]} />
-            <CardContent>
-              <TableContainer>
-                <Table size='small' sx={{ '& .MuiTableCell-root': { border: 0, py:0.2, px:0.5 } }}>
-                    {generateDetails()}
-                </Table>
-              </TableContainer>
-              
-            </CardContent>
-            <CardActions disableSpacing >
-              <Button size="small" color="error" onClick={()=>deleteCurrentUser()} sx={{ marginLeft: 'auto' }}><DeleteForeverIcon /> Delete User</Button>
-            </CardActions>
-          </Card>
+        <Box display='flex' width="30%">
+          <List
+            className='listShadow'
+            sx={{ width: '100%', overflow: 'auto' }}
+            component="nav"
+            subheader={
+              <ListSubheader component="div">Sub-components</ListSubheader>
+            }
+          >
+            {selectedComponent && generateSubcomponentsList()}
+          </List>
         </Box>
       </Box>
 
