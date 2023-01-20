@@ -36,7 +36,6 @@ export default function FirstTestContainer() {
           <Grid container display='flex' direction='column'>
             <FirstTestHeader />
             {renderBasedOnState()}
-
           </Grid>
         </Box> {/* Body end */}
       </ThemeProvider>
