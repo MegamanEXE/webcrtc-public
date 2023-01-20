@@ -13,22 +13,35 @@ import { useEffect, useState } from 'react';
 import { styled } from '@mui/material/styles';
 
 import mockUserData from '../../data/mockUserData.json'
+import mockQuizQuestions from '../../data/mockQuizQuestions.json'
+import { Edit, Settings } from '@mui/icons-material';
 
 export default function IntelligenceTests() {
    const [DATA, setDATA] = useState([]);
 
-  const [selectedClient, setSelectedClient] = useState("");
+  const [selectedTestName, setSelectedTestName] = useState("");
   const [tests, setTests] = useState([]);
-  const [addClientTextField, setAddClientTextField] = useState('');
+  const [addTestTextField, setAddTestTextField] = useState('');
   const [selectedTest, setSelectedTest] = useState({}); {/* uses the entire data row */ }
+  let stl = selectedTest.length; //temporary; testing if this works
 
   //Read data from whereever
   useEffect(() => {
-    setDATA(mockUserData);
+    setDATA(mockQuizQuestions);
   }, []);
 
-  const handleListItemClick = (client) => {
-    setSelectedClient(client);
+  //Returns unique test names from JSON data
+  useEffect(() => {
+    const generateTestList = () => {
+      // return [...new Set(DATA.map(d => d['client']))]
+      return ["Standard APM Test"]; //TODO...this
+    }
+    setTests(generateTestList().sort());
+  }, [DATA]);
+
+  const handleListItemClick = (test) => {
+    setSelectedTestName(test);
+    setSelectedTest(DATA[test]);
   };
 
   const handleDeleteClient = (name, id) => {
@@ -38,25 +51,25 @@ export default function IntelligenceTests() {
 
   const handleAddClient = (e) => {
     if (e.key === 'Enter') {
-      setTests([...tests, addClientTextField]);
-      console.log(`Adding ${addClientTextField}`);
-      setAddClientTextField('');
+      setTests([...tests, addTestTextField]);
+      console.log(`Adding ${addTestTextField}`);
+      setAddTestTextField('');
 
     }
   }
 
   const selectableItems = () => {
-    return tests.map((client, index) => (
+    return tests.map((test, index) => (
       <ListItem
-        key={client}
-        secondaryAction={selectedClient === client && (<IconButton edge="end" onClick={() => handleDeleteClient(client, index)}><DeleteForeverIcon /></IconButton>)}
+        key={test}
+        secondaryAction={selectedTestName === test && (<IconButton edge="end" onClick={() => handleDeleteClient(test, index)}><DeleteForeverIcon /></IconButton>)}
         disablePadding
       >
         <ListItemButton
-          onClick={(event) => handleListItemClick(client)}
-          selected={selectedClient === client}
+          onClick={(event) => handleListItemClick(test)}
+          selected={selectedTestName === test}
         >
-          {client}
+          {test}
         </ListItemButton>
       </ListItem>
     ));
@@ -64,36 +77,30 @@ export default function IntelligenceTests() {
     ;
   }
 
-  //Returns unique test names from JSON data
-  useEffect(() => {
-    const generateTestList = () => {
-      return [...new Set(DATA.map(d => d['client']))]
-    }
-    setTests(generateTestList().sort());
-  }, [DATA]);
+  
 
 
   const generateDetails = () => {
     return <TableBody>
       <TableRow>
-        <TableCell align='right' style={{ width: '35%', fontWeight: 'bold' }}>Age:</TableCell>
-        <TableCell>{selectedTest["age"]}</TableCell>
+        <TableCell align='right' style={{ width: '35%', fontWeight: 'bold' }}>Name:</TableCell>
+        <TableCell>{selectedTest["test_name"]}</TableCell>
       </TableRow>
       <TableRow>
-        <TableCell align='right' style={{ width: '35%', fontWeight: 'bold' }}>Occupation:</TableCell>
-        <TableCell>{selectedTest["occupation"]}</TableCell>
+        <TableCell align='right' style={{ width: '35%', fontWeight: 'bold' }}>Component Library:</TableCell>
+        <TableCell>{selectedTest["loc_name"]}</TableCell>
       </TableRow>
       <TableRow>
-        <TableCell align='right' style={{ width: '35%', fontWeight: 'bold' }}>Education Level:</TableCell>
-        <TableCell>{selectedTest["education-level"]}</TableCell>
+        <TableCell align='right' style={{ width: '35%', fontWeight: 'bold' }}>Number of Questions:</TableCell>
+        <TableCell>{stl}</TableCell>{/* TODO: Calculate this from array*/}
       </TableRow>
       <TableRow>
-        <TableCell align='right' style={{ width: '35%', fontWeight: 'bold' }}>Country:</TableCell>
-        <TableCell>{selectedTest["country"]}</TableCell>
+        <TableCell align='right' style={{ width: '35%', fontWeight: 'bold' }}>Time:</TableCell>
+        <TableCell>{selectedTest && `${selectedTest["time"]} minutes`}</TableCell>
       </TableRow>
       <TableRow>
-        <TableCell align='right' style={{ width: '35%', fontWeight: 'bold' }}>Test IDs:</TableCell>
-        <TableCell>{selectedTest["test-IDs"]}</TableCell>
+        <TableCell align='right' style={{ width: '35%', fontWeight: 'bold' }}>Comments:</TableCell>
+        <TableCell>{selectedTest["comments"]}</TableCell>
       </TableRow>
     </TableBody>
   }
@@ -115,7 +122,7 @@ export default function IntelligenceTests() {
             className='listShadow'
             sx={{ width: '100%', overflow: 'auto' }}
             subheader={
-              <ListSubheader className='listSubheader'><Typography variant='h6' fontWeight='bold' color='white'>Clients</Typography></ListSubheader>
+              <ListSubheader className='listSubheader'><Typography variant='h6' fontWeight='bold' color='white'>Tests</Typography></ListSubheader>
             }
           >
 
@@ -126,12 +133,12 @@ export default function IntelligenceTests() {
           <Box display='flex'>
             <TextField
               id="new-client"
-              label="Add new client"
-              value={addClientTextField}
+              label="Add new test"
+              value={addTestTextField}
               size='small'
               margin='dense'
               InputProps={{ endAdornment: <IconButton ><AddCircleIcon /></IconButton> }}
-              onChange={(e) => setAddClientTextField(e.target.value)}
+              onChange={(e) => setAddTestTextField(e.target.value)}
               onKeyPress={handleAddClient}
 
               fullWidth /></Box>
@@ -144,13 +151,15 @@ export default function IntelligenceTests() {
             <CardContent>
               <TableContainer>
                 <Table size='small' sx={{ '& .MuiTableCell-root': { border: 0, py: 0.2, px: 0.5 } }}>
-                  {generateDetails()}
+                  {selectedTest && generateDetails()}
                 </Table>
               </TableContainer>
 
             </CardContent>
             <CardActions disableSpacing >
-              <Button size="small" color="error" onClick={() => deleteCurrentUser()} sx={{ marginLeft: 'auto' }}><DeleteForeverIcon /> Delete User</Button>
+              <Button size="small" onClick={() => deleteCurrentUser()} sx={{ marginLeft: 'auto' }}><Edit />Modify</Button>
+              <Button size="small" color="error" onClick={() => deleteCurrentUser()} ><DeleteForeverIcon /> Delete Test</Button>
+              
             </CardActions>
           </Card>
         </Box>

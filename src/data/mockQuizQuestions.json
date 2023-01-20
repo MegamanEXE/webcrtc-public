@@ -1,7 +1,10 @@
 {
   "Standard APM Test": {
     "id": 1,
+    "test_name": "Standard APM Test",
     "loc_name": "Standard Component Library",
+    "time":20,
+    "comments":"The default test to show unless stated otherwise",
     "questions": [
       {
       "number": 1,
