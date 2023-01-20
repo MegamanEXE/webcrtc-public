@@ -136,6 +136,11 @@ body {
 .answerImage {
   max-width: 90%;
   height: auto;
+  border: solid 6px transparent;
+}
+
+.answerBorder {
+  border:  solid 6px #238ad3;
 }
 
 .answersContainer {

@@ -12,26 +12,41 @@ import ImageListItem from '@mui/material/ImageListItem';
 import AnswerOption from './AnswerOption';
 
 import mockQuizQuestions from "../../data/mockQuizQuestions.json"
+import { useEffect, useState } from 'react';
 
 const theme = crtcTheme();
 
 export default function FirstTest() {
+  const [DATA, setDATA] = useState({});
+  const [currentTestData, setCurrentTestData] = useState();
+  
+  const [questionNumber, setQuestionNumber] = useState(1);
+  const [selectedAnswer, setSelectedAnswer] = useState(-1);
+  let userAnswers = [];
+  let selectedAnswerURI = "";
+
+  useEffect(()=>{setDATA(mockQuizQuestions);},[]);
+  useEffect(() => { setCurrentTestData(DATA["Standard APM Test"]); }, [DATA]);
+
+  const handleContinue = () => {
+    setQuestionNumber(q=>q+1);
+    setSelectedAnswer(-1)
+  }
+
   return (
     <>
       <Grid item flexGrow={1} sx={{ width: '80%', alignSelf: 'center', order: 2 }}>
         <Box className='questionsContainer'>
           <Box className="questionSizeWrapper">
-            <Typography sx={{ fontWeight: '700', size: '24px' }}>Question 1</Typography>
+            <Typography sx={{ fontWeight: '700', size: '24px' }}>Question {questionNumber}</Typography>
             <Box className='actualQuestion'>
               <ImageList sx={{ overflow: 'hidden', }} cols={3} gap={20}>
-                <ImageListItem className="questionImage"><img src={'assets/Tests/defaultSample/1/q1.png'} alt="q1" /></ImageListItem>
-                <ImageListItem className="questionImage"><img src={'assets/Tests/defaultSample/1/q2.png'} alt="q2" /></ImageListItem>
-                <ImageListItem className="questionImage"><img src={'assets/Tests/defaultSample/1/q3.png'} alt="q3" /></ImageListItem>
-                <ImageListItem className="questionImage"><img src={'assets/Tests/defaultSample/1/q4.png'} alt="q4" /></ImageListItem>
-                <ImageListItem className="questionImage"><img src={'assets/Tests/defaultSample/1/q5.png'} alt="q5" /></ImageListItem>
-                <ImageListItem className="questionImage"><img src={'assets/Tests/defaultSample/1/q6.png'} alt="q6" /></ImageListItem>
-                <ImageListItem className="questionImage"><img src={'assets/Tests/defaultSample/1/q7.png'} alt="q7" /></ImageListItem>
-                <ImageListItem className="questionImage"><img src={'assets/Tests/defaultSample/1/q8.png'} alt="q8" /></ImageListItem>
+                {currentTestData 
+                  && currentTestData["questions"][questionNumber - 1]["questionImages"].map((q, i) => <ImageListItem border="4px dashed transparent" key={`q${i + 1}`} className="questionImage"><img src={q} alt={`q${i + 1}`} /></ImageListItem>)}
+
+                {currentTestData &&
+                  <Box border="4px dashed grey" key="filler" width="84px"><img className='questionImage' src={`${currentTestData["questions"][questionNumber - 1]["answerImages"][selectedAnswer-1]}`} alt="" /></Box>
+                }
               </ImageList>
             </Box>
           </Box>
@@ -47,20 +62,14 @@ export default function FirstTest() {
               <Typography sx={{ fontWeight: '700', size: '24px', }}>Which of these fit the best?</Typography>
 
               <ImageList sx={{ overflow: 'hidden' }} cols={4} gap={16} >
-                <AnswerOption src={'assets/Tests/defaultSample/1/a1.png'} id={'a1'} />
-                <AnswerOption src={'assets/Tests/defaultSample/1/a2.png'} id={'a2'} />
-                <AnswerOption src={'assets/Tests/defaultSample/1/a3.png'} id={'a3'} />
-                <AnswerOption src={'assets/Tests/defaultSample/1/a4.png'} id={'a4'} />
-                <AnswerOption src={'assets/Tests/defaultSample/1/a5.png'} id={'a5'} />
-                <AnswerOption src={'assets/Tests/defaultSample/1/a6.png'} id={'a6'} />
-                <AnswerOption src={'assets/Tests/defaultSample/1/a7.png'} id={'a7'} />
-                <AnswerOption src={'assets/Tests/defaultSample/1/a8.png'} id={'a8'} />
+                {currentTestData
+                  && currentTestData["questions"][questionNumber - 1]["answerImages"].map((q, i) => <AnswerOption src={q} id={`a${i + 1}`} selectedAnswer={selectedAnswer} setSelectedAnswer={setSelectedAnswer} />)}
               </ImageList>
             </Box>
           </Grid>
 
           <Grid item xs={3}>
-            <Button variant="contained" color="success">Continue</Button>
+            <Button variant="contained" color="success" onClick={()=>handleContinue()}>Continue</Button>
           </Grid>
 
         </Grid>
