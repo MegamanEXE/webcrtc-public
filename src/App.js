@@ -18,8 +18,7 @@ function App() {
           <Route path="/" element={<SignIn />} />
           <Route path="/SignUp" element={<SignUp />} />
           <Route path="/ForgotPassword" element={<ForgotPassword />} />
-          <Route path="/FirstTest" element={<FirstTest />} />
-          <Route path="/FirstTestContainer" element={<FirstTestContainer />} />
+          <Route path="/FirstTest" element={<FirstTestContainer />} />
           <Route path="/Admin" element={<AdminContainer />} />
           <Route path="/Debug" element={<Debugger />} />
         </Routes>
