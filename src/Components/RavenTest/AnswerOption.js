@@ -1,13 +1,16 @@
 import '../../App.css'
 import ImageListItem from '@mui/material/ImageListItem';
 
-export default function AnswerOption({src,id}) {
+export default function AnswerOption({src,id,setSelectedAnswer,selectedAnswer}) {
     function handleClick(name){
-        console.log(`${name} selected`)
+        console.log(`${name[1]} selected.`)
+        setSelectedAnswer(name[1])
     }
 
     return (
-        <ImageListItem onClick={(e) => handleClick(id,e)} sx={{maxWidth:'100%'}}><img src={src} className="answerImage" alt="Answer Option" /></ImageListItem> 
+        <ImageListItem key={id} onClick={(e) => handleClick(id,e)} sx={{maxWidth:'100%'}}>
+            <img src={src} className={`answerImage ${id===("a"+selectedAnswer) ? 'answerBorder':''}`} alt="Answer Option" />
+        </ImageListItem> 
     );
 }
 
