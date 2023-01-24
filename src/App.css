@@ -327,6 +327,7 @@ a:active {
 
 #modalActions {
   padding: 1em;
+  margin-left: auto;
 }
 
 #testSettings{
@@ -341,4 +342,8 @@ a:active {
 #mainContent #rightFrame{
   flex-grow: 1;
   padding: 0.5em;
+}
+
+#modalSettingsContainer{
+  padding: 0.5em 1em;
 }

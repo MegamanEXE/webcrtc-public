@@ -7,6 +7,8 @@ import Typography from '@mui/material/Typography';
 import { Dialog, DialogActions, DialogContent, DialogTitle, IconButton } from '@mui/material';
 import { GridCloseIcon } from '@mui/x-data-grid';
 import CloseIcon from '@mui/icons-material/Close';
+import TestModalQuestions from './TestModalQuestions';
+import TestModalSettings from './TestModalSettings';
 
 const style = {
   position: 'absolute',
@@ -41,7 +43,7 @@ export default function TestModal({ setModalOpen, modalOpen }) {
     <Fade in={modalOpen}>
       <Box sx={style} id="modalMainContainer" component="div">
 
-        <Box id="modalHeader" bgcolor="lightblue" >
+        <Box id="modalHeader" >
           <Box>Standard APM Test</Box>
           <Box>
             <IconButton size="small" aria-label="close" onClick={handleClose} sx={{ position: 'absolute', right: 5, top: 5 }}>
@@ -51,16 +53,25 @@ export default function TestModal({ setModalOpen, modalOpen }) {
         </Box>
 
 
-        <Box id="modalContent" flexGrow={1} bgcolor="cyan">
-          <Box id="testSettings" bgcolor="lightcoral">
-            Hello it me
+
+
+        <Box id="modalContent" flexGrow={1}>
+          <Box id="testSettings">
+            <TestModalSettings />
           </Box>
           <Box id="mainContent">
-            <Box id="leftFrame" bgcolor="lightgreen">yo it me</Box>
-            <Box id="rightFrame" bgcolor="blueviolet">most stuff here</Box>
+            <Box id="leftFrame"><TestModalQuestions /></Box>
+            <Box id="rightFrame">most stuff here</Box>
           </Box>
         </Box>
-        <Box id="modalActions">3</Box>
+        
+        
+        
+        
+        <Box id="modalActions">
+          <Button sx={{mx:2}}>Cancel</Button>
+          <Button><strong>Save Test</strong></Button>
+        </Box>
 
 
       </Box>
