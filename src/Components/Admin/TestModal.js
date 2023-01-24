@@ -9,6 +9,7 @@ import { GridCloseIcon } from '@mui/x-data-grid';
 import CloseIcon from '@mui/icons-material/Close';
 import TestModalQuestions from './TestModalQuestions';
 import TestModalSettings from './TestModalSettings';
+import TestModalMatrix from './TestModalMatrix';
 
 const style = {
   position: 'absolute',
@@ -61,7 +62,7 @@ export default function TestModal({ setModalOpen, modalOpen }) {
           </Box>
           <Box id="mainContent">
             <Box id="leftFrame"><TestModalQuestions /></Box>
-            <Box id="rightFrame">most stuff here</Box>
+            <Box id="rightFrame"><TestModalMatrix /></Box>
           </Box>
         </Box>
         

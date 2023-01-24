@@ -347,3 +347,31 @@ a:active {
 #modalSettingsContainer{
   padding: 0.5em 1em;
 }
+
+#modal-matrixContainer{
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  height: 100%;
+}
+
+.modal-questionMatrix{
+  width:100px;
+  height:100px;
+  border: 2px solid #BDBDBD;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+}
+
+.qm-ImageList{
+  align-items: center;
+  width: 100px;
+  height: 100px;
+}
+
+.questionAddImageBtn{
+  
+}
