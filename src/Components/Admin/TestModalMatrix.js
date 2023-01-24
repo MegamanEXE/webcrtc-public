@@ -21,7 +21,7 @@ export default function TestModalMatrix() {
 
             <ImageListItem className="qm-ImageList"><Box class="modal-questionMatrix"><Fab size="small" className="questionAddImageBtn"><AddIcon sx={{ color: '#9f9f9f' }} /></Fab></Box></ImageListItem>
             <ImageListItem className="qm-ImageList"><Box class="modal-questionMatrix"><Fab size="small" className="questionAddImageBtn"><AddIcon sx={{ color: '#9f9f9f' }} /></Fab></Box></ImageListItem>
-            <ImageListItem className="qm-ImageList"><Box class="modal-questionMatrix"><Fab size="small" className="questionAddImageBtn"><AddIcon sx={{ color: '#9f9f9f' }} /></Fab></Box></ImageListItem>
+            <ImageListItem className="qm-ImageList"><Box class="modal-questionMatrix qm-placeholder"></Box></ImageListItem>
           </ImageList>
         </Box>
       </Box>

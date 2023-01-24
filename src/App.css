@@ -345,7 +345,7 @@ a:active {
 }
 
 #modalSettingsContainer{
-  padding: 0.5em 1em;
+  padding: 0 0.5em;
 }
 
 #modal-matrixContainer{
@@ -374,4 +374,16 @@ a:active {
 
 .questionAddImageBtn{
   
+}
+
+.qm-placeholder{
+  border: 7px solid rgba(0, 0, 0, 0.23)
+}
+
+.addQuestionItemBtn{
+  background-color: #e0e0e0;
+}
+
+.addQuestionItemBtn:hover {
+  background-color: #a0a0a0;
 }

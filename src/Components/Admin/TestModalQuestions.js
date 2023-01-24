@@ -1,7 +1,10 @@
-import { IconButton, List, ListItem, ListItemButton, ListSubheader, Typography } from "@mui/material";
+import { Button, IconButton, List, ListItem, ListItemButton, ListSubheader, Typography } from "@mui/material";
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import { GridAddIcon } from "@mui/x-data-grid";
+import { useState } from "react";
 
 export default function TestModalQuestions(props) {
+  const [items, setItems] = useState({});
   let questions = props.questions;
   let selectedQuestion = props.selectedQuestion;
 
@@ -14,6 +17,10 @@ export default function TestModalQuestions(props) {
     console.log(`Deleting id:${id}, ${name}`)
 
   }
+
+  const handleAddQuestion = () => {
+    console.log("Item added");
+  };
 
   const selectableItems = () => {
     return questions.map((question, index) => (
@@ -34,7 +41,8 @@ export default function TestModalQuestions(props) {
     ;
   }
 
-  return (<List
+  return (<>
+  <List
     className='listShadow'
     sx={{ width: '100%', overflow: 'auto' }}
     subheader={
@@ -45,7 +53,8 @@ export default function TestModalQuestions(props) {
     {selectableItems()}
 
   </List>
-  )
+  <Button onClick={()=>handleAddQuestion()} className="addQuestionItemBtn" variant="contained" fullWidth sx={{backgroundColor:'#e0e0e0', my:1}}><GridAddIcon sx={{color:'#676767'}} /></Button>
+  </>)
 }
 
 TestModalQuestions.defaultProps = {
