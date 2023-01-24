@@ -299,3 +299,46 @@ a:active {
   background: #FFFFFF;
 }
 
+#modalMainContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+#modalHeader{
+  padding: 0.5em;
+
+  display: flex;
+  flex-direction: row;
+}
+
+#modalContent{
+  padding: 1em;
+
+  display: flex;
+  flex-direction: column;
+}
+
+#modalContent #mainContent{
+  display: flex;
+  flex-direction: row;
+
+  height: 100%;
+}
+
+#modalActions {
+  padding: 1em;
+}
+
+#testSettings{
+  width: 100%;
+}
+
+#mainContent #leftFrame {
+  width: 18%;
+  padding: 0.5em;
+  
+}
+#mainContent #rightFrame{
+  flex-grow: 1;
+  padding: 0.5em;
+}

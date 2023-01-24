@@ -22,7 +22,7 @@ export default function FirstTestContainer() {
     if (quizScreen === 'instructions')
       return <FirstTestInstructions setQuizScreen={setQuizScreen} />
     else if (quizScreen === 'quiz')
-      return <FirstTest />
+      return <FirstTest setQuizScreen={setQuizScreen}/>
     else if (quizScreen === 'result')
       return <FirstTestResult />
   }

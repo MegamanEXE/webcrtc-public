@@ -15,6 +15,7 @@ import { styled } from '@mui/material/styles';
 import mockUserData from '../../data/mockUserData.json'
 import mockQuizQuestions from '../../data/mockQuizQuestions.json'
 import { Edit, Settings } from '@mui/icons-material';
+import TestModal from './TestModal';
 
 export default function IntelligenceTests() {
    const [DATA, setDATA] = useState([]);
@@ -23,6 +24,7 @@ export default function IntelligenceTests() {
   const [tests, setTests] = useState([]);
   const [addTestTextField, setAddTestTextField] = useState('');
   const [selectedTest, setSelectedTest] = useState({}); {/* uses the entire data row */ }
+  const [modalOpen, setModalOpen] = useState(false);
   let stl = selectedTest.length; //temporary; testing if this works
 
   //Read data from whereever
@@ -77,9 +79,6 @@ export default function IntelligenceTests() {
     ;
   }
 
-  
-
-
   const generateDetails = () => {
     return <TableBody>
       <TableRow>
@@ -108,6 +107,10 @@ export default function IntelligenceTests() {
   const deleteCurrentUser = () => {
     console.log(`Deleting ${selectedTest["name"]}`);
     setDATA(DATA.filter(r => r["id"] !== selectedTest["id"]));
+  }
+
+  const openTest = () => {
+    setModalOpen(true)
   }
 
   return (
@@ -157,7 +160,7 @@ export default function IntelligenceTests() {
 
             </CardContent>
             <CardActions disableSpacing >
-              <Button size="small" onClick={() => deleteCurrentUser()} sx={{ marginLeft: 'auto' }}><Edit />Modify</Button>
+              <Button size="small" onClick={() => openTest()} sx={{ marginLeft: 'auto' }}><Edit />Modify</Button>
               <Button size="small" color="error" onClick={() => deleteCurrentUser()} ><DeleteForeverIcon /> Delete Test</Button>
               
             </CardActions>
@@ -166,6 +169,7 @@ export default function IntelligenceTests() {
       </Box>
 
 
+      {modalOpen && <TestModal setModalOpen={setModalOpen} modalOpen={modalOpen} />}
     </Box>
   )
 }

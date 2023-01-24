@@ -15,7 +15,7 @@ export default function FirstTestResult(props) {
 
         <Typography variant='h2' sx={{fontWeight: 800}}>RESULTS</Typography>
 
-        <Typography variant='h5' sx={{flexGrow:1}}>You got <strong>4/8</strong> questions correct</Typography>
+        <Typography variant='h5' sx={{flexGrow:1}}>You got <strong>0/2</strong> questions correct</Typography>
         {/* TODO: Get score from container later. Put in place of 4/8 */}
 
         <Box className='finishRavenTestBtn'>

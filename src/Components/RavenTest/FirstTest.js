@@ -16,7 +16,7 @@ import { useEffect, useState } from 'react';
 
 const theme = crtcTheme();
 
-export default function FirstTest() {
+export default function FirstTest({setQuizScreen}) {
   const [DATA, setDATA] = useState({});
   const [currentTestData, setCurrentTestData] = useState();
   
@@ -29,6 +29,9 @@ export default function FirstTest() {
   useEffect(() => { setCurrentTestData(DATA["Standard APM Test"]); }, [DATA]);
 
   const handleContinue = () => {
+    if(questionNumber===2){ //TODO: Remove this hardcode when I wake up
+      setQuizScreen("result");
+    }
     setQuestionNumber(q=>q+1);
     setSelectedAnswer(-1)
   }
