@@ -169,7 +169,7 @@ export default function IntelligenceTests() {
       </Box>
 
 
-      {modalOpen && <TestModal setModalOpen={setModalOpen} modalOpen={modalOpen} />}
+      {modalOpen && selectedTest && <TestModal setModalOpen={setModalOpen} modalOpen={modalOpen} testData={selectedTest}  />}
     </Box>
   )
 }

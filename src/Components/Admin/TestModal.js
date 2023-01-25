@@ -10,6 +10,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import TestModalQuestions from './TestModalQuestions';
 import TestModalSettings from './TestModalSettings';
 import TestModalMatrix from './TestModalMatrix';
+import { useEffect, useState } from 'react';
 
 const style = {
   position: 'absolute',
@@ -23,8 +24,10 @@ const style = {
   boxShadow: 24,
 };
 
-export default function TestModal({ setModalOpen, modalOpen }) {
-  //const [open, setOpen] = useState(false);
+export default function TestModal({ setModalOpen, modalOpen, testData }) {
+  const [selectedQuestion, setSelectedQuestion] = useState(1);
+
+
   const handleClose = () => {
     setModalOpen(false);
   }
@@ -61,16 +64,17 @@ export default function TestModal({ setModalOpen, modalOpen }) {
             <TestModalSettings />
           </Box>
           <Box id="mainContent">
-            <Box id="leftFrame"><TestModalQuestions /></Box>
-            <Box id="rightFrame"><TestModalMatrix /></Box>
+            <Box id="leftFrame"><TestModalQuestions testData={testData} selectedQuestion={selectedQuestion} setSelectedQuestion={setSelectedQuestion} /></Box>
+            <Box id="rightFrame"><TestModalMatrix testData={testData} selectedQuestion={selectedQuestion} setSelectedQuestion={setSelectedQuestion} /></Box>
           </Box>
+
         </Box>
-        
-        
-        
-        
+
+
+
+
         <Box id="modalActions">
-          <Button sx={{mx:2}}>Cancel</Button>
+          <Button sx={{ mx: 2 }}>Cancel</Button>
           <Button><strong>Save Test</strong></Button>
         </Box>
 

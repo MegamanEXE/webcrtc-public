@@ -1,16 +1,21 @@
 import { Button, IconButton, List, ListItem, ListItemButton, ListSubheader, Typography } from "@mui/material";
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { GridAddIcon } from "@mui/x-data-grid";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function TestModalQuestions(props) {
   const [items, setItems] = useState({});
-  let questions = props.questions;
-  let selectedQuestion = props.selectedQuestion;
+
+  const setSelectedQuestion = props.setSelectedQuestion;
+  const selectedQuestion = props.selectedQuestion;
+  
+
+  const td = props.testData.questions;
 
 
   const handleListItemClick = (q) => {
     console.log(q);
+    setSelectedQuestion(q);
   };
 
   const handleDeleteQuestion = (name, id) => {
@@ -19,21 +24,23 @@ export default function TestModalQuestions(props) {
   }
 
   const handleAddQuestion = () => {
-    console.log("Item added");
+    let newIndex = td.length + 1;
+    let newQ = [...td, `Item ${newIndex}`]
+    console.log(`Item ${newIndex} added`);
   };
 
   const selectableItems = () => {
-    return questions.map((question, index) => (
+    return td.map((question, index) => (
       <ListItem
-        key={question}
-        secondaryAction={selectedQuestion === question && (<IconButton edge="end" onClick={() => handleDeleteQuestion(question, index)}><DeleteForeverIcon /></IconButton>)}
+        key={index+1}
+        secondaryAction={selectedQuestion === index+1 && (<IconButton edge="end" onClick={() => handleDeleteQuestion(question, index)}><DeleteForeverIcon /></IconButton>)}
         disablePadding
       >
         <ListItemButton
-          onClick={(event) => handleListItemClick(question)}
-          selected={selectedQuestion === question}
+          onClick={(event) => handleListItemClick(index+1)}
+          selected={selectedQuestion === index+1}
         >
-          {question}
+          {`Item ${index+1}`}
         </ListItemButton>
       </ListItem>
     ));
@@ -58,6 +65,7 @@ export default function TestModalQuestions(props) {
 }
 
 TestModalQuestions.defaultProps = {
-  questions: ["Item 1"],
-  question: "Item 1",
+  questions: [],
+  question: "",
+  testData:[],
 };
