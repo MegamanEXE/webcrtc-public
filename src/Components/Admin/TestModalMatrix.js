@@ -13,7 +13,7 @@ export default function TestModalMatrix(props) {
   useEffect(() => {
     const qi = testData.questions[selectedQuestion - 1].questionImages || {};
     setQMatrix({ ...qMatrix, ...qi })
-  }, [selectedQuestion]);
+  }, [selectedQuestion,testData]);
 
   const handleUpload = (e, i) => {
     let uploadedImage = e.target.files[0];

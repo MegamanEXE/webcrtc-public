@@ -10,8 +10,9 @@ export default function TestModalQuestions(props) {
   const selectedQuestion = props.selectedQuestion;
   
 
-  const td = props.testData.questions;
+  const td = props.testData.questions || [];
 
+  const emptyInitialStates = { "1":"", "2":"", "3":"", "4":"","5":"", "6":"","7":"", "8":"" };
 
   const handleListItemClick = (q) => {
     console.log(q);
@@ -24,9 +25,11 @@ export default function TestModalQuestions(props) {
   }
 
   const handleAddQuestion = () => {
-    let newIndex = td.length + 1;
-    let newQ = [...td, `Item ${newIndex}`]
-    console.log(`Item ${newIndex} added`);
+    const newIndex = td.length + 1;
+    const newQ = { "number":newIndex, "correct_answer":-1, "questionImages":emptyInitialStates, "answerImages":emptyInitialStates }
+    console.log({ ...props.testData, "questions":[...props.testData.questions,newQ ]});
+    props.setTestData({ ...props.testData, "questions": [...props.testData.questions, newQ] });
+    //console.log(`Item ${newIndex} added`);
   };
 
   const selectableItems = () => {

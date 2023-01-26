@@ -24,7 +24,7 @@ const style = {
   boxShadow: 24,
 };
 
-export default function TestModal({ setModalOpen, modalOpen, testData }) {
+export default function TestModal({ setModalOpen, modalOpen, testData, setTestData }) {
   const [selectedQuestion, setSelectedQuestion] = useState(1);
 
 
@@ -64,8 +64,8 @@ export default function TestModal({ setModalOpen, modalOpen, testData }) {
             <TestModalSettings />
           </Box>
           <Box id="mainContent">
-            <Box id="leftFrame"><TestModalQuestions testData={testData} selectedQuestion={selectedQuestion} setSelectedQuestion={setSelectedQuestion} /></Box>
-            <Box id="rightFrame"><TestModalMatrix testData={testData} selectedQuestion={selectedQuestion} setSelectedQuestion={setSelectedQuestion} /></Box>
+            <Box id="leftFrame"><TestModalQuestions testData={testData} selectedQuestion={selectedQuestion} setSelectedQuestion={setSelectedQuestion} setTestData={setTestData} /></Box>
+            <Box id="rightFrame"><TestModalMatrix testData={testData} selectedQuestion={selectedQuestion} setSelectedQuestion={setSelectedQuestion} setTestData={setTestData} /></Box>
           </Box>
 
         </Box>
