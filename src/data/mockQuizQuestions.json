@@ -9,51 +9,51 @@
       {
       "number": 1,
       "correct_answer": 3,
-      "questionImages": [
-        "assets/Tests/defaultSample/1/q1.png",
-        "assets/Tests/defaultSample/1/q2.png",
-        "assets/Tests/defaultSample/1/q3.png",
-        "assets/Tests/defaultSample/1/q4.png",
-        "assets/Tests/defaultSample/1/q5.png",
-        "assets/Tests/defaultSample/1/q6.png",
-        "assets/Tests/defaultSample/1/q7.png",
-        "assets/Tests/defaultSample/1/q8.png"
-      ],
-      "answerImages": [
-        "assets/Tests/defaultSample/1/a1.png",
-        "assets/Tests/defaultSample/1/a2.png",
-        "assets/Tests/defaultSample/1/a3.png",
-        "assets/Tests/defaultSample/1/a4.png",
-        "assets/Tests/defaultSample/1/a5.png",
-        "assets/Tests/defaultSample/1/a6.png",
-        "assets/Tests/defaultSample/1/a7.png",
-        "assets/Tests/defaultSample/1/a8.png"
-      ]
+      "questionImages": {
+        "1":"assets/Tests/defaultSample/1/q1.png",
+        "2":"assets/Tests/defaultSample/1/q2.png",
+        "3":"assets/Tests/defaultSample/1/q3.png",
+        "4":"assets/Tests/defaultSample/1/q4.png",
+        "5":"assets/Tests/defaultSample/1/q5.png",
+        "6":"assets/Tests/defaultSample/1/q6.png",
+        "7":"assets/Tests/defaultSample/1/q7.png",
+        "8":"assets/Tests/defaultSample/1/q8.png"
+      },
+      "answerImages": {
+        "1": "assets/Tests/defaultSample/1/a1.png",
+        "2": "assets/Tests/defaultSample/1/a2.png",
+        "3": "assets/Tests/defaultSample/1/a3.png",
+        "4": "assets/Tests/defaultSample/1/a4.png",
+        "5": "assets/Tests/defaultSample/1/a5.png",
+        "6": "assets/Tests/defaultSample/1/a6.png",
+        "7": "assets/Tests/defaultSample/1/a7.png",
+        "8": "assets/Tests/defaultSample/1/a8.png"
+      }
     },
 
     {
       "number": 2,
       "correct_answer": 8,
-      "questionImages": [
-        "assets/Tests/defaultSample/2/q1.png",
-        "assets/Tests/defaultSample/2/q2.png",
-        "assets/Tests/defaultSample/2/q3.png",
-        "assets/Tests/defaultSample/2/q4.png",
-        "assets/Tests/defaultSample/2/q5.png",
-        "assets/Tests/defaultSample/2/q6.png",
-        "assets/Tests/defaultSample/2/q7.png",
-        "assets/Tests/defaultSample/2/q8.png"
-      ],
-      "answerImages": [
-        "assets/Tests/defaultSample/2/a1.png",
-        "assets/Tests/defaultSample/2/a2.png",
-        "assets/Tests/defaultSample/2/a3.png",
-        "assets/Tests/defaultSample/2/a4.png",
-        "assets/Tests/defaultSample/2/a5.png",
-        "assets/Tests/defaultSample/2/a6.png",
-        "assets/Tests/defaultSample/2/a7.png",
-        "assets/Tests/defaultSample/2/a8.png"
-      ]
+      "questionImages": {
+        "1": "assets/Tests/defaultSample/2/q1.png",
+        "2": "assets/Tests/defaultSample/2/q2.png",
+        "3": "assets/Tests/defaultSample/2/q3.png",
+        "4": "assets/Tests/defaultSample/2/q4.png",
+        "5": "assets/Tests/defaultSample/2/q5.png",
+        "6": "assets/Tests/defaultSample/2/q6.png",
+        "7": "assets/Tests/defaultSample/2/q7.png",
+        "8": "assets/Tests/defaultSample/2/q8.png"
+      },
+      "answerImages": {
+        "1": "assets/Tests/defaultSample/2/a1.png",
+        "2": "assets/Tests/defaultSample/2/a2.png",
+        "3": "assets/Tests/defaultSample/2/a3.png",
+        "4": "assets/Tests/defaultSample/2/a4.png",
+        "5": "assets/Tests/defaultSample/2/a5.png",
+        "6": "assets/Tests/defaultSample/2/a6.png",
+        "7": "assets/Tests/defaultSample/2/a7.png",
+        "8": "assets/Tests/defaultSample/2/a8.png"
+      }
     }
   ]
   }

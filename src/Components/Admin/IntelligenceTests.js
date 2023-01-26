@@ -35,8 +35,7 @@ export default function IntelligenceTests() {
   //Returns unique test names from JSON data
   useEffect(() => {
     const generateTestList = () => {
-      // return [...new Set(DATA.map(d => d['client']))]
-      return ["Standard APM Test"]; //TODO...this
+      return Object.keys(DATA);
     }
     setTests(generateTestList().sort());
   }, [DATA]);
