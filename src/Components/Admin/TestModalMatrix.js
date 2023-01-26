@@ -14,20 +14,28 @@ export default function TestModalMatrix(props) {
   useEffect(() => {
     const qi = testData.questions[selectedQuestion - 1].questionImages || {};
     setQMatrix({ ...qMatrix, ...qi })
+
+    const ai = testData.questions[selectedQuestion - 1].answerImages || {};
+    setAMatrix({ ...aMatrix, ...ai })
   }, [selectedQuestion]);
 
-  const handleUpload = (e, i) => {
+  const handleQUpload = (e, i) => {
     let uploadedImage = e.target.files[0];
     setQMatrix({ ...qMatrix, [`${i}`]: URL.createObjectURL(uploadedImage) });
-
   }
+
+  const handleAUpload = (e, i) => {
+    let uploadedImage = e.target.files[0];
+    setAMatrix({ ...aMatrix, [`${i}`]: URL.createObjectURL(uploadedImage) });
+  }
+  //Yes, these two above could be merged with one extra param, I just like to be more explicit like this
+
   useEffect(() => {
-    const newS = produce(testData, (draft) => {
+    const newState = produce(testData, (draft) => {
       draft.questions[selectedQuestion - 1].questionImages = qMatrix;
     })
-    console.log(newS)
-    props.setTestData(newS); 
-  },[qMatrix]); //TODO: Fix infinite loop and we're set. Long live Immer
+    props.setTestData(newState); 
+  },[qMatrix]);
 
   const generateQMatrix = () => {
     let qs = []
@@ -39,7 +47,7 @@ export default function TestModalMatrix(props) {
               <img alt={`qMatrix-${i}`} width="96px" style={{ objectFit: "contain", maxHeight: "96px" }} src={qMatrix[`${i}`]} />
               :
               <Fab size="small" className="questionAddImageBtn">
-                <IconButton component="label"><input id={`q-${i}`} type="file" accept="image/*" onChange={(e) => handleUpload(e, i)} hidden /><AddIcon sx={{ color: '#9f9f9f' }} /></IconButton>
+                <IconButton component="label"><input id={`q-${i}`} type="file" accept="image/*" onChange={(e) => handleQUpload(e, i)} hidden /><AddIcon sx={{ color: '#9f9f9f' }} /></IconButton>
               </Fab>
             }
           </Box>
@@ -66,6 +74,28 @@ export default function TestModalMatrix(props) {
       </Box>)
   }
 
+
+
+  const generateAMatrix = () => {
+    let as = []
+    for (let i = 1; i <= 8; i++) {
+      as.push(
+        <ImageListItem key={i} className="qm-ImageList">
+          <Box className="modal-questionMatrix">
+            {aMatrix[`${i}`] ?
+              <img alt={`aMatrix-${i}`} width="96px" style={{ objectFit: "contain", maxHeight: "96px" }} src={aMatrix[`${i}`]} />
+              :
+              <Fab size="small" className="questionAddImageBtn">
+                <IconButton component="label"><input id={`a-${i}`} type="file" accept="image/*" onChange={(e) => handleAUpload(e, i)} hidden /><AddIcon sx={{ color: '#9f9f9f' }} /></IconButton>
+              </Fab>
+            }
+          </Box>
+        </ImageListItem>
+      )
+    }
+    return as;
+  }
+
   const answerMatrix = () => {
     return (
       <Box display="flex" flexDirection="column" flexGrow="1">
@@ -73,15 +103,7 @@ export default function TestModalMatrix(props) {
         <Box sx={{ px: 4, py: 1 }}>
           <Box display="flex" justifyContent="center">
             <ImageList cols={4} gap={10}>
-              <ImageListItem className="qm-ImageList"><Box className="modal-questionMatrix"><Fab size="small" className="questionAddImageBtn"><AddIcon sx={{ color: '#9f9f9f' }} /></Fab></Box></ImageListItem>
-              <ImageListItem className="qm-ImageList"><Box className="modal-questionMatrix"><Fab size="small" className="questionAddImageBtn"><AddIcon sx={{ color: '#9f9f9f' }} /></Fab></Box></ImageListItem>
-              <ImageListItem className="qm-ImageList"><Box className="modal-questionMatrix"><Fab size="small" className="questionAddImageBtn"><AddIcon sx={{ color: '#9f9f9f' }} /></Fab></Box></ImageListItem>
-              <ImageListItem className="qm-ImageList"><Box className="modal-questionMatrix"><Fab size="small" className="questionAddImageBtn"><AddIcon sx={{ color: '#9f9f9f' }} /></Fab></Box></ImageListItem>
-
-              <ImageListItem className="qm-ImageList"><Box className="modal-questionMatrix"><Fab size="small" className="questionAddImageBtn"><AddIcon sx={{ color: '#9f9f9f' }} /></Fab></Box></ImageListItem>
-              <ImageListItem className="qm-ImageList"><Box className="modal-questionMatrix"><Fab size="small" className="questionAddImageBtn"><AddIcon sx={{ color: '#9f9f9f' }} /></Fab></Box></ImageListItem>
-              <ImageListItem className="qm-ImageList"><Box className="modal-questionMatrix"><Fab size="small" className="questionAddImageBtn"><AddIcon sx={{ color: '#9f9f9f' }} /></Fab></Box></ImageListItem>
-              <ImageListItem className="qm-ImageList"><Box className="modal-questionMatrix"><Fab size="small" className="questionAddImageBtn"><AddIcon sx={{ color: '#9f9f9f' }} /></Fab></Box></ImageListItem>
+              {generateAMatrix()}
             </ImageList>
           </Box>
         </Box>
