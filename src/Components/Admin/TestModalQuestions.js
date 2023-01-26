@@ -4,7 +4,6 @@ import { GridAddIcon } from "@mui/x-data-grid";
 import { useEffect, useState } from "react";
 
 export default function TestModalQuestions(props) {
-  const [items, setItems] = useState({});
 
   const setSelectedQuestion = props.setSelectedQuestion;
   const selectedQuestion = props.selectedQuestion;

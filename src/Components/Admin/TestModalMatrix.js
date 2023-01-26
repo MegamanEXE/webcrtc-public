@@ -2,6 +2,7 @@ import { Fab, IconButton, ImageList, ImageListItem, Typography } from "@mui/mate
 import { Box } from "@mui/system";
 import AddIcon from '@mui/icons-material/Add';
 import { useEffect, useRef, useState } from "react";
+import produce from "immer";
 
 
 export default function TestModalMatrix(props) {
@@ -13,39 +14,29 @@ export default function TestModalMatrix(props) {
   useEffect(() => {
     const qi = testData.questions[selectedQuestion - 1].questionImages || {};
     setQMatrix({ ...qMatrix, ...qi })
-  }, [selectedQuestion,testData]);
+  }, [selectedQuestion]);
 
   const handleUpload = (e, i) => {
     let uploadedImage = e.target.files[0];
-    setQMatrix({ ...qMatrix, [`${i}`]: uploadedImage });
+    setQMatrix({ ...qMatrix, [`${i}`]: URL.createObjectURL(uploadedImage) });
+
   }
+  useEffect(() => {
+    const newS = produce(testData, (draft) => {
+      draft.questions[selectedQuestion - 1].questionImages = qMatrix;
+    })
+    console.log(newS)
+    props.setTestData(newS); 
+  },[qMatrix]); //TODO: Fix infinite loop and we're set. Long live Immer
 
   const generateQMatrix = () => {
-    //If question images exist along with their positions
-    // let qi = testData.questions[selectedQuestion - 1].questionImages || {};
-    // if (Object.keys(qi).length !== 0) {
-    //   for (const k in qi) {
-    //     if (qi[k]) {
-    //       setQMatrix(prevState => { 
-    //         // console.log({...prevState, [k]: qi[k] })
-    //         return { ...prevState, [k]: qi[k] } })
-    //     }
-    //   }
-    // }
-
-
-    //500 iq (standard) way, leaving the above just in case
-    //This just merges directly from the API to the state because they have the same format
-    // setQMatrix({...qMatrix, ...qi})
-
-
     let qs = []
     for (let i = 1; i <= 8; i++) {
       qs.push(
         <ImageListItem key={i} className="qm-ImageList">
           <Box className="modal-questionMatrix">
             {qMatrix[`${i}`] ?
-              <img alt={`qMatrix-${i}`} width="100px" style={{ objectFit: "contain", maxHeight: "100px" }} src={qMatrix[`${i}`] || URL.createObjectURL(qMatrix[`${i}`])} />
+              <img alt={`qMatrix-${i}`} width="96px" style={{ objectFit: "contain", maxHeight: "96px" }} src={qMatrix[`${i}`]} />
               :
               <Fab size="small" className="questionAddImageBtn">
                 <IconButton component="label"><input id={`q-${i}`} type="file" accept="image/*" onChange={(e) => handleUpload(e, i)} hidden /><AddIcon sx={{ color: '#9f9f9f' }} /></IconButton>
