@@ -10,7 +10,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import TestModalQuestions from './TestModalQuestions';
 import TestModalSettings from './TestModalSettings';
 import TestModalMatrix from './TestModalMatrix';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 const style = {
   position: 'absolute',
@@ -27,10 +27,31 @@ const style = {
 export default function TestModal({ setModalOpen, modalOpen, testData, setTestData }) {
   const [selectedQuestion, setSelectedQuestion] = useState(1);
 
+  let firstTimeOpened = useRef(false); 
+  let unalteredTestData = useRef(testData); //if modifications are not saved
+  useEffect(() => {
+    if(!firstTimeOpened.current){
+      firstTimeOpened.current = true;
+      unalteredTestData.current = testData;
+    }   
+  },);
+
 
   const handleClose = () => {
     setModalOpen(false);
   }
+
+  const handleCancel = () => {
+    setTestData(unalteredTestData.current);
+    setModalOpen(false);
+  }
+
+  const handleSave = () => {
+    /* TODO: publish changes to API */
+    setModalOpen(false);
+  }
+
+
 
   return (<Modal
     className="testModal"
@@ -74,8 +95,8 @@ export default function TestModal({ setModalOpen, modalOpen, testData, setTestDa
 
 
         <Box id="modalActions">
-          <Button sx={{ mx: 2 }}>Cancel</Button>
-          <Button><strong>Save Test</strong></Button>
+          <Button sx={{ mx: 2 }} onClick={()=>handleCancel()}>Cancel</Button>
+          <Button onClick={() =>  handleSave()}><strong>Save Test</strong></Button>
         </Box>
 
 

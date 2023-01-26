@@ -26,9 +26,7 @@ export default function TestModalQuestions(props) {
   const handleAddQuestion = () => {
     const newIndex = td.length + 1;
     const newQ = { "number":newIndex, "correct_answer":-1, "questionImages":emptyInitialStates, "answerImages":emptyInitialStates }
-    console.log({ ...props.testData, "questions":[...props.testData.questions,newQ ]});
     props.setTestData({ ...props.testData, "questions": [...props.testData.questions, newQ] });
-    //console.log(`Item ${newIndex} added`);
   };
 
   const selectableItems = () => {
