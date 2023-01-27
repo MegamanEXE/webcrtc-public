@@ -1,8 +1,10 @@
-import { Fab, IconButton, ImageList, ImageListItem, Typography } from "@mui/material";
+import { Fab, IconButton, ImageList, ImageListItem, ImageListItemBar, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import AddIcon from '@mui/icons-material/Add';
 import { useEffect, useRef, useState } from "react";
 import produce from "immer";
+import { DeleteForever } from "@mui/icons-material";
+import ModalImage from "./ModalImage";
 
 
 export default function TestModalMatrix(props) {
@@ -10,6 +12,7 @@ export default function TestModalMatrix(props) {
   const testData = props.testData;
   const [qMatrix, setQMatrix] = useState({ "1": "", "2": "", "3": "", "4": "", "5": "", "6": "", "7": "", "8": "" });
   const [aMatrix, setAMatrix] = useState({ "1": "", "2": "", "3": "", "4": "", "5": "", "6": "", "7": "", "8": "" });
+  const [markedSolution, setMarkedSolution] = useState(-1);
 
   useEffect(() => {
     const qi = testData.questions[selectedQuestion - 1].questionImages || {};
@@ -81,15 +84,17 @@ export default function TestModalMatrix(props) {
     for (let i = 1; i <= 8; i++) {
       as.push(
         <ImageListItem key={i} className="qm-ImageList">
-          <Box className="modal-questionMatrix">
+          <Box  sx={{border: markedSolution===i ? "7px solid green" : "7px solid transparent"}}>
             {aMatrix[`${i}`] ?
-              <img alt={`aMatrix-${i}`} width="96px" style={{ objectFit: "contain", maxHeight: "96px" }} src={aMatrix[`${i}`]} />
+              <ModalImage alt={`aMatrix-${i}`} src={aMatrix[`${i}`]} setMarkedSolution={setMarkedSolution} idx={i}  />
               :
               <Fab size="small" className="questionAddImageBtn">
                 <IconButton component="label"><input id={`a-${i}`} type="file" accept="image/*" onChange={(e) => handleAUpload(e, i)} hidden /><AddIcon sx={{ color: '#9f9f9f' }} /></IconButton>
               </Fab>
             }
           </Box>
+
+
         </ImageListItem>
       )
     }
@@ -102,7 +107,7 @@ export default function TestModalMatrix(props) {
         <Typography variant="h6" sx={{ px: 4 }}>Solutions</Typography>
         <Box sx={{ px: 4, py: 1 }}>
           <Box display="flex" justifyContent="center">
-            <ImageList cols={4} gap={10}>
+            <ImageList cols={4} gap={9} sx={{overflow:'hidden', p:'7px'}}>
               {generateAMatrix()}
             </ImageList>
           </Box>
