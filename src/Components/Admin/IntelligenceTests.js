@@ -90,11 +90,11 @@ export default function IntelligenceTests() {
       </TableRow>
       <TableRow>
         <TableCell align='right' style={{ width: '35%', fontWeight: 'bold' }}>Number of Questions:</TableCell>
-        <TableCell>{stl}</TableCell>{/* TODO: Calculate this from array*/}
+        <TableCell>{selectedTest.questions!==undefined ? selectedTest.questions.length : null}</TableCell>{/* TODO: Calculate this from array*/}
       </TableRow>
       <TableRow>
         <TableCell align='right' style={{ width: '35%', fontWeight: 'bold' }}>Time:</TableCell>
-        <TableCell>{selectedTest && `${selectedTest["time"]} minutes`}</TableCell>
+        <TableCell>{selectedTest.time!==undefined ? `${selectedTest["time"]} minutes` : null}</TableCell>
       </TableRow>
       <TableRow>
         <TableCell align='right' style={{ width: '35%', fontWeight: 'bold' }}>Comments:</TableCell>
