@@ -20,6 +20,8 @@ export default function TestModalMatrix(props) {
 
     const ai = testData.questions[selectedQuestion - 1].answerImages || {};
     setAMatrix({ ...aMatrix, ...ai })
+
+    setMarkedSolution(testData.questions[selectedQuestion - 1]["correct_answer"] || -1);
   }, [selectedQuestion]);
 
   const handleQUpload = (e, i) => {
@@ -39,6 +41,14 @@ export default function TestModalMatrix(props) {
     })
     props.setTestData(newState); 
   },[qMatrix]);
+
+  //Update correct answer
+  useEffect(() => {
+    const newState = produce(testData, (draft) => {
+      draft.questions[selectedQuestion - 1]["correct_answer"] = markedSolution;
+    })
+    props.setTestData(newState);
+  },[markedSolution]);
 
   const generateQMatrix = () => {
     let qs = []
@@ -84,9 +94,9 @@ export default function TestModalMatrix(props) {
     for (let i = 1; i <= 8; i++) {
       as.push(
         <ImageListItem key={i} className="qm-ImageList">
-          <Box  sx={{border: markedSolution===i ? "7px solid green" : "7px solid transparent"}}>
+          <Box className={markedSolution === i ? "modal-questionMatrix greenBorder" : "modal-questionMatrix greyBorder"}>
             {aMatrix[`${i}`] ?
-              <ModalImage alt={`aMatrix-${i}`} src={aMatrix[`${i}`]} setMarkedSolution={setMarkedSolution} idx={i}  />
+              <ModalImage alt={`aMatrix-${i}`} src={aMatrix[`${i}`]} setMarkedSolution={setMarkedSolution} setAMatrix={setAMatrix} idx={i}  />
               :
               <Fab size="small" className="questionAddImageBtn">
                 <IconButton component="label"><input id={`a-${i}`} type="file" accept="image/*" onChange={(e) => handleAUpload(e, i)} hidden /><AddIcon sx={{ color: '#9f9f9f' }} /></IconButton>

@@ -4,17 +4,18 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import { useState } from "react";
 import zIndex from "@mui/material/styles/zIndex";
+import produce from "immer";
 
 export default function ModalImage(props) {
   const [hovered, setHovered] = useState(false);
 
   const handleMouseEnter = () => {
-    console.log("Mouse over");
+    // console.log("Mouse over");
     setHovered(true);
   }
 
   const handleMouseLeave = () => {
-    console.log("Mouse leave");
+    // console.log("Mouse leave");
     setHovered(false);
   }
 
@@ -25,8 +26,10 @@ export default function ModalImage(props) {
 
   const deleteImage = () => {
     console.log("image deleted");
-
-  }
+    props.setAMatrix(prev => produce(prev,(draft)=>{
+      draft[props.idx]=""
+    }));
+  } //heckin' love immer now
 
 
   return (<>
@@ -39,7 +42,7 @@ export default function ModalImage(props) {
       <img
         alt={props.alt}
         width="96px"
-        style={{ objectFit: "contain", maxHeight: "96px" }}
+        style={{ objectFit: "contain", maxHeight: "80px" }}
         src={props.src}
       />
   

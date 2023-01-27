@@ -387,3 +387,15 @@ a:active {
 .addQuestionItemBtn:hover {
   background-color: #a0a0a0;
 }
+
+.greenBorder{
+  border: 7px solid green;
+}
+
+.transparentBorder {
+  border: 7px solid transparent;
+}
+
+.greyBorder{
+  border: 7px solid #BDBDBD;
+}
