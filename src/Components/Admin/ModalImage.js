@@ -8,6 +8,7 @@ import produce from "immer";
 
 export default function ModalImage(props) {
   const [hovered, setHovered] = useState(false);
+  const isQ = props.isQuestion;
 
   const handleMouseEnter = () => {
     // console.log("Mouse over");
@@ -26,9 +27,15 @@ export default function ModalImage(props) {
 
   const deleteImage = () => {
     console.log("image deleted");
-    props.setAMatrix(prev => produce(prev,(draft)=>{
-      draft[props.idx]=""
-    }));
+    if (isQ) {
+      props.setQMatrix(prev => produce(prev, (draft) => {
+        draft[props.idx] = ""
+      }));
+    } else {
+      props.setAMatrix(prev => produce(prev, (draft) => {
+        draft[props.idx] = ""
+      }));
+    }
   } //heckin' love immer now
 
 
@@ -37,7 +44,7 @@ export default function ModalImage(props) {
       sx={{ display: 'relative' }}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-     
+
     >
       <img
         alt={props.alt}
@@ -45,14 +52,14 @@ export default function ModalImage(props) {
         style={{ objectFit: "contain", maxHeight: "80px" }}
         src={props.src}
       />
-  
-      <Box hidden={!hovered} sx={{ position: 'absolute', left:0,top:0,  width: '100%', height: '100%', backgroundColor: 'rgba(0, 0, 0, 0.5)'}}>
+
+      <Box hidden={!hovered} sx={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
         <Box height="inherit" display="flex" flexDirection="column" justifyContent="center" alignItems="center" gap={1}>
-          <Button variant="contained" color="success" size="medium" onClick={markSolution} ><CheckCircleOutlineIcon /></Button>
+          {!isQ && <Button variant="contained" color="success" size="medium" onClick={markSolution} ><CheckCircleOutlineIcon /></Button>}
           <Button variant="contained" color="error" size="medium" onClick={deleteImage}><DeleteIcon /></Button>
         </Box>
       </Box>
-    
+
     </Box>
-    </>);
+  </>);
 }

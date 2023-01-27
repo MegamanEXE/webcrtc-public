@@ -14,6 +14,7 @@ export default function TestModalMatrix(props) {
   const [aMatrix, setAMatrix] = useState({ "1": "", "2": "", "3": "", "4": "", "5": "", "6": "", "7": "", "8": "" });
   const [markedSolution, setMarkedSolution] = useState(-1);
 
+  //Updates view to match data from API
   useEffect(() => {
     const qi = testData.questions[selectedQuestion - 1].questionImages || {};
     setQMatrix({ ...qMatrix, ...qi })
@@ -57,7 +58,8 @@ export default function TestModalMatrix(props) {
         <ImageListItem key={i} className="qm-ImageList">
           <Box className="modal-questionMatrix">
             {qMatrix[`${i}`] ?
-              <img alt={`qMatrix-${i}`} width="96px" style={{ objectFit: "contain", maxHeight: "96px" }} src={qMatrix[`${i}`]} />
+              // <img alt={`qMatrix-${i}`} width="96px" style={{ objectFit: "contain", maxHeight: "96px" }} src={qMatrix[`${i}`]} />
+              <ModalImage isQuestion={true} alt={`qMatrix-${i}`} src={qMatrix[`${i}`]} setQMatrix={setQMatrix} idx={i}  />
               :
               <Fab size="small" className="questionAddImageBtn">
                 <IconButton component="label"><input id={`q-${i}`} type="file" accept="image/*" onChange={(e) => handleQUpload(e, i)} hidden /><AddIcon sx={{ color: '#9f9f9f' }} /></IconButton>
@@ -96,7 +98,7 @@ export default function TestModalMatrix(props) {
         <ImageListItem key={i} className="qm-ImageList">
           <Box className={markedSolution === i ? "modal-questionMatrix greenBorder" : "modal-questionMatrix greyBorder"}>
             {aMatrix[`${i}`] ?
-              <ModalImage alt={`aMatrix-${i}`} src={aMatrix[`${i}`]} setMarkedSolution={setMarkedSolution} setAMatrix={setAMatrix} idx={i}  />
+              <ModalImage isQuestion={false} alt={`aMatrix-${i}`} src={aMatrix[`${i}`]} setMarkedSolution={setMarkedSolution} setAMatrix={setAMatrix} idx={i} />
               :
               <Fab size="small" className="questionAddImageBtn">
                 <IconButton component="label"><input id={`a-${i}`} type="file" accept="image/*" onChange={(e) => handleAUpload(e, i)} hidden /><AddIcon sx={{ color: '#9f9f9f' }} /></IconButton>
