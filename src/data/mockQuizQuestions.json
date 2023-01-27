@@ -9,6 +9,7 @@
       {
       "number": 1,
       "correct_answer": 3,
+      "difficulty": "Easy",
       "questionImages": {
         "1":"assets/Tests/defaultSample/1/q1.png",
         "2":"assets/Tests/defaultSample/1/q2.png",
@@ -34,6 +35,7 @@
     {
       "number": 2,
       "correct_answer": 8,
+      "difficulty": "Hard",
       "questionImages": {
         "1": "assets/Tests/defaultSample/2/q1.png",
         "2": "assets/Tests/defaultSample/2/q2.png",

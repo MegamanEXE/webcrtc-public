@@ -8,16 +8,6 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 export default function TestModalSettings() {
   const [derivedFrom, setDerivedFrom] = useState("None");
-  const [selectedChip, setSelectedChip] = useState(1);
-
-  const difficultyChips = [
-    { key: 1, label: "Easy", color: "primary" }, { key: 2, label: "Medium", color: "secondary" }, { key: 3, label: "Hard", color: "error" }
-  ];
-
-  const handleDifficulty = (k) => {
-    console.log(k)
-    setSelectedChip(k);
-  }
 
   return (<>
     <Box id="modalSettingsContainer">
@@ -63,14 +53,6 @@ export default function TestModalSettings() {
                   <MenuItem disabled value={-1}>None</MenuItem>
                 </Select>
               </FormControl>
-            </Box>
-
-            <Box display="flex" flexDirection="row" flexGrow="1" alignItems="flex-start" justifyContent="center">
-              <FormLabel component="legend" sx={{ minWidth: '80px', alignSelf: 'center' }}>Difficulty</FormLabel>
-              <Stack direction="row" size="small" spacing="8px">
-                {difficultyChips.map(c => <Chip key={c.key} label={c.label} color={selectedChip === c.key ? c.color : 'default'} onClick={() => setSelectedChip(c.key)} />)}
-
-              </Stack>
             </Box>
 
 

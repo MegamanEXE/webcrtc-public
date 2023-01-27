@@ -1,4 +1,4 @@
-import { Fab, IconButton, ImageList, ImageListItem, ImageListItemBar, Typography } from "@mui/material";
+import { Chip, Fab, FormLabel, IconButton, ImageList, ImageListItem, ImageListItemBar, Stack, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import AddIcon from '@mui/icons-material/Add';
 import { useEffect, useRef, useState } from "react";
@@ -13,6 +13,13 @@ export default function TestModalMatrix(props) {
   const [qMatrix, setQMatrix] = useState({ "1": "", "2": "", "3": "", "4": "", "5": "", "6": "", "7": "", "8": "" });
   const [aMatrix, setAMatrix] = useState({ "1": "", "2": "", "3": "", "4": "", "5": "", "6": "", "7": "", "8": "" });
   const [markedSolution, setMarkedSolution] = useState(-1);
+  const [selectedChip, setSelectedChip] = useState(1);
+
+  const difficultyChips = [
+    { key: 1, label: "Easy", color: "primary" }, { key: 2, label: "Medium", color: "secondary" }, { key: 3, label: "Hard", color: "error" }
+  ];
+
+  
 
   //Updates view to match data from API
   useEffect(() => {
@@ -23,6 +30,13 @@ export default function TestModalMatrix(props) {
     setAMatrix({ ...aMatrix, ...ai })
 
     setMarkedSolution(testData.questions[selectedQuestion - 1]["correct_answer"] || -1);
+
+    //Welcome to programming 101. I could have just made the name as keys, but I moved this
+    //from the settings component and couldn't be bothered. I just want to sleep
+    const d = testData.questions[selectedQuestion - 1].difficulty;
+    let x;
+    if (d === "Easy") x = 1; else if (d === "Medium") x=2; else if (d === "Hard") x=3;
+    setSelectedChip(x);
   }, [selectedQuestion]);
 
   const handleQUpload = (e, i) => {
@@ -50,6 +64,18 @@ export default function TestModalMatrix(props) {
     })
     props.setTestData(newState);
   },[markedSolution]);
+
+  const handleDifficulty = (k) => {
+    setSelectedChip(k);
+  }
+
+  //Update difficulty in API
+  useEffect(() => {
+    const newState = produce(testData, (draft) => {
+      draft.questions[selectedQuestion - 1]["difficulty"] = difficultyChips[selectedChip-1].label;
+    })
+    props.setTestData(newState);
+  }, [selectedChip]);
 
   const generateQMatrix = () => {
     let qs = []
@@ -124,6 +150,17 @@ export default function TestModalMatrix(props) {
             </ImageList>
           </Box>
         </Box>
+
+        <Box display="flex" flexDirection="row" flexGrow="1" alignItems="center" justifyContent="flex-start" sx={{mx:4}}>
+          <FormLabel component="legend" sx={{ minWidth: '80px', alignSelf: 'center' }}>Difficulty: </FormLabel>
+          <Stack direction="row" size="small" spacing="8px">
+            {difficultyChips.map(c => <Chip key={c.key} label={c.label} color={selectedChip === c.key ? c.color : 'default'} onClick={() => setSelectedChip(c.key)} />)}
+
+          </Stack>
+        </Box>
+
+
+
       </Box>)
   }
 
