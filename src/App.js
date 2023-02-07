@@ -9,6 +9,7 @@ import './App.css';
 import "@fontsource/roboto";
 import AdminContainer from "./Components/Admin/AdminContainer";
 import Debugger from "./Components/Admin/Debugger";
+import CreateTestContainer from "./Components/CreateTest/CreateTestContainer";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           <Route path="/ForgotPassword" element={<ForgotPassword />} />
           <Route path="/FirstTest" element={<FirstTestContainer />} />
           <Route path="/Admin" element={<AdminContainer />} />
+          <Route path="/CreateTest" element={<CreateTestContainer />} />
           <Route path="/Debug" element={<Debugger />} />
         </Routes>
       </BrowserRouter>

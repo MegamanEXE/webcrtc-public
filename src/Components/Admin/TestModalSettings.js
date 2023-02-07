@@ -33,7 +33,7 @@ export default function TestModalSettings() {
               </FormControl>
             </Box>
 
-
+            {/* TODO, write regex or function for time and reflect it on IntelligenceTests*/}
             <Box display="flex" flexDirection="row" flexGrow="0.1" alignItems="flex-start" justifyContent="center">
               <FormLabel component="legend" sx={{ minWidth: '70px', alignSelf: 'center' }}>Timer</FormLabel>
               <FormControl fullWidth size="small">

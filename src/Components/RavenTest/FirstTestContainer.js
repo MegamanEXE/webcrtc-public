@@ -34,10 +34,10 @@ export default function FirstTestContainer() {
         <Box display="flex" sx={{minHeight: '100vh', width: '100%' }}> {/* Body start */}
 
           <Grid container display='flex' direction='column'>
-            <FirstTestHeader />
+            <Grid item sx={{ order: 1 }}><FirstTestHeader timer={480} /></Grid>
             {renderBasedOnState()}
           </Grid>
-        </Box> {/* Body end */}
+        </Box> 
       </ThemeProvider>
     </StyledEngineProvider >
   )

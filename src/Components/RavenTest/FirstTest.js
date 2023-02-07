@@ -36,6 +36,26 @@ export default function FirstTest({setQuizScreen}) {
     setSelectedAnswer(-1)
   }
 
+  const renderQuestions = () => {
+    let qs = [];
+    const qi = currentTestData["questions"][questionNumber - 1]["questionImages"];
+    for (let k in qi){
+      qs.push(<ImageListItem border="4px dashed transparent" key={`q${k + 1}`} className="questionImage"><img src={qi[k]} alt={`q${k + 1}`} /></ImageListItem>);
+    }
+
+    return qs;
+  }
+
+  const renderAnswers = () => {
+    let as = [];
+    const ai = currentTestData["questions"][questionNumber - 1]["answerImages"];
+    for (let k in ai) {
+      as.push(<AnswerOption src={ai[k]} id={`a${k + 1}`} selectedAnswer={selectedAnswer} setSelectedAnswer={setSelectedAnswer} />);
+    }
+
+    return as;
+  }
+
   return (
     <>
       <Grid item flexGrow={1} sx={{ width: '80%', alignSelf: 'center', order: 2 }}>
@@ -44,11 +64,10 @@ export default function FirstTest({setQuizScreen}) {
             <Typography sx={{ fontWeight: '700', size: '24px' }}>Question {questionNumber}</Typography>
             <Box className='actualQuestion'>
               <ImageList sx={{ overflow: 'hidden', }} cols={3} gap={20}>
-                {currentTestData 
-                  && currentTestData["questions"][questionNumber - 1]["questionImages"].map((q, i) => <ImageListItem border="4px dashed transparent" key={`q${i + 1}`} className="questionImage"><img src={q} alt={`q${i + 1}`} /></ImageListItem>)}
-
+                {currentTestData && renderQuestions()}
+                
                 {currentTestData &&
-                  <Box border="4px dashed grey" key="filler" width="84px"><img className='questionImage' src={`${currentTestData["questions"][questionNumber - 1]["answerImages"][selectedAnswer-1]}`} alt="" /></Box>
+                  <Box border="4px dashed grey" key="filler" width="84px"><img className='questionImage' src={`${currentTestData["questions"][questionNumber - 1]["answerImages"][selectedAnswer]}`} alt="" /></Box>
                 }
               </ImageList>
             </Box>
@@ -65,8 +84,7 @@ export default function FirstTest({setQuizScreen}) {
               <Typography sx={{ fontWeight: '700', size: '24px', }}>Which of these fit the best?</Typography>
 
               <ImageList sx={{ overflow: 'hidden' }} cols={4} gap={16} >
-                {currentTestData
-                  && currentTestData["questions"][questionNumber - 1]["answerImages"].map((q, i) => <AnswerOption src={q} id={`a${i + 1}`} selectedAnswer={selectedAnswer} setSelectedAnswer={setSelectedAnswer} />)}
+                {currentTestData && renderAnswers()}
               </ImageList>
             </Box>
           </Grid>
