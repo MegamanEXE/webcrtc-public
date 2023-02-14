@@ -72,7 +72,8 @@ export default function TestModalMatrix(props) {
   //Update difficulty in API
   useEffect(() => {
     const newState = produce(testData, (draft) => {
-      draft.questions[selectedQuestion - 1]["difficulty"] = difficultyChips[selectedChip-1].label;
+      if (difficultyChips[selectedChip - 1]!==undefined)
+        draft.questions[selectedQuestion - 1]["difficulty"] = difficultyChips[selectedChip-1].label;
     })
     props.setTestData(newState);
   }, [selectedChip]);
