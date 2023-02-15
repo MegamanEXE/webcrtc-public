@@ -13,10 +13,10 @@ export default function Canvas() {
   const [selectedShape, setSelectedShape] = useState(null);
 
   const divRef = useRef(null);
-  const layer1Ref = useRef(null);
+  const stage1_Ref = useRef(null);
 
   //Lift these up to CreateTestContainer later for submit button
-  const [shapes1, setShapes1] = useState({});
+  const [shapes1, setShapes1] = useState([]);
 
   //Utility debounce function
   function debounce(fn, ms) {
@@ -58,7 +58,22 @@ export default function Canvas() {
   const handleDrop = (event) => {
     event.preventDefault();
     const draggedData = event.dataTransfer.getData("dragged_shape");
-    console.log("Something dropped");
+    console.log(draggedData);
+
+    if (draggedData) {
+      const { type, offsetX, offsetY, clientHeight, clientWidth } = JSON.parse(draggedData);
+
+      stage1_Ref.current.setPointersPositions(event);
+      const coords = stage1_Ref.current.getPointerPosition();
+      console.log(coords)
+
+      if (type === SHAPE_TYPES.SQUARE) {
+        createSquare({
+          x: coords.x - (DEFAULTS.SQUARE.WIDTH/2),
+          y: coords.y - (DEFAULTS.SQUARE.HEIGHT/2),
+        });
+      }
+    }
   }
 
   const denom = 6;
@@ -78,16 +93,16 @@ export default function Canvas() {
 
       <Box id="canvasWorkspace" my={1.5} p={1.5} >
 
-
+          {/* Note only this first one has a ref, other matrices just use the same value calculated using this one */}
           <Box id="matrix1" className="matrix" ref={divRef}
             onDragOver={handleDragOver} onDrop={handleDrop}
             sx={{ width: matrix_size, height: matrix_size }}
           >
-            <Stage className="stage" width={dimensions.width} height={dimensions.height}  >
+            <Stage ref={stage1_Ref} className="stage" width={dimensions.width} height={dimensions.height}  >
               <Layer className="layer">
 
                 <Rect class="bg-color-rect" width={matrix_size} height={matrix_size} x={0} y={0} fill="white" stroke={layer_color} />{/* background color, do not remove */}
-
+                {shapes1.map(s=><Rect key={s.id} {...s} />)}
 
               </Layer>
             </Stage>
@@ -136,13 +151,13 @@ export default function Canvas() {
   function createSquare({ x, y }) {
     setShapes1(produce(shapes1, (draft) => {
       draft.push({
-        'id': nanoid(),
-        'type': SHAPE_TYPES.SQUARE,
-        'width': DEFAULTS.SQUARE.WIDTH,
-        'height': DEFAULTS.SQUARE.HEIGHT,
-        'fill': DEFAULTS.SQUARE.FILL,
-        'stroke': DEFAULTS.SQUARE.STROKE,
-        'rotation': DEFAULTS.SQUARE.ROTATION,
+        id: nanoid(),
+        type: SHAPE_TYPES.SQUARE,
+        width: DEFAULTS.SQUARE.WIDTH,
+        height: DEFAULTS.SQUARE.HEIGHT,
+        fill: DEFAULTS.SQUARE.FILL,
+        stroke: DEFAULTS.SQUARE.STROKE,
+        rotation: DEFAULTS.SQUARE.ROTATION,
         x,
         y
       })

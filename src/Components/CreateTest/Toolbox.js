@@ -25,7 +25,6 @@ const handleDragStart = (event) => {
     });
 
     // console.log(dragPayload)
-    // event.nativeEvent.dataTransfer.setData("dragged_shape", dragPayload);
     event.dataTransfer.setData("dragged_shape",dragPayload);
   }
 };

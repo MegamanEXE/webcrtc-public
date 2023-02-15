@@ -1,5 +1,5 @@
 const defaultStroke = "#000000";
-const defaultFill = "#FFFFFF"
+const defaultFill = "#ffff"
 
 export const SHAPE_TYPES = {
   SQUARE: "square",
