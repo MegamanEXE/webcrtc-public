@@ -1,12 +1,22 @@
-import { Box } from "@mui/material";
+import { Box, Paper } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 import { Circle, Layer, Rect, Stage } from "react-konva";
 import '../../App.css'
-
+import Toolbox from "./Toolbox";
+import RightBar from "./RightBar"
+import produce from "immer";
+import { nanoid } from "nanoid";
+import { DEFAULTS, SHAPE_TYPES } from "./ShapesData";
 
 export default function Canvas() {
-  const divRef = useRef(null)
   const [dimensions, setDimensions] = useState({ width: null, height: null });
+  const [selectedShape, setSelectedShape] = useState(null);
+
+  const divRef = useRef(null);
+  const layer1Ref = useRef(null);
+
+  //Lift these up to CreateTestContainer later for submit button
+  const [shapes1, setShapes1] = useState({});
 
   //Utility debounce function
   function debounce(fn, ms) {
@@ -25,10 +35,10 @@ export default function Canvas() {
   const handleResize = () => {
     if (divRef.current?.offsetHeight && divRef.current?.offsetWidth) {
       setDimensions({
-        width: divRef.current.offsetWidth - 20,
+        width: divRef.current.offsetWidth,
         height: divRef.current.offsetHeight,
-      }) 
-      console.log(`Rendering at ${dimensions.width} x ${dimensions.height}`)
+      })
+      // console.log(`Rendering at ${dimensions.width} x ${dimensions.height}`)
     }
   }
 
@@ -43,54 +53,100 @@ export default function Canvas() {
     return () => window.removeEventListener('resize', debouncedHandleResize)
   })
 
+  const handleDragOver = (event) => event.preventDefault();
+
+  const handleDrop = (event) => {
+    event.preventDefault();
+    const draggedData = event.dataTransfer.getData("dragged_shape");
+    console.log("Something dropped");
+  }
+
   const denom = 6;
-  const layer_size = 400;
+  const matrix_size = 250;
   const layer_color = "grey"
   const layer_gap = 15;
-  var center_offset = dimensions.width*0.1; //calculate this properly later
-  return (<Box id="canvasContainer">
-
-    <Box id="toolbox" >
-      Yo waddup
-    </Box>
+  var center_offset = dimensions.width * 0.1; //calculate this properly later
 
 
-    <Box id="canvasWorkspace" ref={divRef}>
-      {/* <Stage className="stage" width={dimensions.width/denom} height={dimensions.height/denom}> */}
+  return (
+    <Box id="canvasContainer">
 
-      <Stage className="stage" width={dimensions.width} height={dimensions.height}>
-        <Layer id="box1" className="layer" x={center_offset} width={layer_size} height={layer_size}>
-          <Rect class="bg-color-rect" width={layer_size} height={layer_size} x={0} y={0} fill="white" stroke={layer_color}
-          onClick={()=>{console.log("Layer clicked")}}
-          />{/* background color, do not remove */}
-
-          <Rect width={100} height={100} x={10} y={10} fill="blue" draggable="true" />
-          <Rect width={100} height={100} x={100} y={100} fill="blue" />
-        </Layer>
-
-        <Layer id="box2" x={center_offset + layer_size + layer_gap} y={0} className="layer" width={layer_size} height={layer_size}>
-          <Rect width={layer_size} height={layer_size} x={0} y={0} fill="white" stroke={layer_color} />
-
-          <Rect width={50} height={100} x={10} y={10} fill="lightblue" />
-          <Rect width={50} height={100} x={100} y={100} fill="green" />
-        </Layer>
-
-        <Layer id="box3" x={center_offset + layer_size*2 + layer_gap*2} y={0} className="layer" width={layer_size} height={layer_size}>
-          <Rect width={layer_size} height={layer_size} x={0} y={0} fill="white" stroke={layer_color} />
-
-          <Rect width={50} height={100} x={10} y={10} fill="lightblue" />
-          <Rect width={50} height={100} x={100} y={100} fill="green" />
-        </Layer>
-
-      </Stage>
-
-    </Box>
+      <Box id="toolbox" >
+        <Toolbox />
+      </Box>
 
 
-    <Box id="rightBar">
-      Yo waddup
-    </Box>
+      <Box id="canvasWorkspace" my={1.5} p={1.5} >
 
 
-  </Box>);
+          <Box id="matrix1" className="matrix" ref={divRef}
+            onDragOver={handleDragOver} onDrop={handleDrop}
+            sx={{ width: matrix_size, height: matrix_size }}
+          >
+            <Stage className="stage" width={dimensions.width} height={dimensions.height}  >
+              <Layer className="layer">
+
+                <Rect class="bg-color-rect" width={matrix_size} height={matrix_size} x={0} y={0} fill="white" stroke={layer_color} />{/* background color, do not remove */}
+
+
+              </Layer>
+            </Stage>
+          </Box>
+
+          <Box id="matrix2" className="matrix"
+            onDragOver={handleDragOver} onDrop={handleDrop}
+            sx={{ width: matrix_size, height: matrix_size }}
+          >
+            <Stage className="stage" width={dimensions.width} height={dimensions.height}  >
+              <Layer className="layer">
+
+                <Rect class="bg-color-rect" width={matrix_size} height={matrix_size} x={0} y={0} fill="white" stroke={layer_color} />
+
+
+              </Layer>
+            </Stage>
+          </Box>
+
+          <Box id="matrix3" className="matrix"
+            onDragOver={handleDragOver} onDrop={handleDrop}
+            sx={{ width: matrix_size, height: matrix_size }}
+          >
+            <Stage className="stage" width={dimensions.width} height={dimensions.height}  >
+              <Layer className="layer">
+
+                <Rect class="bg-color-rect" width={matrix_size} height={matrix_size} x={0} y={0} fill="white" stroke={layer_color} />
+
+
+              </Layer>
+            </Stage>
+          </Box>
+
+      </Box>
+
+
+      <Box id="rightBar">
+        <RightBar />
+      </Box>
+
+
+    </Box>);
+
+
+
+  function createSquare({ x, y }) {
+    setShapes1(produce(shapes1, (draft) => {
+      draft.push({
+        'id': nanoid(),
+        'type': SHAPE_TYPES.SQUARE,
+        'width': DEFAULTS.SQUARE.WIDTH,
+        'height': DEFAULTS.SQUARE.HEIGHT,
+        'fill': DEFAULTS.SQUARE.FILL,
+        'stroke': DEFAULTS.SQUARE.STROKE,
+        'rotation': DEFAULTS.SQUARE.ROTATION,
+        x,
+        y
+      })
+    }));
+  }
 }
+
