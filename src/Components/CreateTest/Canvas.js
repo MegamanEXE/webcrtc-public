@@ -7,80 +7,28 @@ import RightBar from "./RightBar"
 import produce from "immer";
 import { nanoid } from "nanoid";
 import { DEFAULTS, SHAPE_TYPES } from "./ShapesData";
+import Matrix from "./Matrix";
 
 export default function Canvas() {
-  const [dimensions, setDimensions] = useState({ width: null, height: null });
+  
   const [selectedShape, setSelectedShape] = useState(null);
 
-  const divRef = useRef(null);
-  const stage1_Ref = useRef(null);
+  
+  
 
   //Lift these up to CreateTestContainer later for submit button
-  const [shapes1, setShapes1] = useState([]);
-
-  //Utility debounce function
-  function debounce(fn, ms) {
-    let timer
-    return _ => {
-      clearTimeout(timer)
-      timer = setTimeout(_ => {
-        timer = null
-        fn.apply(this, arguments)
-      }, ms)
-    };
-
-  }
-
-  //Set stage's dimensions because it only takes pixel values as its dimensions
-  const handleResize = () => {
-    if (divRef.current?.offsetHeight && divRef.current?.offsetWidth) {
-      setDimensions({
-        width: divRef.current.offsetWidth,
-        height: divRef.current.offsetHeight,
-      })
-      // console.log(`Rendering at ${dimensions.width} x ${dimensions.height}`)
-    }
-  }
-
-  //For initial render
-  useEffect(() => { handleResize() }, [])
-
-  //To control resize. In the future, may try using Stage's scale to make it fully responsive
-  useEffect(() => {
-    const debouncedHandleResize = debounce(handleResize, 500)
-
-    window.addEventListener('resize', debouncedHandleResize);
-    return () => window.removeEventListener('resize', debouncedHandleResize)
-  })
-
-  const handleDragOver = (event) => event.preventDefault();
-
-  const handleDrop = (event) => {
-    event.preventDefault();
-    const draggedData = event.dataTransfer.getData("dragged_shape");
-    console.log(draggedData);
-
-    if (draggedData) {
-      const { type, offsetX, offsetY, clientHeight, clientWidth } = JSON.parse(draggedData);
-
-      stage1_Ref.current.setPointersPositions(event);
-      const coords = stage1_Ref.current.getPointerPosition();
-      console.log(coords)
-
-      if (type === SHAPE_TYPES.SQUARE) {
-        createSquare({
-          x: coords.x - (DEFAULTS.SQUARE.WIDTH/2),
-          y: coords.y - (DEFAULTS.SQUARE.HEIGHT/2),
-        });
-      }
-    }
-  }
-
-  const denom = 6;
-  const matrix_size = 250;
-  const layer_color = "grey"
-  const layer_gap = 15;
-  var center_offset = dimensions.width * 0.1; //calculate this properly later
+  //Nothing wrong with being explicit. This way is easier to debug
+  const [shapes, setShapes] = useState({
+    '1': [],
+    '2': [],
+    '3': [],
+    '4': [],
+    '5': [],
+    '6': [],
+    '7': [],
+    '8': [],
+    '9': [],
+  });
 
 
   return (
@@ -92,49 +40,10 @@ export default function Canvas() {
 
 
       <Box id="canvasWorkspace" my={1.5} p={1.5} >
+        <Matrix id="matrix-1" shapes={shapes['1']} setShapes={setShapes} />
+        <Matrix id="matrix-2" shapes={shapes['2']} setShapes={setShapes} />
+        <Matrix id="matrix-3" shapes={shapes['3']} setShapes={setShapes} />
 
-          {/* Note only this first one has a ref, other matrices just use the same value calculated using this one */}
-          <Box id="matrix1" className="matrix" ref={divRef}
-            onDragOver={handleDragOver} onDrop={handleDrop}
-            sx={{ width: matrix_size, height: matrix_size }}
-          >
-            <Stage ref={stage1_Ref} className="stage" width={dimensions.width} height={dimensions.height}  >
-              <Layer className="layer">
-
-                <Rect class="bg-color-rect" width={matrix_size} height={matrix_size} x={0} y={0} fill="white" stroke={layer_color} />{/* background color, do not remove */}
-                {shapes1.map(s=><Rect key={s.id} {...s} />)}
-
-              </Layer>
-            </Stage>
-          </Box>
-
-          <Box id="matrix2" className="matrix"
-            onDragOver={handleDragOver} onDrop={handleDrop}
-            sx={{ width: matrix_size, height: matrix_size }}
-          >
-            <Stage className="stage" width={dimensions.width} height={dimensions.height}  >
-              <Layer className="layer">
-
-                <Rect class="bg-color-rect" width={matrix_size} height={matrix_size} x={0} y={0} fill="white" stroke={layer_color} />
-
-
-              </Layer>
-            </Stage>
-          </Box>
-
-          <Box id="matrix3" className="matrix"
-            onDragOver={handleDragOver} onDrop={handleDrop}
-            sx={{ width: matrix_size, height: matrix_size }}
-          >
-            <Stage className="stage" width={dimensions.width} height={dimensions.height}  >
-              <Layer className="layer">
-
-                <Rect class="bg-color-rect" width={matrix_size} height={matrix_size} x={0} y={0} fill="white" stroke={layer_color} />
-
-
-              </Layer>
-            </Stage>
-          </Box>
 
       </Box>
 
@@ -146,22 +55,5 @@ export default function Canvas() {
 
     </Box>);
 
-
-
-  function createSquare({ x, y }) {
-    setShapes1(produce(shapes1, (draft) => {
-      draft.push({
-        id: nanoid(),
-        type: SHAPE_TYPES.SQUARE,
-        width: DEFAULTS.SQUARE.WIDTH,
-        height: DEFAULTS.SQUARE.HEIGHT,
-        fill: DEFAULTS.SQUARE.FILL,
-        stroke: DEFAULTS.SQUARE.STROKE,
-        rotation: DEFAULTS.SQUARE.ROTATION,
-        x,
-        y
-      })
-    }));
-  }
 }
 

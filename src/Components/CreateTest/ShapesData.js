@@ -11,20 +11,20 @@ export const DEFAULTS = {
   SQUARE: {
     STROKE: defaultStroke,
     FILL: defaultFill,
-    WIDTH: 100,
-    HEIGHT: 100,
+    WIDTH: 50,
+    HEIGHT: 50,
     ROTATION: 0,
   },
   RECT: {
     STROKE: defaultStroke,
     FILL: defaultFill,
-    WIDTH: 150,
-    HEIGHT: 100,
+    WIDTH: 80,
+    HEIGHT: 50,
     ROTATION: 0,
   },
   CIRCLE: {
     STROKE: defaultStroke,
     FILL: defaultFill,
-    RADIUS: 50,
+    RADIUS: 25,
   },
 };

@@ -1,4 +1,4 @@
-import { SquareOutlined } from "@mui/icons-material";
+import { CircleOutlined, SquareOutlined } from "@mui/icons-material";
 import { Paper, ToggleButton, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { SHAPE_TYPES } from "./ShapesData";
@@ -37,6 +37,7 @@ export default function Toolbox() {
       <Box>
         <Typography mb={1}>Shapes</Typography>
           <ToggleButton value={SHAPE_TYPES.SQUARE} shape={SHAPE_TYPES.SQUARE} draggable onDragStart={handleDragStart}><SquareOutlined /></ToggleButton>
+          <ToggleButton value={SHAPE_TYPES.CIRCLE} shape={SHAPE_TYPES.CIRCLE} draggable onDragStart={handleDragStart}><CircleOutlined /></ToggleButton>
       </Box>
 
     </Paper>
