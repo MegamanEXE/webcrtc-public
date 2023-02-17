@@ -4,14 +4,17 @@ import { Circle, Layer, Rect, Stage } from "react-konva";
 import '../../App.css'
 import produce from "immer";
 import { nanoid } from "nanoid";
-import { DEFAULTS, SHAPE_TYPES } from "./ShapesData";
+import { DEFAULTS, LIMITS, SHAPE_TYPES } from "./ShapesData";
 import GenericShape from "./GenericShape";
 
 export default function Matrix(props){
   const [dimensions, setDimensions] = useState({ width: null, height: null });
+  // const [selectedShapeID, setSelectedShapeID] = useState(null);
+  const selectedShapeID = props.selectedShapeID;
+  const setSelectedShapeID = props.setSelectedShapeID;
 
   const divRef = useRef(null);
-  const stage1_Ref = useRef(null);
+  const stageRef = useRef(null);
 
   const matrix_size = 150;
   const matrixNumber = props.id.split("-")[1]
@@ -50,19 +53,21 @@ export default function Matrix(props){
     return () => window.removeEventListener('resize', debouncedHandleResize)
   })
 
-  const handleDragOver = (event) => event.preventDefault();
+
+  const handleDragOver = (event) => {
+    event.preventDefault();
+  }
 
   const handleDrop = (event) => {
     event.preventDefault();
     const draggedData = event.dataTransfer.getData("dragged_shape");
-    console.log(draggedData);
+    // console.log(draggedData);
 
     if (draggedData) {
       const { type, offsetX, offsetY, clientHeight, clientWidth } = JSON.parse(draggedData);
 
-      stage1_Ref.current.setPointersPositions(event);
-      const coords = stage1_Ref.current.getPointerPosition();
-      console.log(coords)
+      stageRef.current.setPointersPositions(event);
+      const coords = stageRef.current.getPointerPosition();
 
       if (type === SHAPE_TYPES.SQUARE) {
         createSquare({
@@ -71,8 +76,8 @@ export default function Matrix(props){
         });
       } else if (type === SHAPE_TYPES.CIRCLE) {
         createCircle({
-          x: coords.x - (DEFAULTS.CIRCLE.RADIUS / 2),
-          y: coords.y - (DEFAULTS.CIRCLE.RADIUS / 2),
+          x: coords.x,
+          y: coords.y,
         });
       }
     }
@@ -84,11 +89,11 @@ export default function Matrix(props){
     onDragOver={handleDragOver} onDrop={handleDrop}
     sx={{ width: matrix_size, height: matrix_size }}
     >
-      <Stage ref={stage1_Ref} className="stage" width={dimensions.width} height={dimensions.height}  >
+      <Stage ref={stageRef} className="stage" width={dimensions.width} height={dimensions.height} onClick={()=>setSelectedShapeID(null)}  >
         <Layer className="layer">
 
           <Rect class="bg-color-rect" width={matrix_size} height={matrix_size} x={0} y={0} fill="white" />{/* background color, do not remove */}
-          {props.shapes.map(s => <GenericShape key={s.id} {...s} />)}
+          {props.shapes.map(s => <GenericShape key={s.id} selectedShapeID={selectedShapeID} setSelectedShapeID={setSelectedShapeID} matrixNumber={matrixNumber} shapes={props.shapes} setShapes={props.setShapes} {...s} />)}
 
         </Layer>
       </Stage>

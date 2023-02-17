@@ -11,7 +11,7 @@ import Matrix from "./Matrix";
 
 export default function Canvas() {
   
-  const [selectedShape, setSelectedShape] = useState(null);
+  const [selectedShapeID, setSelectedShapeID] = useState(null);
 
   
   
@@ -40,9 +40,9 @@ export default function Canvas() {
 
 
       <Box id="canvasWorkspace" my={1.5} p={1.5} >
-        <Matrix id="matrix-1" shapes={shapes['1']} setShapes={setShapes} />
-        <Matrix id="matrix-2" shapes={shapes['2']} setShapes={setShapes} />
-        <Matrix id="matrix-3" shapes={shapes['3']} setShapes={setShapes} />
+        <Matrix id="matrix-1" shapes={shapes['1']} setShapes={setShapes} selectedShapeID={selectedShapeID} setSelectedShapeID={setSelectedShapeID} />
+        <Matrix id="matrix-2" shapes={shapes['2']} setShapes={setShapes} selectedShapeID={selectedShapeID} setSelectedShapeID={setSelectedShapeID} />
+        <Matrix id="matrix-3" shapes={shapes['3']} setShapes={setShapes} selectedShapeID={selectedShapeID} setSelectedShapeID={setSelectedShapeID} />
 
 
       </Box>

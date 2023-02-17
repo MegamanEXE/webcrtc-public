@@ -28,3 +28,14 @@ export const DEFAULTS = {
     RADIUS: 25,
   },
 };
+
+export const LIMITS = {
+  RECT: {
+    MAX: 100,
+    MIN: 10,
+  },
+  CIRCLE: {
+    MAX: 100,
+    MIN: 5,
+  },
+};
