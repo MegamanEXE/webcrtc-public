@@ -36,6 +36,6 @@ export const LIMITS = {
   },
   CIRCLE: {
     MAX: 100,
-    MIN: 5,
+    MIN: 10,
   },
 };

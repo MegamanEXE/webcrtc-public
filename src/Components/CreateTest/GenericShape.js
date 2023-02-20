@@ -1,6 +1,6 @@
 import produce from "immer";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Circle, Rect, Transformer } from "react-konva";
+import { Circle, Ellipse, Rect, Transformer } from "react-konva";
 import { LIMITS, SHAPE_TYPES } from "./ShapesData";
 
 //Utility clamp function
@@ -10,6 +10,18 @@ const boundBoxCallbackForRectangle = (oldBox, newBox) => {
   if (
     newBox.width < LIMITS.RECT.MIN || newBox.height < LIMITS.RECT.MIN ||
     newBox.width > LIMITS.RECT.MAX || newBox.height > LIMITS.RECT.MAX) {
+    return oldBox;
+  }
+  return newBox;
+};
+
+const boundBoxCallbackForCircle = (oldBox, newBox) => {
+  if (
+    newBox.width < LIMITS.CIRCLE.MIN ||
+    newBox.height < LIMITS.CIRCLE.MIN ||
+    newBox.width > LIMITS.CIRCLE.MAX ||
+    newBox.height > LIMITS.CIRCLE.MAX
+  ) {
     return oldBox;
   }
   return newBox;
@@ -35,8 +47,7 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
     }
   }
 
-  //Transform shapes, this is the only somewhat complicated function
-  const transformRectShape = (node, id, e) => {
+  const transformShape = (node, id, e) => {
     const scaleX = node.scaleX();
     const scaleY = node.scaleY();
 
@@ -51,10 +62,38 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
         d.x = node.x();
         d.y = node.y();
 
+        //Handle special cases here
+        if(d.type === "circle"){
+          d.radius = clamp((node.width() * scaleX) / 2, LIMITS.CIRCLE.MIN, LIMITS.CIRCLE.MAX);
+        } else {
+          d.rotation = node.rotation();
+
+          d.width = clamp(node.width() * scaleX, LIMITS.RECT.MIN, LIMITS.RECT.MAX);
+          d.height = clamp(node.height() * scaleY, LIMITS.RECT.MIN, LIMITS.RECT.MAX);
+        } 
+      }));
+    }
+  }
+
+  // Merged into transformShape (previously transformRectangleShape)
+  const transformCircleShape = (node, id, event) => {
+    const scaleX = node.scaleX();
+    const scaleY = node.scaleY();
+
+    node.scaleX(1);
+    node.scaleY(1);
+
+    const shapeIdx = shapes.findIndex(s => s.id === id);
+    if (shapeIdx !== -1) {
+      setShapes(prevState => produce(prevState, (draft) => {
+        let d = draft[matrixNumber][shapeIdx];
+        d.x = node.x();
+        d.y = node.y();
+
         d.rotation = node.rotation();
 
-        d.width = clamp(node.width() * scaleX, LIMITS.RECT.MIN, LIMITS.RECT.MAX);
-        d.height = clamp(node.height() * scaleY, LIMITS.RECT.MIN, LIMITS.RECT.MAX);
+        d.radius = clamp((node.width() * scaleX)/2, LIMITS.CIRCLE.MIN, LIMITS.CIRCLE.MAX);
+     
       }));
     }
   }
@@ -92,26 +131,26 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
   }, [props.id]);
 
   const handleTransform = useCallback((event) => {
-    transformRectShape(shapeRef.current, props.id, event);
+    transformShape(shapeRef.current, props.id, event);
   }, [props.id]);
 
   switch (props.type) {
     case SHAPE_TYPES.SQUARE:
-      return <><Rect ref={shapeRef} {...props} draggable isSelected={isSelected} onClick={handleSelect} onTap={handleSelect} onDragStart={handleSelect} onDragEnd={handleDrag} onTransformEnd={handleTransform} />
-        {
-          isSelected && (
-            <Transformer
-              anchorSize={5}
-              borderDash={[6, 2]}
-              ref={transformerRef}
-              boundBoxFunc={boundBoxCallbackForRectangle}
-            />
-          )
-        }</>
+      return <>
+        <Rect ref={shapeRef} {...props} draggable isSelected={isSelected} onClick={handleSelect} onTap={handleSelect} onDragStart={handleSelect} onDragEnd={handleDrag} onTransformEnd={handleTransform} />
+        {isSelected && (<Transformer anchorSize={5} borderDash={[6, 2]} ref={transformerRef} boundBoxFunc={boundBoxCallbackForRectangle} />)}
+      </>
     case SHAPE_TYPES.RECT:
-      return <Rect {...props} draggable />
+      return <>
+        <Rect ref={shapeRef} {...props} draggable isSelected={isSelected} onClick={handleSelect} onTap={handleSelect} onDragStart={handleSelect} onDragEnd={handleDrag} onTransformEnd={handleTransform} />
+        {isSelected && (<Transformer anchorSize={5} borderDash={[6, 2]} ref={transformerRef} boundBoxFunc={boundBoxCallbackForRectangle} />)}
+      </>
     case SHAPE_TYPES.CIRCLE:
-      return <Circle {...props} draggable />
+      return <>
+        <Circle ref={shapeRef} {...props} draggable isSelected={isSelected} onClick={handleSelect} onTap={handleSelect} onDragStart={handleSelect} onDragEnd={handleDrag} onTransformEnd={handleTransform}
+           />
+        {isSelected && (<Transformer anchorSize={5} borderDash={[6, 2]} ref={transformerRef} rotateEnabled={false} enabledAnchors={["top-left", "top-right", "bottom-right", "bottom-left"]} boundBoxFunc={boundBoxCallbackForCircle} />)}
+      </>
     default:
       return null
   }
