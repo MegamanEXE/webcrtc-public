@@ -1,4 +1,4 @@
-import { Box, Paper } from "@mui/material";
+import { Box, Grid, Paper } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 import { Circle, Layer, Rect, Stage } from "react-konva";
 import '../../App.css'
@@ -10,11 +10,8 @@ import { DEFAULTS, SHAPE_TYPES } from "./ShapesData";
 import Matrix from "./Matrix";
 
 export default function Canvas() {
-  
-  const [selectedShapeID, setSelectedShapeID] = useState(null);
 
-  
-  
+  const [selectedShapeID, setSelectedShapeID] = useState(null);
 
   //Lift these up to CreateTestContainer later for submit button
   //Nothing wrong with being explicit. This way is easier to debug
@@ -30,26 +27,40 @@ export default function Canvas() {
     '9': [],
   });
 
+  //Set this in events to properly update what matrix is being used. Is helpful in general
+  //to implement matrix features. Remember, a proper value for this is a string, not an int
+  const [selectedMatrix, setSelectedMatrix] = useState("1");
+
+  const generateGridItems = () => {
+    let gridItems = []
+    for (let i = 1; i <= 9; i++) {
+      gridItems.push(<Grid item className="gridMatrix" key={`matrixKey-${i}`} xs={4}>
+        <Matrix id={`matrix-${i}`} shapes={shapes[i.toString()]} setShapes={setShapes} selectedShapeID={selectedShapeID} setSelectedShapeID={setSelectedShapeID} selectedMatrix={selectedMatrix} setSelectedMatrix={setSelectedMatrix} />
+      </Grid>);
+    }
+
+    return gridItems;
+  }
 
   return (
     <Box id="canvasContainer">
 
       <Box id="toolbox" >
-        <Toolbox />
+        <Toolbox selectedShapeID={selectedShapeID} shapes={shapes} setShapes={setShapes} selectedMatrix={selectedMatrix} />
       </Box>
 
 
       <Box id="canvasWorkspace" my={1.5} p={1.5} >
-        <Matrix id="matrix-1" shapes={shapes['1']} setShapes={setShapes} selectedShapeID={selectedShapeID} setSelectedShapeID={setSelectedShapeID} />
-        <Matrix id="matrix-2" shapes={shapes['2']} setShapes={setShapes} selectedShapeID={selectedShapeID} setSelectedShapeID={setSelectedShapeID} />
-        <Matrix id="matrix-3" shapes={shapes['3']} setShapes={setShapes} selectedShapeID={selectedShapeID} setSelectedShapeID={setSelectedShapeID} />
+        <Grid container spacing={2} columns={12}>
+          {generateGridItems()}
+        </Grid>
 
 
       </Box>
 
 
       <Box id="rightBar">
-        <RightBar />
+        <RightBar selectedShapeID={selectedShapeID} shapes={shapes} setShapes={setShapes} selectedMatrix={selectedMatrix} />
       </Box>
 
 

@@ -1,7 +1,10 @@
 import { Box, Paper, ToggleButton, Typography } from "@mui/material";
+import produce from "immer";
 
 
-export default function RightBar(){
+export default function RightBar(props){
+  
+  
 
 
   return (
@@ -9,7 +12,7 @@ export default function RightBar(){
     <Paper sx={{ height: '100%', p: 1.5 }}>
 
       <Box>
-        <Typography mb={1}>Inspector</Typography>
+        <Typography mb={1}>Clipboard</Typography>
       </Box>
 
     </Paper>

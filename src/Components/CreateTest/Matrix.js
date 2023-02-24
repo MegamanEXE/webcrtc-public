@@ -1,6 +1,6 @@
 import { Box, Paper } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
-import { Circle, Layer, Rect, Stage } from "react-konva";
+import { Circle, Layer, Line, Rect, Stage } from "react-konva";
 import '../../App.css'
 import produce from "immer";
 import { nanoid } from "nanoid";
@@ -12,9 +12,10 @@ export default function Matrix(props){
   // const [selectedShapeID, setSelectedShapeID] = useState(null);
   const selectedShapeID = props.selectedShapeID;
   const setSelectedShapeID = props.setSelectedShapeID;
-
+  const setSelectedMatrix = props.setSelectedMatrix;
   const divRef = useRef(null);
   const stageRef = useRef(null);
+  const layerRef = useRef(null);
 
   const matrix_size = 150;
   const matrixNumber = props.id.split("-")[1]
@@ -64,6 +65,8 @@ export default function Matrix(props){
     // console.log(draggedData);
 
     if (draggedData) {
+      props.setSelectedMatrix(matrixNumber);
+
       const { type, offsetX, offsetY, clientHeight, clientWidth } = JSON.parse(draggedData);
 
       stageRef.current.setPointersPositions(event);
@@ -79,21 +82,41 @@ export default function Matrix(props){
           x: coords.x,
           y: coords.y,
         });
+      } else if (type === SHAPE_TYPES.VERTICAL_LINE) {
+        createVerticalLine({
+          x: coords.x,
+          y: coords.y - (DEFAULTS.VERTICAL_LINE.HEIGHT/2),
+        });
+      } else if (type === SHAPE_TYPES.TILTED_LINE) {
+        createTiltedLine({
+          x: coords.x + DEFAULTS.TILTED_LINE.HEIGHT/3,
+          y: coords.y - DEFAULTS.TILTED_LINE.HEIGHT/3,
+        });
       }
     }
   }
 
+  const handleCanvasClick = () => {
+    setSelectedMatrix(matrixNumber);
+    setSelectedShapeID(null);
+  }
+
   /* Note only the first one has a ref, other matrices just use the same value calculated using this one */ 
   return (
-    <Box id={props.id} className="matrix" ref={divRef}
+    <Box id={props.id} className={props.selectedMatrix === matrixNumber ? "matrix selected" : "matrix"} ref={divRef}
     onDragOver={handleDragOver} onDrop={handleDrop}
     sx={{ width: matrix_size, height: matrix_size }}
     >
-      <Stage ref={stageRef} className="stage" width={dimensions.width} height={dimensions.height} onClick={()=>setSelectedShapeID(null)}  >
-        <Layer className="layer">
+      <Stage ref={stageRef} className="stage" width={dimensions.width} height={dimensions.height} onClick={handleCanvasClick}  >
+        <Layer className="layer" ref={layerRef}>
 
           <Rect class="bg-color-rect" width={matrix_size} height={matrix_size} x={0} y={0} fill="white" />{/* background color, do not remove */}
-          {props.shapes.map(s => <GenericShape key={s.id} selectedShapeID={selectedShapeID} setSelectedShapeID={setSelectedShapeID} matrixNumber={matrixNumber} shapes={props.shapes} setShapes={props.setShapes} {...s} />)}
+          {props.shapes.map(s => <GenericShape key={s.id} selectedShapeID={selectedShapeID} setSelectedShapeID={setSelectedShapeID} 
+          matrixNumber={matrixNumber} 
+          setSelectedMatrix={setSelectedMatrix}
+          shapes={props.shapes} setShapes={props.setShapes} 
+          layerRef={layerRef}
+          {...s} />)}
 
         </Layer>
       </Stage>
@@ -110,6 +133,8 @@ export default function Matrix(props){
         height: DEFAULTS.SQUARE.HEIGHT,
         fill: DEFAULTS.SQUARE.FILL,
         stroke: DEFAULTS.SQUARE.STROKE,
+        strokeWidth: DEFAULTS.SQUARE.STROKE_WIDTH,
+        dash: DEFAULTS.SQUARE.DASH,
         rotation: DEFAULTS.SQUARE.ROTATION,
         x,
         y
@@ -125,8 +150,42 @@ export default function Matrix(props){
         radius: DEFAULTS.CIRCLE.RADIUS,
         fill: DEFAULTS.CIRCLE.FILL,
         stroke: DEFAULTS.CIRCLE.STROKE,
+        strokeWidth: DEFAULTS.CIRCLE.STROKE_WIDTH,
+        dash: DEFAULTS.CIRCLE.DASH,
         x,
         y
+      })
+    }));
+  }
+
+  function createVerticalLine({ x, y }) {
+    props.setShapes(prevState => produce(prevState, (draft) => {
+      draft[matrixNumber].push({
+        id: nanoid(),
+        type: SHAPE_TYPES.VERTICAL_LINE,
+        stroke: DEFAULTS.VERTICAL_LINE.STROKE,
+        strokeWidth: DEFAULTS.VERTICAL_LINE.STROKE_WIDTH,
+        dash: DEFAULTS.VERTICAL_LINE.DASH,
+        rotation: DEFAULTS.VERTICAL_LINE.ROTATION,
+        x,
+        y,
+        points: [0,0,0,DEFAULTS.VERTICAL_LINE.HEIGHT],
+      })
+    }));
+  }
+
+  function createTiltedLine({ x, y }) {
+    props.setShapes(prevState => produce(prevState, (draft) => {
+      draft[matrixNumber].push({
+        id: nanoid(),
+        type: SHAPE_TYPES.TILTED_LINE,
+        stroke: DEFAULTS.TILTED_LINE.STROKE,
+        strokeWidth: DEFAULTS.TILTED_LINE.STROKE_WIDTH,
+        dash: DEFAULTS.TILTED_LINE.DASH,
+        rotation: DEFAULTS.TILTED_LINE.ROTATION,
+        x,
+        y,
+        points: [0, 0, 0, DEFAULTS.TILTED_LINE.HEIGHT],
       })
     }));
   }

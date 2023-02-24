@@ -422,7 +422,9 @@ a:active {
 
   display: flex;
   flex-direction: row;
-  justify-content: space-evenly;
+  justify-content: space-around;
+  align-items:inherit;
+  
 }
 
 #rightBar {
@@ -439,4 +441,14 @@ a:active {
 
 .matrix{
   outline: 2px solid gray;
+}
+
+.matrix.selected{
+  outline: 5px solid rgb(13, 107, 153);
+}
+
+.gridMatrix {
+  display: flex;
+  justify-content: center;
+  align-self: center;
 }

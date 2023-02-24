@@ -1,7 +1,9 @@
+import { padding } from "@mui/system";
 import produce from "immer";
+import Konva from "konva";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Circle, Ellipse, Rect, Transformer } from "react-konva";
-import { LIMITS, SHAPE_TYPES } from "./ShapesData";
+import { Circle, Ellipse, Line, Rect, Transformer } from "react-konva";
+import { DEFAULTS, LIMITS, SHAPE_TYPES } from "./ShapesData";
 
 //Utility clamp function
 const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
@@ -27,10 +29,14 @@ const boundBoxCallbackForCircle = (oldBox, newBox) => {
   return newBox;
 };
 
+const boundBoxCallbackForLine = (oldBox, newBox) => {
+  //In case additional processing is needed. It's fine for now
+  return newBox;
+};
 
 
-export default function GenericShape({ selectedShapeID, setSelectedShapeID, matrixNumber, shapes, setShapes, ...props }) {
-  // let isSelected = props.id === props.selectedShapeID;
+
+export default function GenericShape({ selectedShapeID, setSelectedShapeID, matrixNumber, setSelectedMatrix, shapes, setShapes, layerRef, ...props }) {
   const [isSelected, setIsSelected] = useState(false);
 
   const shapeRef = useRef();
@@ -47,6 +53,7 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
     }
   }
 
+  //Update shapes in API according to new transformation
   const transformShape = (node, id, e) => {
     const scaleX = node.scaleX();
     const scaleY = node.scaleY();
@@ -62,42 +69,38 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
         d.x = node.x();
         d.y = node.y();
 
-        //Handle special cases here
-        if(d.type === "circle"){
+        //Handle specific cases here
+        if (d.type === SHAPE_TYPES.CIRCLE) {
+
           d.radius = clamp((node.width() * scaleX) / 2, LIMITS.CIRCLE.MIN, LIMITS.CIRCLE.MAX);
+
+        } else if ([SHAPE_TYPES.VERTICAL_LINE, SHAPE_TYPES.TILTED_LINE].includes(d.type)) {
+
+          const oldPoints = node.points();
+          const newPoints = [];
+          for (var i = 0; i < oldPoints.length / 2; i++) {
+            const point = {
+              x: oldPoints[i * 2] * scaleX,
+              y: oldPoints[i * 2 + 1] * scaleY,
+            }
+            newPoints.push(point.x, point.y);
+          }
+
+          d.points = newPoints;
+
         } else {
+
           d.rotation = node.rotation();
 
           d.width = clamp(node.width() * scaleX, LIMITS.RECT.MIN, LIMITS.RECT.MAX);
           d.height = clamp(node.height() * scaleY, LIMITS.RECT.MIN, LIMITS.RECT.MAX);
-        } 
+
+        }
       }));
     }
   }
 
-  // Merged into transformShape (previously transformRectangleShape)
-  const transformCircleShape = (node, id, event) => {
-    const scaleX = node.scaleX();
-    const scaleY = node.scaleY();
-
-    node.scaleX(1);
-    node.scaleY(1);
-
-    const shapeIdx = shapes.findIndex(s => s.id === id);
-    if (shapeIdx !== -1) {
-      setShapes(prevState => produce(prevState, (draft) => {
-        let d = draft[matrixNumber][shapeIdx];
-        d.x = node.x();
-        d.y = node.y();
-
-        d.rotation = node.rotation();
-
-        d.radius = clamp((node.width() * scaleX)/2, LIMITS.CIRCLE.MIN, LIMITS.CIRCLE.MAX);
-     
-      }));
-    }
-  }
-
+  //Mark active
   useEffect(() => {
     setIsSelected(selectedShapeID === props.id)
   }, [selectedShapeID])
@@ -106,50 +109,56 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
   const handleSelect = useCallback((event) => {
     event.cancelBubble = true;
     setSelectedShapeID(props.id);
+    setSelectedMatrix(matrixNumber);
     setIsSelected(selectedShapeID === props.id)
   }, [selectedShapeID]
   );
 
-
-  // const handleSelect = () => {
-  //     setSelectedShapeID(props.id);
-  //     // setIsSelected(selectedShapeID === props.id);
-  // }
-
+  //Add transformer nodes to selected shape
   useEffect(() => {
     if (isSelected) {
       transformerRef.current.nodes([shapeRef.current]);
       transformerRef.current.getLayer().batchDraw();
     }
-  }, [isSelected]); //if things go bad, check this later, may have to change isSelected to a state var 
+  }, [isSelected]);
 
-
-
-
+  //Event handler for moving shapes
   const handleDrag = useCallback((event) => {
     moveShape(props.id, event);
   }, [props.id]);
 
+  //Event handler for transforming shapes
   const handleTransform = useCallback((event) => {
     transformShape(shapeRef.current, props.id, event);
   }, [props.id]);
 
+  //MAIN return
   switch (props.type) {
     case SHAPE_TYPES.SQUARE:
       return <>
         <Rect ref={shapeRef} {...props} draggable isSelected={isSelected} onClick={handleSelect} onTap={handleSelect} onDragStart={handleSelect} onDragEnd={handleDrag} onTransformEnd={handleTransform} />
-        {isSelected && (<Transformer anchorSize={5} borderDash={[6, 2]} ref={transformerRef} boundBoxFunc={boundBoxCallbackForRectangle} />)}
+        {isSelected && (<Transformer anchorSize={5} rotateAnchorOffset={20} borderDash={[6, 2]} ref={transformerRef} boundBoxFunc={boundBoxCallbackForRectangle} />)}
       </>
     case SHAPE_TYPES.RECT:
       return <>
         <Rect ref={shapeRef} {...props} draggable isSelected={isSelected} onClick={handleSelect} onTap={handleSelect} onDragStart={handleSelect} onDragEnd={handleDrag} onTransformEnd={handleTransform} />
-        {isSelected && (<Transformer anchorSize={5} borderDash={[6, 2]} ref={transformerRef} boundBoxFunc={boundBoxCallbackForRectangle} />)}
+        {isSelected && (<Transformer anchorSize={5} rotateAnchorOffset={20} borderDash={[6, 2]} ref={transformerRef} boundBoxFunc={boundBoxCallbackForRectangle} />)}
       </>
     case SHAPE_TYPES.CIRCLE:
       return <>
         <Circle ref={shapeRef} {...props} draggable isSelected={isSelected} onClick={handleSelect} onTap={handleSelect} onDragStart={handleSelect} onDragEnd={handleDrag} onTransformEnd={handleTransform}
-           />
-        {isSelected && (<Transformer anchorSize={5} borderDash={[6, 2]} ref={transformerRef} rotateEnabled={false} enabledAnchors={["top-left", "top-right", "bottom-right", "bottom-left"]} boundBoxFunc={boundBoxCallbackForCircle} />)}
+        />
+        {isSelected && (<Transformer anchorSize={5} rotateAnchorOffset={20} borderDash={[6, 2]} ref={transformerRef} rotateEnabled={false} enabledAnchors={["top-left", "top-right", "bottom-right", "bottom-left"]} boundBoxFunc={boundBoxCallbackForCircle} />)}
+      </>
+    case SHAPE_TYPES.VERTICAL_LINE:
+      return <>
+        <Line ref={shapeRef} {...props} draggable isSelected={isSelected} onClick={handleSelect} onTap={handleSelect} onDragStart={handleSelect} onDragEnd={handleDrag} onTransformEnd={handleTransform} />
+        {isSelected && (<Transformer padding={10} rotateAnchorOffset={20} anchorSize={8} borderDash={[6, 2]} ref={transformerRef} enabledAnchors={['top-center', 'bottom-center']}  boundBoxFunc={boundBoxCallbackForLine} />) }
+      </>
+    case SHAPE_TYPES.TILTED_LINE:
+      return <>
+        <Line ref={shapeRef} {...props} draggable isSelected={isSelected} onClick={handleSelect} onTap={handleSelect} onDragStart={handleSelect} onDragEnd={handleDrag} onTransformEnd={handleTransform} />
+        {isSelected && (<Transformer padding={10} rotateAnchorOffset={20} anchorSize={8} borderDash={[6, 2]} ref={transformerRef} enabledAnchors={['top-center', 'bottom-center']} boundBoxFunc={boundBoxCallbackForLine} />)}
       </>
     default:
       return null
