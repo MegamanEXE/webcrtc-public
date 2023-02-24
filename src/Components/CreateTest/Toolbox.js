@@ -1,4 +1,4 @@
-import { CircleOutlined, LineStyle, SquareOutlined } from "@mui/icons-material";
+import { CircleOutlined, LineStyle, Padding, SquareOutlined } from "@mui/icons-material";
 import { Button, Menu, MenuItem, Paper, Popover, ToggleButton, Tooltip, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import produce from "immer";
@@ -10,8 +10,14 @@ import Draggable from "react-draggable";
 import PopupState, { bindMenu, bindTrigger } from "material-ui-popup-state";
 import { TbMinusVertical } from "react-icons/tb"
 import { RxSlash } from "react-icons/rx"
+import { nanoid } from "nanoid";
+import { circleObj, squareObj, tiltedLineObj, verticalLineObj } from "./ShapeObjects";
 
 const customIconSize = "1.5em";
+
+function randomInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1) + min)
+}
 
 const handleDragStart = (event) => {
   const type = event.target.attributes.shape.value;
@@ -37,6 +43,8 @@ const handleDragStart = (event) => {
     event.dataTransfer.setData("dragged_shape", dragPayload);
   }
 };
+
+
 
 export default function Toolbox(props) {
   const selectedShapeID = props.selectedShapeID;
@@ -95,6 +103,50 @@ export default function Toolbox(props) {
     }
   }
 
+  const handleClick = (event) => {
+    console.log(event.target)
+    let type;
+     
+    //Because somehow the Icon and the Button base are separate entities in MUI's toggle button
+    if (event.target.attributes.shape === undefined) 
+      type = event.target.parentElement.attributes.shape.value;
+    else
+      type = event.target.attributes.shape.value;
+
+    const matrix_size = 150; //Match this up with matrix_size in Matrix.js. Not needed generally.
+    const randPadding = matrix_size/4;
+
+    const defaultPosition = {x: matrix_size/3, y: matrix_size/3}
+    const randomPosition = {x: randomInt(randPadding,matrix_size-randPadding), y:randomInt(randPadding,matrix_size-randPadding)}
+    
+    if (type) {
+      switch(type){
+        case SHAPE_TYPES.SQUARE:
+          setShapes(prevState => produce(prevState, (draft) => {
+            draft[selectedMatrix].push({ id:nanoid(), ...randomPosition, ...squareObj});
+          }));
+          break;
+        case SHAPE_TYPES.CIRCLE:
+          setShapes(prevState => produce(prevState, (draft) => {
+            draft[selectedMatrix].push({ id: nanoid(), ...randomPosition, ...circleObj });
+          }));
+          break;
+        case SHAPE_TYPES.VERTICAL_LINE:
+          setShapes(prevState => produce(prevState, (draft) => {
+            draft[selectedMatrix].push({ id: nanoid(), ...randomPosition, ...verticalLineObj });
+          }));
+          break;
+        case SHAPE_TYPES.TILTED_LINE:
+          setShapes(prevState => produce(prevState, (draft) => {
+            draft[selectedMatrix].push({ id: nanoid(), ...randomPosition, ...tiltedLineObj });
+          }));
+          break;
+        default:
+          console.log("Case not found")
+          break;
+    }
+    }
+  }
 
 
 
@@ -103,31 +155,19 @@ export default function Toolbox(props) {
       <Paper sx={{ height: '100%', p: 1.5 }}>
 
         <Box>
-          <Typography mb={1}>Shapes</Typography>
-          <ToggleButton size="large" value={SHAPE_TYPES.SQUARE} shape={SHAPE_TYPES.SQUARE} draggable onDragStart={handleDragStart}><SquareOutlined /></ToggleButton>
-          <ToggleButton size="large" value={SHAPE_TYPES.CIRCLE} shape={SHAPE_TYPES.CIRCLE} draggable onDragStart={handleDragStart}><CircleOutlined /></ToggleButton>
-          <ToggleButton size="large" value={SHAPE_TYPES.VERTICAL_LINE} shape={SHAPE_TYPES.VERTICAL_LINE} draggable onDragStart={handleDragStart}><TbMinusVertical size={customIconSize} /></ToggleButton>
-          <ToggleButton size="large" value={SHAPE_TYPES.TILTED_LINE} shape={SHAPE_TYPES.TILTED_LINE} draggable onDragStart={handleDragStart}><RxSlash size={customIconSize} /></ToggleButton>
-          <ToggleButton size="large" value={SHAPE_TYPES.C_LINE} shape={SHAPE_TYPES.C_LINE} draggable onDragStart={handleDragStart}><CircleOutlined /></ToggleButton>
-          <ToggleButton size="large" value={SHAPE_TYPES.EIGHT_LINE} shape={SHAPE_TYPES.EIGHT_LINE} draggable onDragStart={handleDragStart}><CircleOutlined /></ToggleButton>
-          <ToggleButton size="large" value={SHAPE_TYPES.S_LINE} shape={SHAPE_TYPES.S_LINE} draggable onDragStart={handleDragStart}><CircleOutlined /></ToggleButton>
+          <Typography mb={1}>Lines</Typography>
+          <ToggleButton size="large" value={SHAPE_TYPES.VERTICAL_LINE} shape={SHAPE_TYPES.VERTICAL_LINE} draggable onDragStart={handleDragStart} onClick={handleClick}><TbMinusVertical size={customIconSize} /></ToggleButton>
+          <ToggleButton size="large" value={SHAPE_TYPES.TILTED_LINE} shape={SHAPE_TYPES.TILTED_LINE} draggable onDragStart={handleDragStart} onClick={handleClick}><RxSlash size={customIconSize} /></ToggleButton>
+          <ToggleButton size="large" value={SHAPE_TYPES.C_LINE} shape={SHAPE_TYPES.C_LINE} draggable onDragStart={handleDragStart} onClick={handleClick}><CircleOutlined /></ToggleButton>
+          <ToggleButton size="large" value={SHAPE_TYPES.EIGHT_LINE} shape={SHAPE_TYPES.EIGHT_LINE} draggable onDragStart={handleDragStart} onClick={handleClick}><CircleOutlined /></ToggleButton>
+          <ToggleButton size="large" value={SHAPE_TYPES.S_LINE} shape={SHAPE_TYPES.S_LINE} draggable onDragStart={handleDragStart} onClick={handleClick}><CircleOutlined /></ToggleButton>
 
-          <ToggleButton size="large" value={SHAPE_TYPES.CIRCLE} shape={SHAPE_TYPES.CIRCLE} draggable onDragStart={handleDragStart}><CircleOutlined /></ToggleButton>
-          <PopupState variant="popover" popupId="demo-popup-menu">
-            {(popupState) => (
-              <>
-                <Button variant="contained" {...bindTrigger(popupState)}>
-                  Dashboard
-                </Button>
-                <Menu {...bindMenu(popupState)}>
-                  <MenuItem><Draggable shape={SHAPE_TYPES.CIRCLE} draggable onDragStart={handleDragStart}><ToggleButton value={SHAPE_TYPES.CIRCLE} size="large" ><CircleOutlined /></ToggleButton></Draggable></MenuItem>
-                  <MenuItem onClick={popupState.close}>My account</MenuItem>
-                  <MenuItem onClick={popupState.close}>Logout</MenuItem>
-                </Menu>
-              </>
-            )}
-          </PopupState>
-          
+          <Typography mb={1}>Squares</Typography>
+          <ToggleButton size="large" value={SHAPE_TYPES.SQUARE} shape={SHAPE_TYPES.SQUARE} draggable onDragStart={handleDragStart} onClick={handleClick}><SquareOutlined height="inherit" /></ToggleButton>
+
+          <Typography mb={1}>Circles</Typography>
+          <ToggleButton size="large" value={SHAPE_TYPES.CIRCLE} shape={SHAPE_TYPES.CIRCLE} draggable onDragStart={handleDragStart} onClick={handleClick}><CircleOutlined /></ToggleButton>
+
           
         </Box>
 

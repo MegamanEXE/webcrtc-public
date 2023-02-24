@@ -6,6 +6,7 @@ import produce from "immer";
 import { nanoid } from "nanoid";
 import { DEFAULTS, LIMITS, SHAPE_TYPES } from "./ShapesData";
 import GenericShape from "./GenericShape";
+import { circleObj, squareObj, tiltedLineObj, verticalLineObj } from "./ShapeObjects";
 
 export default function Matrix(props){
   const [dimensions, setDimensions] = useState({ width: null, height: null });
@@ -112,11 +113,11 @@ export default function Matrix(props){
 
           <Rect class="bg-color-rect" width={matrix_size} height={matrix_size} x={0} y={0} fill="white" />{/* background color, do not remove */}
           {props.shapes.map(s => <GenericShape key={s.id} selectedShapeID={selectedShapeID} setSelectedShapeID={setSelectedShapeID} 
-          matrixNumber={matrixNumber} 
-          setSelectedMatrix={setSelectedMatrix}
-          shapes={props.shapes} setShapes={props.setShapes} 
-          layerRef={layerRef}
-          {...s} />)}
+            matrixNumber={matrixNumber} 
+            setSelectedMatrix={setSelectedMatrix}
+            shapes={props.shapes} setShapes={props.setShapes} 
+            layerRef={layerRef}
+            {...s} />)}
 
         </Layer>
       </Stage>
@@ -124,69 +125,29 @@ export default function Matrix(props){
   );
 
   // Creation functions
+  //There are good reasons why it finally looks like this.
+  //Read ShapeObjects.js for more info
   function createSquare({ x, y }) {
     props.setShapes(prevState => produce(prevState, (draft) => {
-      draft[matrixNumber].push({
-        id: nanoid(),
-        type: SHAPE_TYPES.SQUARE,
-        width: DEFAULTS.SQUARE.WIDTH,
-        height: DEFAULTS.SQUARE.HEIGHT,
-        fill: DEFAULTS.SQUARE.FILL,
-        stroke: DEFAULTS.SQUARE.STROKE,
-        strokeWidth: DEFAULTS.SQUARE.STROKE_WIDTH,
-        dash: DEFAULTS.SQUARE.DASH,
-        rotation: DEFAULTS.SQUARE.ROTATION,
-        x,
-        y
-      })
+      draft[matrixNumber].push({ id: nanoid(), x, y, ...squareObj})
     }));
   }
 
   function createCircle({ x, y }) {
     props.setShapes(prevState => produce(prevState, (draft) => {
-      draft[matrixNumber].push({
-        id: nanoid(),
-        type: SHAPE_TYPES.CIRCLE,
-        radius: DEFAULTS.CIRCLE.RADIUS,
-        fill: DEFAULTS.CIRCLE.FILL,
-        stroke: DEFAULTS.CIRCLE.STROKE,
-        strokeWidth: DEFAULTS.CIRCLE.STROKE_WIDTH,
-        dash: DEFAULTS.CIRCLE.DASH,
-        x,
-        y
-      })
+      draft[matrixNumber].push({id:nanoid(), x, y, ...circleObj})
     }));
   }
 
   function createVerticalLine({ x, y }) {
     props.setShapes(prevState => produce(prevState, (draft) => {
-      draft[matrixNumber].push({
-        id: nanoid(),
-        type: SHAPE_TYPES.VERTICAL_LINE,
-        stroke: DEFAULTS.VERTICAL_LINE.STROKE,
-        strokeWidth: DEFAULTS.VERTICAL_LINE.STROKE_WIDTH,
-        dash: DEFAULTS.VERTICAL_LINE.DASH,
-        rotation: DEFAULTS.VERTICAL_LINE.ROTATION,
-        x,
-        y,
-        points: [0,0,0,DEFAULTS.VERTICAL_LINE.HEIGHT],
-      })
+      draft[matrixNumber].push({id:nanoid(), x, y, ...verticalLineObj})
     }));
   }
 
   function createTiltedLine({ x, y }) {
     props.setShapes(prevState => produce(prevState, (draft) => {
-      draft[matrixNumber].push({
-        id: nanoid(),
-        type: SHAPE_TYPES.TILTED_LINE,
-        stroke: DEFAULTS.TILTED_LINE.STROKE,
-        strokeWidth: DEFAULTS.TILTED_LINE.STROKE_WIDTH,
-        dash: DEFAULTS.TILTED_LINE.DASH,
-        rotation: DEFAULTS.TILTED_LINE.ROTATION,
-        x,
-        y,
-        points: [0, 0, 0, DEFAULTS.TILTED_LINE.HEIGHT],
-      })
+      draft[matrixNumber].push({id:nanoid(), x, y, ...tiltedLineObj})
     }));
   }
 
