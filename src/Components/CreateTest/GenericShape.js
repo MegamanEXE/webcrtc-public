@@ -89,14 +89,11 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
 
           d.points = newPoints;
 
-        } else if ([SHAPE_TYPES.C_LINE].includes(d.type)) {
-          // console.log(node)
+        } else if ([SHAPE_TYPES.C_LINE, SHAPE_TYPES.S_LINE, SHAPE_TYPES.EIGHT_LINE].includes(d.type)) {
           d.rotation = node.rotation();
 
-          // d.width = node.width() * scaleX;
-          // d.height = node.height() * scaleY;
-          d.scaleX = scaleX;
-          d.scaleY = scaleY;
+          d.width = node.width()*scaleX;
+          d.height = node.height()*scaleY;
 
         } else {
 
@@ -146,20 +143,22 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
   //Do not be discouraged from this, this is more about manually adusting the box when NECESSARY, it wasn't always explicitly defined like this
   //but transforming lines comes with its own set of problems, which are fixed here.
   //At this point in time, they can probably be merged into one but I'll keep my options open until more shapes are defined
+
+  //Update: I've normalized the shapes enough that this one generic function works for all lines, but keeping this code in case fine-tuning is required
   const customTransformerBox = () => {
-    switch(props.type){
-      case SHAPE_TYPES.C_LINE:
-        shapeRef.current.getSelfRect = () => { return { x: 0, y: 0, width: DEFAULTS.C_LINE.WIDTH, height: DEFAULTS.C_LINE.HEIGHT }; }
-        break;
+    // switch(props.type){
+    //   case SHAPE_TYPES.C_LINE:
+    //     shapeRef.current.getSelfRect = () => { return { x: 0, y: 0, width: DEFAULTS.C_LINE.WIDTH, height: DEFAULTS.C_LINE.HEIGHT }; }
+    //     break;
 
-      case SHAPE_TYPES.S_LINE:
-        shapeRef.current.getSelfRect = () => { return { x: 0, y: 0, width: DEFAULTS.S_LINE.WIDTH, height: DEFAULTS.S_LINE.HEIGHT }; }
-        break;
+    //   case SHAPE_TYPES.S_LINE:
+    //     shapeRef.current.getSelfRect = () => { return { x: 0, y: 0, width: DEFAULTS.S_LINE.WIDTH, height: DEFAULTS.S_LINE.HEIGHT }; }
+    //     break;
 
-
-      default:
-        break;
-    }
+    //   default:
+    //     break;
+    // }
+    shapeRef.current.getSelfRect = () => { return { x: 0, y: 0, width: props.width, height: props.height }; }
   }
 
   //MAIN return
@@ -194,8 +193,8 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
       return <>
         <Shape ref={shapeRef} {...props} draggable isSelected={isSelected} onClick={handleSelect} onTap={handleSelect} onDragStart={handleSelect} onDragEnd={handleDrag} onTransformEnd={handleTransform} 
           sceneFunc={(c,s)=>{
-            const w = DEFAULTS.C_LINE.WIDTH;
-            const h = DEFAULTS.C_LINE.HEIGHT;
+            const w = props.width;
+            const h = props.height;
 
             c.beginPath();
             c.moveTo(w/2, 0);
@@ -213,8 +212,8 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
       return <>
         <Shape ref={shapeRef} {...props} draggable isSelected={isSelected} onClick={handleSelect} onTap={handleSelect} onDragStart={handleSelect} onDragEnd={handleDrag} onTransformEnd={handleTransform}
           sceneFunc={(c, s) => {
-            const w = DEFAULTS.S_LINE.WIDTH;
-            const h = DEFAULTS.S_LINE.HEIGHT;
+            const w = props.width;
+            const h = props.height;
 
             c.beginPath();
             c.moveTo(w/2, 0);
@@ -224,6 +223,37 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
               w/2, h
             );
             c.fillStrokeShape(s);
+          }}
+
+        />
+        {shapeRef.current && customTransformerBox()}
+        {isSelected && (<Transformer padding={10} ignoreStroke={true} rotateAnchorOffset={20} anchorSize={8} borderDash={[6, 2]} ref={transformerRef} rotationSnaps={snaps} enabledAnchors={['top-center', 'bottom-center']} boundBoxFunc={boundBoxCallbackForLine} />)}
+      </>
+    case SHAPE_TYPES.EIGHT_LINE:
+      return <>
+        <Shape ref={shapeRef} {...props} draggable isSelected={isSelected} onClick={handleSelect} onTap={handleSelect} onDragStart={handleSelect} onDragEnd={handleDrag} onTransformEnd={handleTransform}
+          sceneFunc={(c, s) => {
+            const w = props.width;
+            const h = props.height;
+
+            c.beginPath();
+            c.moveTo(w / 2, 0);
+            c.bezierCurveTo(
+              -w / 2, h / 4,
+              w * 1.5, h * 0.75,
+              w / 2, h
+            );
+            c.fillStrokeShape(s);
+
+            
+            c.moveTo(w / 2, 0);
+            c.bezierCurveTo(
+              w*1.5, h / 4,
+              -w*0.5, h * 0.75,
+              w / 2, h
+            );
+            c.fillStrokeShape(s);
+
           }}
 
         />
