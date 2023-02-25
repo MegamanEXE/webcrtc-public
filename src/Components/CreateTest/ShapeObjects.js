@@ -105,7 +105,7 @@ export const tallFatRectObj = {
   rotation: DEFAULTS.TALL_FAT_RECT.ROTATION,
 }
 
-export const tallThinObj = {
+export const tallThinRectObj = {
   type: SHAPE_TYPES.TALL_THIN_RECT,
   width: DEFAULTS.TALL_THIN_RECT.WIDTH,
   height: DEFAULTS.TALL_THIN_RECT.HEIGHT,
@@ -125,6 +125,7 @@ export const tiltedRectObj = {
   strokeWidth: DEFAULTS.TILTED_RECT.STROKE_WIDTH,
   dash: DEFAULTS.TILTED_RECT.DASH,
   rotation: DEFAULTS.TILTED_RECT.ROTATION,
+  skewX: DEFAULTS.TILTED_RECT.SKEWX,
 }
 
 export const foldedRectObj = {
@@ -193,7 +194,7 @@ export const starMediumObj = {
   rotation: DEFAULTS.STAR_MEDIUM.ROTATION,
 }
 
-export const starThingObj = {
+export const starThinObj = {
   type: SHAPE_TYPES.STAR_THIN,
   width: DEFAULTS.STAR_THIN.WIDTH,
   height: DEFAULTS.STAR_THIN.HEIGHT,

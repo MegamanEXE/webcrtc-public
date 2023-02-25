@@ -6,7 +6,7 @@ import produce from "immer";
 import { nanoid } from "nanoid";
 import { DEFAULTS, LIMITS, SHAPE_TYPES } from "./ShapesData";
 import GenericShape from "./GenericShape";
-import { circleObj, cLineObj, eightLineObj, sLineObj, squareObj, tiltedLineObj, verticalLineObj } from "./ShapeObjects";
+import { circleObj, cLineObj, cRectObj, diamondObj, eightLineObj, foldedRectObj, sLineObj, squareObj, starMediumObj, starObj, starThinObj, tallFatRectObj, tallRectObj, tallThinRectObj, tiltedLineObj, tiltedRectObj, topLeftRectObj, verticalLineObj } from "./ShapeObjects";
 
 export default function Matrix(props){
   const [dimensions, setDimensions] = useState({ width: null, height: null });
@@ -95,18 +95,73 @@ export default function Matrix(props){
         });
       } else if (type === SHAPE_TYPES.C_LINE) {
         createCLine({
-          x: coords.x + DEFAULTS.C_LINE.HEIGHT / 3,
-          y: coords.y - DEFAULTS.C_LINE.HEIGHT / 3,
+          x: coords.x,
+          y: coords.y - DEFAULTS.C_LINE.HEIGHT / 2,
         });
       } else if (type === SHAPE_TYPES.S_LINE) {
         createSLine({
-          x: coords.x + DEFAULTS.S_LINE.HEIGHT / 3,
-          y: coords.y - DEFAULTS.S_LINE.HEIGHT / 3,
+          x: coords.x - DEFAULTS.S_LINE.WIDTH/2,
+          y: coords.y - DEFAULTS.S_LINE.HEIGHT / 2,
         });
       } else if (type === SHAPE_TYPES.EIGHT_LINE) {
         createEightLine({
-          x: coords.x + DEFAULTS.EIGHT_LINE.HEIGHT / 3,
-          y: coords.y - DEFAULTS.EIGHT_LINE.HEIGHT / 3,
+          x: coords.x - DEFAULTS.EIGHT_LINE.WIDTH / 2,
+          y: coords.y - DEFAULTS.EIGHT_LINE.HEIGHT / 2,
+        });
+      } else if (type === SHAPE_TYPES.DIAMOND) {
+        createDiamond({
+          x: coords.x,
+          y: coords.y - (DEFAULTS.DIAMOND.HEIGHT/2),
+        });
+      } else if (type === SHAPE_TYPES.TALL_FAT_RECT) {
+        createTallFatRect({
+          x: coords.x - (DEFAULTS.TALL_FAT_RECT.WIDTH / 2),
+          y: coords.y - (DEFAULTS.TALL_FAT_RECT.HEIGHT / 2),
+        });
+      } else if (type === SHAPE_TYPES.TALL_THIN_RECT) {
+        createTallThinRect({
+          x: coords.x - (DEFAULTS.TALL_THIN_RECT.WIDTH / 2),
+          y: coords.y - (DEFAULTS.TALL_THIN_RECT.HEIGHT / 2),
+        });
+      } else if (type === SHAPE_TYPES.TILTED_RECT) {
+        createTiltedRect({
+          x: coords.x - (DEFAULTS.TILTED_RECT.WIDTH / 2),
+          y: coords.y - (DEFAULTS.TILTED_RECT.HEIGHT / 2),
+        });
+      } else if (type === SHAPE_TYPES.FOLDED_RECT) {
+        createFoldedRect({
+          x: coords.x - (DEFAULTS.FOLDED_RECT.WIDTH / 2),
+          y: coords.y - (DEFAULTS.FOLDED_RECT.HEIGHT / 2),
+        });
+      } else if (type === SHAPE_TYPES.TALL_RECT) {
+        createTallRect({
+          x: coords.x - (DEFAULTS.TALL_RECT.WIDTH / 2),
+          y: coords.y - (DEFAULTS.TALL_RECT.HEIGHT / 2),
+        });
+      } else if (type === SHAPE_TYPES.C_RECT) {
+        createCRect({
+          x: coords.x - (DEFAULTS.C_RECT.WIDTH / 2),
+          y: coords.y - (DEFAULTS.C_RECT.HEIGHT / 2),
+        });
+      } else if (type === SHAPE_TYPES.TOP_LEFT_RECT) {
+        createTopLeftRect({
+          x: coords.x - (DEFAULTS.TOP_LEFT_RECT.WIDTH / 2),
+          y: coords.y - (DEFAULTS.TOP_LEFT_RECT.HEIGHT / 2),
+        });
+      } else if (type === SHAPE_TYPES.STAR) {
+        createStar({
+          x: coords.x - (DEFAULTS.C_RECT.WIDTH / 2),
+          y: coords.y - (DEFAULTS.C_RECT.HEIGHT / 2),
+        });
+      } else if (type === SHAPE_TYPES.STAR_MEDIUM) {
+        createStarMedium({
+          x: coords.x - (DEFAULTS.STAR_MEDIUM.WIDTH / 2),
+          y: coords.y - (DEFAULTS.STAR_MEDIUM.HEIGHT / 2),
+        });
+      } else if (type === SHAPE_TYPES.STAR_THIN) {
+        createStarThin({
+          x: coords.x - (DEFAULTS.STAR_THIN.WIDTH / 2),
+          y: coords.y - (DEFAULTS.STAR_THIN.HEIGHT / 2),
         });
       }
     }
@@ -142,18 +197,13 @@ export default function Matrix(props){
   // Creation functions
   //There are good reasons why it finally looks like this.
   //Read ShapeObjects.js for more info
-  function createSquare({ x, y }) {
-    props.setShapes(prevState => produce(prevState, (draft) => {
-      draft[matrixNumber].push({ id: nanoid(), x, y, ...squareObj})
-    }));
-  }
-
   function createCircle({ x, y }) {
     props.setShapes(prevState => produce(prevState, (draft) => {
       draft[matrixNumber].push({id:nanoid(), x, y, ...circleObj})
     }));
   }
 
+  //Lines
   function createVerticalLine({ x, y }) {
     props.setShapes(prevState => produce(prevState, (draft) => {
       draft[matrixNumber].push({id:nanoid(), x, y, ...verticalLineObj})
@@ -181,6 +231,79 @@ export default function Matrix(props){
   function createEightLine({ x, y }) {
     props.setShapes(prevState => produce(prevState, (draft) => {
       draft[matrixNumber].push({ id: nanoid(), x, y, ...eightLineObj })
+    }));
+  }
+
+  //Rectangles
+  function createSquare({ x, y }) {
+    props.setShapes(prevState => produce(prevState, (draft) => {
+      draft[matrixNumber].push({ id: nanoid(), x, y, ...squareObj })
+    }));
+  }
+
+  function createDiamond({ x, y }) {
+    props.setShapes(prevState => produce(prevState, (draft) => {
+      draft[matrixNumber].push({ id: nanoid(), x, y, ...diamondObj })
+    }));
+  }
+
+  function createTallFatRect({ x, y }) {
+    props.setShapes(prevState => produce(prevState, (draft) => {
+      draft[matrixNumber].push({ id: nanoid(), x, y, ...tallFatRectObj })
+    }));
+  }
+
+  function createTallThinRect({ x, y }) {
+    props.setShapes(prevState => produce(prevState, (draft) => {
+      draft[matrixNumber].push({ id: nanoid(), x, y, ...tallThinRectObj })
+    }));
+  }
+
+  function createTiltedRect({ x, y }) {
+    props.setShapes(prevState => produce(prevState, (draft) => {
+      draft[matrixNumber].push({ id: nanoid(), x, y, ...tiltedRectObj })
+    }));
+  }
+
+  function createFoldedRect({ x, y }) {
+    props.setShapes(prevState => produce(prevState, (draft) => {
+      draft[matrixNumber].push({ id: nanoid(), x, y, ...foldedRectObj })
+    }));
+  }
+
+  function createTallRect({ x, y }) {
+    props.setShapes(prevState => produce(prevState, (draft) => {
+      draft[matrixNumber].push({ id: nanoid(), x, y, ...tallRectObj })
+    }));
+  }
+
+  function createCRect({ x, y }) {
+    props.setShapes(prevState => produce(prevState, (draft) => {
+      draft[matrixNumber].push({ id: nanoid(), x, y, ...cRectObj })
+    }));
+  }
+
+  function createTopLeftRect({ x, y }) {
+    props.setShapes(prevState => produce(prevState, (draft) => {
+      draft[matrixNumber].push({ id: nanoid(), x, y, ...topLeftRectObj })
+    }));
+  }
+
+  function createStar({ x, y }) {
+    props.setShapes(prevState => produce(prevState, (draft) => {
+      draft[matrixNumber].push({ id: nanoid(), x, y, ...starObj })
+    }));
+  }
+
+  function createStarMedium({ x, y }) {
+    props.setShapes(prevState => produce(prevState, (draft) => {
+      draft[matrixNumber].push({ id: nanoid(), x, y, ...starMediumObj })
+    }));
+  }
+
+  function createStarThin({ x, y }) {
+    props.setShapes(prevState => produce(prevState, (draft) => {
+      draft[matrixNumber].push({ id: nanoid(), x, y, ...starThinObj })
     }));
   }
 

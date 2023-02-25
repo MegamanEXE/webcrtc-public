@@ -2,7 +2,7 @@ import { padding } from "@mui/system";
 import produce from "immer";
 import Konva from "konva";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Circle, Ellipse, Line, Rect, Shape, Transformer } from "react-konva";
+import { Circle, Ellipse, Group, Line, Rect, Shape, Transformer } from "react-konva";
 import { DEFAULTS, LIMITS, SHAPE_TYPES } from "./ShapesData";
 
 //Utility clamp function
@@ -89,13 +89,14 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
 
           d.points = newPoints;
 
-        } else if ([SHAPE_TYPES.C_LINE, SHAPE_TYPES.S_LINE, SHAPE_TYPES.EIGHT_LINE].includes(d.type)) {
+        } else if ([SHAPE_TYPES.C_LINE, SHAPE_TYPES.S_LINE, SHAPE_TYPES.EIGHT_LINE,
+        SHAPE_TYPES.FOLDED_RECT].includes(d.type)) {
           d.rotation = node.rotation();
 
           d.width = node.width()*scaleX;
           d.height = node.height()*scaleY;
 
-        } else {
+        }  else {
 
           d.rotation = node.rotation();
 
@@ -147,18 +148,14 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
   //Update: I've normalized the shapes enough that this one generic function works for all lines, but keeping this code in case fine-tuning is required
   const customTransformerBox = () => {
     // switch(props.type){
-    //   case SHAPE_TYPES.C_LINE:
-    //     shapeRef.current.getSelfRect = () => { return { x: 0, y: 0, width: DEFAULTS.C_LINE.WIDTH, height: DEFAULTS.C_LINE.HEIGHT }; }
-    //     break;
-
-    //   case SHAPE_TYPES.S_LINE:
-    //     shapeRef.current.getSelfRect = () => { return { x: 0, y: 0, width: DEFAULTS.S_LINE.WIDTH, height: DEFAULTS.S_LINE.HEIGHT }; }
+    //   case SHAPE_TYPES.DIAMOND:
+    //     shapeRef.current.getSelfRect = () => { return { x: 0, y: 0, width: props.width, height: props.height,rotation:0 }; }
     //     break;
 
     //   default:
     //     break;
-    // }
-    shapeRef.current.getSelfRect = () => { return { x: 0, y: 0, width: props.width, height: props.height }; }
+    //   }
+      shapeRef.current.getSelfRect = () => { return { x: 0, y: 0, width: props.width, height: props.height }; }
   }
 
   //MAIN return
@@ -244,8 +241,6 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
               w / 2, h
             );
             c.fillStrokeShape(s);
-
-            
             c.moveTo(w / 2, 0);
             c.bezierCurveTo(
               w*1.5, h / 4,
@@ -260,6 +255,41 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
         {shapeRef.current && customTransformerBox()}
         {isSelected && (<Transformer padding={10} ignoreStroke={true} rotateAnchorOffset={20} anchorSize={8} borderDash={[6, 2]} ref={transformerRef} rotationSnaps={snaps} enabledAnchors={['top-center', 'bottom-center']} boundBoxFunc={boundBoxCallbackForLine} />)}
       </>
+
+    
+      
+
+    case SHAPE_TYPES.TALL_FAT_RECT:
+    case SHAPE_TYPES.TALL_THIN_RECT:
+    case SHAPE_TYPES.TALL_RECT:
+    case SHAPE_TYPES.TILTED_RECT:
+    case SHAPE_TYPES.DIAMOND:
+    case SHAPE_TYPES.C_RECT:
+    case SHAPE_TYPES.TOP_LEFT_RECT:
+    case SHAPE_TYPES.STAR:
+    case SHAPE_TYPES.STAR_MEDIUM:
+    case SHAPE_TYPES.STAR_THIN:
+      return <>
+        <Rect ref={shapeRef} {...props} draggable isSelected={isSelected} onClick={handleSelect} onTap={handleSelect} onDragStart={handleSelect} onDragEnd={handleDrag} onTransformEnd={handleTransform} />
+        {isSelected && (<Transformer anchorSize={5} rotateAnchorOffset={20} borderDash={[6, 2]} ref={transformerRef} rotationSnaps={snaps} boundBoxFunc={boundBoxCallbackForRectangle} />)}
+      </>
+
+    case SHAPE_TYPES.FOLDED_RECT:
+      const {x,y,rotation, ...other} = props;
+      return <>
+        <Group x={x} y={y} rotation={rotation}
+          ref={shapeRef} draggable isSelected={isSelected} onClick={handleSelect} onTap={handleSelect} onDragStart={handleSelect} onDragEnd={handleDrag} >
+          <Rect {...other} skewX={-0.5} onTransformEnd={handleTransform} />
+          <Rect {...other} skewX={0.5} onTransformEnd={handleTransform} />
+        </Group>
+        {isSelected && (<Transformer anchorSize={5} rotateAnchorOffset={20} borderDash={[6, 2]} ref={transformerRef} rotationSnaps={snaps} boundBoxFunc={boundBoxCallbackForRectangle} />)}
+
+      </>
+
+    
+      
+
+
     default:
       return null
   }
