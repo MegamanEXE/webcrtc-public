@@ -59,6 +59,22 @@ export const DEFAULTS = {
     ROTATION: 45,
     DASH: defaultDash,
   },
+  C_LINE: {
+    STROKE: defaultStroke,
+    STROKE_WIDTH: defaultStrokeWidth,
+    HEIGHT: defaultHeight,
+    WIDTH: defaultHeight / 2,
+    ROTATION: 0,
+    DASH: defaultDash,
+  },
+  S_LINE: {
+    STROKE: defaultStroke,
+    STROKE_WIDTH: defaultStrokeWidth,
+    WIDTH: defaultHeight/2,
+    HEIGHT: defaultHeight,
+    ROTATION: 0,
+    DASH: defaultDash,
+  },
 };
 
 export const LIMITS = {

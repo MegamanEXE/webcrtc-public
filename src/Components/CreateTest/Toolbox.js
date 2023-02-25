@@ -1,5 +1,5 @@
 import { CircleOutlined, LineStyle, Padding, SquareOutlined } from "@mui/icons-material";
-import { Button, Menu, MenuItem, Paper, Popover, ToggleButton, Tooltip, Typography } from "@mui/material";
+import { Button, IconButton, Menu, MenuItem, Paper, Popover, ToggleButton, Tooltip, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import produce from "immer";
 import { DEFAULTS, SHAPE_ACTIONS, SHAPE_TYPES } from "./ShapesData";
@@ -11,7 +11,7 @@ import PopupState, { bindMenu, bindTrigger } from "material-ui-popup-state";
 import { TbMinusVertical } from "react-icons/tb"
 import { RxSlash } from "react-icons/rx"
 import { nanoid } from "nanoid";
-import { circleObj, squareObj, tiltedLineObj, verticalLineObj } from "./ShapeObjects";
+import { circleObj, cLineObj, sLineObj, squareObj, tiltedLineObj, verticalLineObj } from "./ShapeObjects";
 
 const customIconSize = "1.5em";
 
@@ -93,7 +93,6 @@ export default function Toolbox(props) {
       let newIdx = -1;
 
       newIdx = dashStyles.findIndex(l => JSON.stringify(l) === JSON.stringify(currentValue));
-      console.log(currentValue)
       if (newIdx + 1 === dashStyles.length)
         newIdx = 0;
       else
@@ -104,7 +103,7 @@ export default function Toolbox(props) {
   }
 
   const handleClick = (event) => {
-    console.log(event.target)
+    // console.log(event.target)
     let type;
      
     //Because somehow the Icon and the Button base are separate entities in MUI's toggle button
@@ -141,6 +140,16 @@ export default function Toolbox(props) {
             draft[selectedMatrix].push({ id: nanoid(), ...randomPosition, ...tiltedLineObj });
           }));
           break;
+        case SHAPE_TYPES.C_LINE:
+          setShapes(prevState => produce(prevState, (draft) => {
+            draft[selectedMatrix].push({ id: nanoid(), ...randomPosition, ...cLineObj });
+          }));
+          break;
+        case SHAPE_TYPES.S_LINE:
+          setShapes(prevState => produce(prevState, (draft) => {
+            draft[selectedMatrix].push({ id: nanoid(), ...randomPosition, ...sLineObj });
+          }));
+          break;
         default:
           console.log("Case not found")
           break;
@@ -158,12 +167,12 @@ export default function Toolbox(props) {
           <Typography mb={1}>Lines</Typography>
           <ToggleButton size="large" value={SHAPE_TYPES.VERTICAL_LINE} shape={SHAPE_TYPES.VERTICAL_LINE} draggable onDragStart={handleDragStart} onClick={handleClick}><TbMinusVertical size={customIconSize} /></ToggleButton>
           <ToggleButton size="large" value={SHAPE_TYPES.TILTED_LINE} shape={SHAPE_TYPES.TILTED_LINE} draggable onDragStart={handleDragStart} onClick={handleClick}><RxSlash size={customIconSize} /></ToggleButton>
-          <ToggleButton size="large" value={SHAPE_TYPES.C_LINE} shape={SHAPE_TYPES.C_LINE} draggable onDragStart={handleDragStart} onClick={handleClick}><CircleOutlined /></ToggleButton>
+          <ToggleButton size="large" value={SHAPE_TYPES.C_LINE} shape={SHAPE_TYPES.C_LINE} draggable onDragStart={handleDragStart} onClick={handleClick}> ( </ToggleButton>
           <ToggleButton size="large" value={SHAPE_TYPES.EIGHT_LINE} shape={SHAPE_TYPES.EIGHT_LINE} draggable onDragStart={handleDragStart} onClick={handleClick}><CircleOutlined /></ToggleButton>
-          <ToggleButton size="large" value={SHAPE_TYPES.S_LINE} shape={SHAPE_TYPES.S_LINE} draggable onDragStart={handleDragStart} onClick={handleClick}><CircleOutlined /></ToggleButton>
+          <ToggleButton size="large" value={SHAPE_TYPES.S_LINE} shape={SHAPE_TYPES.S_LINE} draggable onDragStart={handleDragStart} onClick={handleClick}>S</ToggleButton>
 
           <Typography mb={1}>Squares</Typography>
-          <ToggleButton size="large" value={SHAPE_TYPES.SQUARE} shape={SHAPE_TYPES.SQUARE} draggable onDragStart={handleDragStart} onClick={handleClick}><SquareOutlined height="inherit" /></ToggleButton>
+          <ToggleButton size="large" value={SHAPE_TYPES.SQUARE} shape={SHAPE_TYPES.SQUARE} draggable onDragStart={handleDragStart} onClick={handleClick}><SquareOutlined /></ToggleButton>
 
           <Typography mb={1}>Circles</Typography>
           <ToggleButton size="large" value={SHAPE_TYPES.CIRCLE} shape={SHAPE_TYPES.CIRCLE} draggable onDragStart={handleDragStart} onClick={handleClick}><CircleOutlined /></ToggleButton>

@@ -2,7 +2,7 @@ import { padding } from "@mui/system";
 import produce from "immer";
 import Konva from "konva";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Circle, Ellipse, Line, Rect, Transformer } from "react-konva";
+import { Circle, Ellipse, Line, Rect, Shape, Transformer } from "react-konva";
 import { DEFAULTS, LIMITS, SHAPE_TYPES } from "./ShapesData";
 
 //Utility clamp function
@@ -34,6 +34,7 @@ const boundBoxCallbackForLine = (oldBox, newBox) => {
   return newBox;
 };
 
+const snaps = [0, 45, 90, 135, 180, 225, 270, 315];
 
 
 export default function GenericShape({ selectedShapeID, setSelectedShapeID, matrixNumber, setSelectedMatrix, shapes, setShapes, layerRef, ...props }) {
@@ -88,6 +89,15 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
 
           d.points = newPoints;
 
+        } else if ([SHAPE_TYPES.C_LINE].includes(d.type)) {
+          // console.log(node)
+          d.rotation = node.rotation();
+
+          // d.width = node.width() * scaleX;
+          // d.height = node.height() * scaleY;
+          d.scaleX = scaleX;
+          d.scaleY = scaleY;
+
         } else {
 
           d.rotation = node.rotation();
@@ -132,12 +142,32 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
     transformShape(shapeRef.current, props.id, event);
   }, [props.id]);
 
+  //Custom shapes do not have natural transformer bounding boxes so they are manually defined like this
+  //Do not be discouraged from this, this is more about manually adusting the box when NECESSARY, it wasn't always explicitly defined like this
+  //but transforming lines comes with its own set of problems, which are fixed here.
+  //At this point in time, they can probably be merged into one but I'll keep my options open until more shapes are defined
+  const customTransformerBox = () => {
+    switch(props.type){
+      case SHAPE_TYPES.C_LINE:
+        shapeRef.current.getSelfRect = () => { return { x: 0, y: 0, width: DEFAULTS.C_LINE.WIDTH, height: DEFAULTS.C_LINE.HEIGHT }; }
+        break;
+
+      case SHAPE_TYPES.S_LINE:
+        shapeRef.current.getSelfRect = () => { return { x: 0, y: 0, width: DEFAULTS.S_LINE.WIDTH, height: DEFAULTS.S_LINE.HEIGHT }; }
+        break;
+
+
+      default:
+        break;
+    }
+  }
+
   //MAIN return
   switch (props.type) {
     case SHAPE_TYPES.SQUARE:
       return <>
         <Rect ref={shapeRef} {...props} draggable isSelected={isSelected} onClick={handleSelect} onTap={handleSelect} onDragStart={handleSelect} onDragEnd={handleDrag} onTransformEnd={handleTransform} />
-        {isSelected && (<Transformer anchorSize={5} rotateAnchorOffset={20} borderDash={[6, 2]} ref={transformerRef} boundBoxFunc={boundBoxCallbackForRectangle} />)}
+        {isSelected && (<Transformer anchorSize={5} rotateAnchorOffset={20} borderDash={[6, 2]} ref={transformerRef} rotationSnaps={snaps} boundBoxFunc={boundBoxCallbackForRectangle} />)}
       </>
     case SHAPE_TYPES.RECT:
       return <>
@@ -159,6 +189,46 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
       return <>
         <Line ref={shapeRef} {...props} draggable isSelected={isSelected} onClick={handleSelect} onTap={handleSelect} onDragStart={handleSelect} onDragEnd={handleDrag} onTransformEnd={handleTransform} />
         {isSelected && (<Transformer padding={10} rotateAnchorOffset={20} anchorSize={8} borderDash={[6, 2]} ref={transformerRef} enabledAnchors={['top-center', 'bottom-center']} boundBoxFunc={boundBoxCallbackForLine} />)}
+      </>
+    case SHAPE_TYPES.C_LINE:
+      return <>
+        <Shape ref={shapeRef} {...props} draggable isSelected={isSelected} onClick={handleSelect} onTap={handleSelect} onDragStart={handleSelect} onDragEnd={handleDrag} onTransformEnd={handleTransform} 
+          sceneFunc={(c,s)=>{
+            const w = DEFAULTS.C_LINE.WIDTH;
+            const h = DEFAULTS.C_LINE.HEIGHT;
+
+            c.beginPath();
+            c.moveTo(w/2, 0);
+            c.quadraticCurveTo(
+              -w/2, h/2,
+              w/2, h);
+            c.fillStrokeShape(s);
+          }}
+        
+        />
+        {shapeRef.current && customTransformerBox()}
+        {isSelected && (<Transformer padding={10} ignoreStroke={true} rotateAnchorOffset={20} anchorSize={8} borderDash={[6, 2]} ref={transformerRef} rotationSnaps={snaps} enabledAnchors={['top-center', 'bottom-center']} boundBoxFunc={boundBoxCallbackForLine} />)}
+      </>
+    case SHAPE_TYPES.S_LINE:
+      return <>
+        <Shape ref={shapeRef} {...props} draggable isSelected={isSelected} onClick={handleSelect} onTap={handleSelect} onDragStart={handleSelect} onDragEnd={handleDrag} onTransformEnd={handleTransform}
+          sceneFunc={(c, s) => {
+            const w = DEFAULTS.S_LINE.WIDTH;
+            const h = DEFAULTS.S_LINE.HEIGHT;
+
+            c.beginPath();
+            c.moveTo(w/2, 0);
+            c.bezierCurveTo(
+              -w/2, h/4, 
+              w*1.5, h*0.75, 
+              w/2, h
+            );
+            c.fillStrokeShape(s);
+          }}
+
+        />
+        {shapeRef.current && customTransformerBox()}
+        {isSelected && (<Transformer padding={10} ignoreStroke={true} rotateAnchorOffset={20} anchorSize={8} borderDash={[6, 2]} ref={transformerRef} rotationSnaps={snaps} enabledAnchors={['top-center', 'bottom-center']} boundBoxFunc={boundBoxCallbackForLine} />)}
       </>
     default:
       return null

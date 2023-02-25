@@ -6,7 +6,7 @@ import produce from "immer";
 import { nanoid } from "nanoid";
 import { DEFAULTS, LIMITS, SHAPE_TYPES } from "./ShapesData";
 import GenericShape from "./GenericShape";
-import { circleObj, squareObj, tiltedLineObj, verticalLineObj } from "./ShapeObjects";
+import { circleObj, cLineObj, sLineObj, squareObj, tiltedLineObj, verticalLineObj } from "./ShapeObjects";
 
 export default function Matrix(props){
   const [dimensions, setDimensions] = useState({ width: null, height: null });
@@ -93,6 +93,16 @@ export default function Matrix(props){
           x: coords.x + DEFAULTS.TILTED_LINE.HEIGHT/3,
           y: coords.y - DEFAULTS.TILTED_LINE.HEIGHT/3,
         });
+      } else if (type === SHAPE_TYPES.C_LINE) {
+        createCLine({
+          x: coords.x + DEFAULTS.C_LINE.HEIGHT / 3,
+          y: coords.y - DEFAULTS.C_LINE.HEIGHT / 3,
+        });
+      } else if (type === SHAPE_TYPES.S_LINE) {
+        createSLine({
+          x: coords.x + DEFAULTS.S_LINE.HEIGHT / 3,
+          y: coords.y - DEFAULTS.S_LINE.HEIGHT / 3,
+        });
       }
     }
   }
@@ -148,6 +158,18 @@ export default function Matrix(props){
   function createTiltedLine({ x, y }) {
     props.setShapes(prevState => produce(prevState, (draft) => {
       draft[matrixNumber].push({id:nanoid(), x, y, ...tiltedLineObj})
+    }));
+  }
+
+  function createCLine({ x, y }) {
+    props.setShapes(prevState => produce(prevState, (draft) => {
+      draft[matrixNumber].push({ id: nanoid(), x, y, ...cLineObj })
+    }));
+  }
+
+  function createSLine({ x, y }) {
+    props.setShapes(prevState => produce(prevState, (draft) => {
+      draft[matrixNumber].push({ id: nanoid(), x, y, ...sLineObj })
     }));
   }
 

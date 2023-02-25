@@ -50,3 +50,23 @@ export const tiltedLineObj = {
   rotation: DEFAULTS.TILTED_LINE.ROTATION,
   points: [0, 0, 0, DEFAULTS.TILTED_LINE.HEIGHT],
 }
+
+export const cLineObj = {
+  type: SHAPE_TYPES.C_LINE,
+  width: DEFAULTS.C_LINE.WIDTH,
+  height: DEFAULTS.C_LINE.HEIGHT,
+  stroke: DEFAULTS.C_LINE.STROKE,
+  strokeWidth: DEFAULTS.C_LINE.STROKE_WIDTH,
+  dash: DEFAULTS.C_LINE.DASH,
+  rotation: DEFAULTS.C_LINE.ROTATION,
+}
+
+export const sLineObj = {
+  type: SHAPE_TYPES.S_LINE,
+  width: DEFAULTS.S_LINE.WIDTH,
+  height: DEFAULTS.S_LINE.HEIGHT,
+  stroke: DEFAULTS.S_LINE.STROKE,
+  strokeWidth: DEFAULTS.S_LINE.STROKE_WIDTH,
+  dash: DEFAULTS.S_LINE.DASH,
+  rotation: DEFAULTS.S_LINE.ROTATION,
+}
