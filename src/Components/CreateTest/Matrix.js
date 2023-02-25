@@ -6,7 +6,7 @@ import produce from "immer";
 import { nanoid } from "nanoid";
 import { DEFAULTS, LIMITS, SHAPE_TYPES } from "./ShapesData";
 import GenericShape from "./GenericShape";
-import { circleObj, cLineObj, sLineObj, squareObj, tiltedLineObj, verticalLineObj } from "./ShapeObjects";
+import { circleObj, cLineObj, eightLineObj, sLineObj, squareObj, tiltedLineObj, verticalLineObj } from "./ShapeObjects";
 
 export default function Matrix(props){
   const [dimensions, setDimensions] = useState({ width: null, height: null });
@@ -103,6 +103,11 @@ export default function Matrix(props){
           x: coords.x + DEFAULTS.S_LINE.HEIGHT / 3,
           y: coords.y - DEFAULTS.S_LINE.HEIGHT / 3,
         });
+      } else if (type === SHAPE_TYPES.EIGHT_LINE) {
+        createEightLine({
+          x: coords.x + DEFAULTS.EIGHT_LINE.HEIGHT / 3,
+          y: coords.y - DEFAULTS.EIGHT_LINE.HEIGHT / 3,
+        });
       }
     }
   }
@@ -170,6 +175,12 @@ export default function Matrix(props){
   function createSLine({ x, y }) {
     props.setShapes(prevState => produce(prevState, (draft) => {
       draft[matrixNumber].push({ id: nanoid(), x, y, ...sLineObj })
+    }));
+  }
+
+  function createEightLine({ x, y }) {
+    props.setShapes(prevState => produce(prevState, (draft) => {
+      draft[matrixNumber].push({ id: nanoid(), x, y, ...eightLineObj })
     }));
   }
 

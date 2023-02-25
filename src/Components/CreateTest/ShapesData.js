@@ -75,6 +75,23 @@ export const DEFAULTS = {
     ROTATION: 0,
     DASH: defaultDash,
   },
+  EIGHT_LINE: {
+    STROKE: defaultStroke,
+    STROKE_WIDTH: defaultStrokeWidth,
+    WIDTH: defaultHeight / 2,
+    HEIGHT: defaultHeight,
+    ROTATION: 0,
+    DASH: defaultDash,
+  },
+  DIAMOND: {
+    STROKE: defaultStroke,
+    STROKE_WIDTH: defaultStrokeWidth,
+    FILL: defaultFill,
+    WIDTH: defaultHeight,
+    HEIGHT: defaultHeight,
+    ROTATION: 0,
+    DASH: defaultDash,
+  },
 };
 
 export const LIMITS = {
