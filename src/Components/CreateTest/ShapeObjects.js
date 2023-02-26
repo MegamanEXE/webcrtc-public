@@ -181,6 +181,7 @@ export const starObj = {
   strokeWidth: DEFAULTS.STAR.STROKE_WIDTH,
   dash: DEFAULTS.STAR.DASH,
   rotation: DEFAULTS.STAR.ROTATION,
+
 }
 
 export const starMediumObj = {
@@ -203,4 +204,38 @@ export const starThinObj = {
   strokeWidth: DEFAULTS.STAR_THIN.STROKE_WIDTH,
   dash: DEFAULTS.STAR_THIN.DASH,
   rotation: DEFAULTS.STAR_THIN.ROTATION,
+}
+
+//CROSS
+export const plusObj = {
+  type: SHAPE_TYPES.PLUS,
+  width: DEFAULTS.PLUS.WIDTH,
+  height: DEFAULTS.PLUS.HEIGHT,
+  fill: DEFAULTS.PLUS.FILL,
+  stroke: DEFAULTS.PLUS.STROKE,
+  strokeWidth: DEFAULTS.PLUS.STROKE_WIDTH,
+  dash: DEFAULTS.PLUS.DASH,
+  rotation: DEFAULTS.PLUS.ROTATION,
+}
+
+export const crossObj = {
+  type: SHAPE_TYPES.CROSS,
+  width: DEFAULTS.CROSS.WIDTH,
+  height: DEFAULTS.CROSS.HEIGHT,
+  fill: DEFAULTS.CROSS.FILL,
+  stroke: DEFAULTS.CROSS.STROKE,
+  strokeWidth: DEFAULTS.CROSS.STROKE_WIDTH,
+  dash: DEFAULTS.CROSS.DASH,
+  rotation: DEFAULTS.CROSS.ROTATION,
+}
+
+export const orthogonalObj = {
+  type: SHAPE_TYPES.ORTHOGONAL,
+  width: DEFAULTS.ORTHOGONAL.WIDTH,
+  height: DEFAULTS.ORTHOGONAL.HEIGHT,
+  fill: DEFAULTS.ORTHOGONAL.FILL,
+  stroke: DEFAULTS.ORTHOGONAL.STROKE,
+  strokeWidth: DEFAULTS.ORTHOGONAL.STROKE_WIDTH,
+  dash: DEFAULTS.ORTHOGONAL.DASH,
+  rotation: DEFAULTS.ORTHOGONAL.ROTATION,
 }

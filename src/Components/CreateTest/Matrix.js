@@ -6,7 +6,7 @@ import produce from "immer";
 import { nanoid } from "nanoid";
 import { DEFAULTS, LIMITS, SHAPE_TYPES } from "./ShapesData";
 import GenericShape from "./GenericShape";
-import { circleObj, cLineObj, cRectObj, diamondObj, eightLineObj, foldedRectObj, sLineObj, squareObj, starMediumObj, starObj, starThinObj, tallFatRectObj, tallRectObj, tallThinRectObj, tiltedLineObj, tiltedRectObj, topLeftRectObj, verticalLineObj } from "./ShapeObjects";
+import { circleObj, cLineObj, cRectObj, crossObj, diamondObj, eightLineObj, foldedRectObj, orthogonalObj, plusObj, sLineObj, squareObj, starMediumObj, starObj, starThinObj, tallFatRectObj, tallRectObj, tallThinRectObj, tiltedLineObj, tiltedRectObj, topLeftRectObj, verticalLineObj } from "./ShapeObjects";
 
 export default function Matrix(props){
   const [dimensions, setDimensions] = useState({ width: null, height: null });
@@ -163,6 +163,21 @@ export default function Matrix(props){
           x: coords.x - (DEFAULTS.STAR_THIN.WIDTH / 2),
           y: coords.y - (DEFAULTS.STAR_THIN.HEIGHT / 2),
         });
+      } else if (type === SHAPE_TYPES.PLUS) {
+        createPlus({
+          x: coords.x - (DEFAULTS.PLUS.WIDTH / 2),
+          y: coords.y - (DEFAULTS.PLUS.HEIGHT / 2),
+        });
+      } else if (type === SHAPE_TYPES.CROSS) {
+        createCross({
+          x: coords.x - (DEFAULTS.CROSS.WIDTH / 2),
+          y: coords.y - (DEFAULTS.CROSS.HEIGHT / 2),
+        });
+      } else if (type === SHAPE_TYPES.ORTHOGONAL) {
+        createOrthogonal({
+          x: coords.x - (DEFAULTS.ORTHOGONAL.WIDTH / 2),
+          y: coords.y - (DEFAULTS.ORTHOGONAL.HEIGHT / 2),
+        });
       }
     }
   }
@@ -304,6 +319,25 @@ export default function Matrix(props){
   function createStarThin({ x, y }) {
     props.setShapes(prevState => produce(prevState, (draft) => {
       draft[matrixNumber].push({ id: nanoid(), x, y, ...starThinObj })
+    }));
+  }
+
+  //Crossed
+  function createPlus({ x, y }) {
+    props.setShapes(prevState => produce(prevState, (draft) => {
+      draft[matrixNumber].push({ id: nanoid(), x, y, ...plusObj })
+    }));
+  }
+  
+  function createCross({ x, y }) {
+    props.setShapes(prevState => produce(prevState, (draft) => {
+      draft[matrixNumber].push({ id: nanoid(), x, y, ...crossObj })
+    }));
+  }
+  
+  function createOrthogonal({ x, y }) {
+    props.setShapes(prevState => produce(prevState, (draft) => {
+      draft[matrixNumber].push({ id: nanoid(), x, y, ...orthogonalObj })
     }));
   }
 
