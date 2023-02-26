@@ -403,4 +403,4 @@ export const rightTriObj = {
   dash: DEFAULTS.SIMPLE_TRI.DASH,
 }
 
-const HELLO=2
+const HELLO=3
