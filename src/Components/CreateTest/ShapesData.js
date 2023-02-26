@@ -44,6 +44,18 @@ export const SHAPE_TYPES = {
   ELLIPSE_DIAGONAL: "ellipse_diagonal",
   ELLIPSE_FOLDED: "ellipse_folded",
 
+  SIMPLE_TRI: "simple_triangle",
+  SIMPLE_TRI_SMALL: "simple_triangle_small",
+  SIMPLE_TRI_BIG: "simple_triangle_big",
+  SQUASHED_TRI: "squashed_triangle",
+  RIGHT_TRI: "right_triangle",
+  RIGHT_TRI_THIN: "right_triangle_thin",
+  OBTUSE_TRI_SMALL: "obtuse_triangle_small",
+  OBTUSE_TRI_BIG: "obtuse_triangle_big",
+  OBTUSE_TRI_FOLDED: "obtuse_triangle_folded",
+  OBTUSE_TRI_SLIGHT: "obtuse_triangle_slight",
+  CONE: "cone",
+
 
 
 };
@@ -322,6 +334,25 @@ export const DEFAULTS = {
     RADIUS_X: defaultWidth / 4,
     RADIUS_Y: defaultHeight / 2,
   },
+  SIMPLE_TRI: {
+    STROKE: defaultStroke,
+    STROKE_WIDTH: defaultStrokeWidth,
+    FILL: defaultFill,
+    WIDTH: defaultWidth,
+    HEIGHT: defaultHeight,
+    ROTATION: 0,
+    DASH: defaultDash,
+  },
+  SIMPLE_TRI_SMALL: "simple_triangle_small",
+  SIMPLE_TRI_BIG: "simple_triangle_big",
+  SQUASHED_TRI: "squashed_triangle",
+  RIGHT_TRI: "right_triangle",
+  RIGHT_TRI_THIN: "right_triangle_thin",
+  OBTUSE_TRI_SMALL: "obtuse_triangle_small",
+  OBTUSE_TRI_BIG: "obtuse_triangle_big",
+  OBTUSE_TRI_FOLDED: "obtuse_triangle_folded",
+  OBTUSE_TRI_SLIGHT: "obtuse_triangle_slight",
+  CONE: "cone",
 
 };
 

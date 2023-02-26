@@ -147,15 +147,16 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
 
   //Update: I've normalized the shapes enough that this one generic function works for all lines, but keeping this code in case fine-tuning is required
   const customTransformerBox = () => {
-    // switch(props.type){
-    //   case SHAPE_TYPES.DIAMOND:
-    //     shapeRef.current.getSelfRect = () => { return { x: 0, y: 0, width: props.width, height: props.height,rotation:0 }; }
-    //     break;
+    const w = props.width;
+    const h = props.height;
+    switch(props.type){
+      case SHAPE_TYPES.ELLIPSE_FOLDED:
+        shapeRef.current.getSelfRect = () => { return { x: 0, y: 0, width: w+(w/3.1), height: h - (h/3.8) }; }
+        break;
 
-    //   default:
-    //     break;
-    //   }
-      shapeRef.current.getSelfRect = () => { return { x: 0, y: 0, width: props.width, height: props.height }; }
+      default:
+        shapeRef.current.getSelfRect = () => { return { x: 0, y: 0, width: props.width, height: props.height }; }
+      }
   }
 
   //MAIN return
@@ -400,28 +401,29 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
           sceneFunc={(c, s) => {
             const w = props.width;
             const h = props.height;
+            const offset = w/3.5;
 
             c.beginPath();
-            c.moveTo(0, 0);
+            c.moveTo(0+offset, 0);
             c.bezierCurveTo(
-              -w*0.75, h, 
-              0, h, 
-              w*0.75, 0 
+              -w*0.75+offset, h, 
+              0 + offset, h, 
+              w*0.75+offset, 0 
             )
             c.closePath();
 
-            c.moveTo(0, 0);
+            c.moveTo(0 + offset, 0);
             c.bezierCurveTo(
-              w * 0.75, h,
-              w * 1.5, h,
-              w * 0.75, 0
+              w * 0.75 + offset, h,
+              w * 1.5 + offset, h,
+              w * 0.75 + offset, 0
             )
             
             c.fillStrokeShape(s);
           }}
         />
         {shapeRef.current && customTransformerBox()}
-        {isSelected && (<Transformer anchorSize={5} rotateAnchorOffset={20} borderDash={[6, 2]} ref={transformerRef} rotationSnaps={snaps} boundBoxFunc={boundBoxCallbackForRectangle} />)}
+        {isSelected && (<Transformer anchorSize={5} rotateAnchorOffset={20} borderDash={[6, 2]} ref={transformerRef} rotationSnaps={snaps}   boundBoxFunc={boundBoxCallbackForRectangle} />)}
       </>
 
 
