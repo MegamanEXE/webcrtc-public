@@ -162,7 +162,7 @@ export const DEFAULTS = {
   C_RECT: {
     STROKE: defaultStroke,
     STROKE_WIDTH: defaultStrokeWidth,
-    FILL: defaultFill,
+    FILL: null,
     WIDTH: defaultWidth,
     HEIGHT: defaultHeight+30,
     ROTATION: 0,
@@ -171,7 +171,7 @@ export const DEFAULTS = {
   TOP_LEFT_RECT: {
     STROKE: defaultStroke,
     STROKE_WIDTH: defaultStrokeWidth,
-    FILL: defaultFill,
+    FILL: null,
     WIDTH: defaultWidth,
     HEIGHT: defaultHeight,
     ROTATION: 0,
@@ -207,7 +207,7 @@ export const DEFAULTS = {
   PLUS: {
     STROKE: defaultStroke,
     STROKE_WIDTH: defaultStrokeWidth,
-    FILL: defaultFill,
+    FILL: null,
     WIDTH: defaultWidth,
     HEIGHT: defaultHeight,
     ROTATION: 0,
@@ -216,7 +216,7 @@ export const DEFAULTS = {
   CROSS: {
     STROKE: defaultStroke,
     STROKE_WIDTH: defaultStrokeWidth,
-    FILL: defaultFill,
+    FILL: null,
     WIDTH: defaultWidth/2,
     HEIGHT: defaultHeight,
     ROTATION: 0,
@@ -225,7 +225,7 @@ export const DEFAULTS = {
   ORTHOGONAL: {
     STROKE: defaultStroke,
     STROKE_WIDTH: defaultStrokeWidth,
-    FILL: defaultFill,
+    FILL: null,
     WIDTH: defaultWidth,
     HEIGHT: defaultHeight,
     ROTATION: 0,
