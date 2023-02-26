@@ -392,3 +392,13 @@ export const squashedTriObj = {
   strokeWidth: DEFAULTS.SIMPLE_TRI.STROKE_WIDTH,
   dash: DEFAULTS.SIMPLE_TRI.DASH,
 }
+
+export const rightTriObj = {
+  type: SHAPE_TYPES.SIMPLE_TRI,
+  width: DEFAULTS.SIMPLE_TRI.WIDTH,
+  height: DEFAULTS.SIMPLE_TRI.HEIGHT,
+  fill: DEFAULTS.SIMPLE_TRI.FILL,
+  stroke: DEFAULTS.SIMPLE_TRI.STROKE,
+  strokeWidth: DEFAULTS.SIMPLE_TRI.STROKE_WIDTH,
+  dash: DEFAULTS.SIMPLE_TRI.DASH,
+}
