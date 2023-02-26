@@ -402,3 +402,5 @@ export const rightTriObj = {
   strokeWidth: DEFAULTS.SIMPLE_TRI.STROKE_WIDTH,
   dash: DEFAULTS.SIMPLE_TRI.DASH,
 }
+
+const HELLO=1
