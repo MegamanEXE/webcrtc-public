@@ -1,6 +1,6 @@
 //These are used internally exclusively within this file for easier adjustment
 //Do not attempt to use these variable outside this file (hence the lack of export)
-const defaultStrokeWidth = 2;
+const defaultStrokeWidth = 3;
 const defaultStroke = "#000000";
 const defaultFill = "#ffff";
 const defaultDash = [0,0];
@@ -35,6 +35,14 @@ export const SHAPE_TYPES = {
   ORTHOGONAL: "orthogonal",
 
   CIRCLE: "circle",
+  SEMICIRCLE: "semi-circle",
+  C_CIRCLE: "c_circle",
+  CIRCLE_20MIN: "circle_20mins",
+  QUARTER_CIRCLE: "quarter_circle",
+  CIRCLE_10MIN: "circle_10mins",
+  ELLIPSE_VERTICAL: "ellipse_vertical",
+  ELLIPSE_DIAGONAL: "ellipse_diagonal",
+  ELLIPSE_FOLDED: "ellipse_folded",
 
 
 
@@ -57,13 +65,6 @@ export const DEFAULTS = {
     WIDTH: 80,
     HEIGHT: defaultHeight,
     ROTATION: 0,
-    DASH: defaultDash,
-  },
-  CIRCLE: {
-    STROKE: defaultStroke,
-    STROKE_WIDTH: defaultStrokeWidth,
-    FILL: defaultFill,
-    RADIUS: 25,
     DASH: defaultDash,
   }, 
   VERTICAL_LINE: {
@@ -231,6 +232,97 @@ export const DEFAULTS = {
     ROTATION: 0,
     DASH: defaultDash,
   },
+  CIRCLE: {
+    STROKE: defaultStroke,
+    STROKE_WIDTH: defaultStrokeWidth,
+    FILL: defaultFill,
+    RADIUS: 25,
+    DASH: defaultDash,
+  },
+  SEMICIRCLE: {
+    STROKE: defaultStroke,
+    STROKE_WIDTH: defaultStrokeWidth,
+    FILL: defaultFill,
+    WIDTH: defaultWidth,
+    HEIGHT: defaultHeight,
+    ROTATION: 90,
+    DASH: defaultDash,
+    OUTER_RADIUS: 25,
+  },
+  C_CIRCLE: {
+    STROKE: defaultStroke,
+    STROKE_WIDTH: defaultStrokeWidth,
+    FILL: null,
+    WIDTH: defaultWidth,
+    HEIGHT: defaultHeight,
+    ROTATION: 90,
+    DASH: defaultDash,
+    RADIUS: 25,
+  },
+  CIRCLE_20MIN: {
+    STROKE: defaultStroke,
+    STROKE_WIDTH: defaultStrokeWidth,
+    FILL: defaultFill,
+    WIDTH: defaultWidth,
+    HEIGHT: defaultHeight,
+    ROTATION: 150,
+    DASH: defaultDash,
+    RADIUS: 50,
+  },
+  QUARTER_CIRCLE: {
+    STROKE: defaultStroke,
+    STROKE_WIDTH: defaultStrokeWidth,
+    FILL: defaultFill,
+    WIDTH: defaultWidth,
+    HEIGHT: defaultHeight,
+    ROTATION: 180,
+    DASH: defaultDash,
+    RADIUS: 50,
+  },
+  CIRCLE_10MIN: {
+    STROKE: defaultStroke,
+    STROKE_WIDTH: defaultStrokeWidth,
+    FILL: defaultFill,
+    WIDTH: defaultWidth,
+    HEIGHT: defaultHeight,
+    ROTATION: 225,
+    DASH: defaultDash,
+    RADIUS: 50,
+  },
+  ELLIPSE_VERTICAL: {
+    STROKE: defaultStroke,
+    STROKE_WIDTH: defaultStrokeWidth,
+    FILL: defaultFill,
+    WIDTH: defaultWidth,
+    HEIGHT: defaultHeight,
+    ROTATION: 0,
+    DASH: defaultDash,
+    RADIUS_X: defaultWidth/4,
+    RADIUS_Y: defaultHeight,
+  },
+  ELLIPSE_DIAGONAL: {
+    STROKE: defaultStroke,
+    STROKE_WIDTH: defaultStrokeWidth,
+    FILL: defaultFill,
+    WIDTH: defaultWidth,
+    HEIGHT: defaultHeight,
+    ROTATION: 45,
+    DASH: defaultDash,
+    RADIUS_X: defaultWidth / 4,
+    RADIUS_Y: defaultHeight,
+  },
+  ELLIPSE_FOLDED: {
+    STROKE: defaultStroke,
+    STROKE_WIDTH: defaultStrokeWidth,
+    FILL: null,
+    WIDTH: defaultWidth,
+    HEIGHT: defaultHeight,
+    ROTATION: 0,
+    DASH: defaultDash,
+    RADIUS_X: defaultWidth / 4,
+    RADIUS_Y: defaultHeight / 2,
+  },
+
 };
 
 export const LIMITS = {

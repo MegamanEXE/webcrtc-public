@@ -11,7 +11,7 @@ import PopupState, { bindMenu, bindTrigger } from "material-ui-popup-state";
 import { TbMinusVertical } from "react-icons/tb"
 import { RxSlash } from "react-icons/rx"
 import { nanoid } from "nanoid";
-import { circleObj, cLineObj, cRectObj, crossObj, diamondObj, eightLineObj, foldedRectObj, orthogonalObj, plusObj, sLineObj, squareObj, starMediumObj, starObj, starThinObj, tallFatRectObj, tallRectObj, tallThinRectObj, tiltedLineObj, tiltedRectObj, topLeftRectObj, verticalLineObj } from "./ShapeObjects";
+import { cCircleObj, circle10MinObj, circle20MinObj, circleObj, cLineObj, cRectObj, crossObj, diamondObj, eightLineObj, ellipseDiagonalObj, ellipseFoldedObj, ellipseVerticalObj, foldedRectObj, orthogonalObj, plusObj, quarterCircleObj, semicircleObj, sLineObj, squareObj, starMediumObj, starObj, starThinObj, tallFatRectObj, tallRectObj, tallThinRectObj, tiltedLineObj, tiltedRectObj, topLeftRectObj, verticalLineObj } from "./ShapeObjects";
 
 const customIconSize = "1.5em";
 
@@ -125,11 +125,6 @@ export default function Toolbox(props) {
             draft[selectedMatrix].push({ id:nanoid(), ...randomPosition, ...squareObj});
           }));
           break;
-        case SHAPE_TYPES.CIRCLE:
-          setShapes(prevState => produce(prevState, (draft) => {
-            draft[selectedMatrix].push({ id: nanoid(), ...randomPosition, ...circleObj });
-          }));
-          break;
         case SHAPE_TYPES.VERTICAL_LINE:
           setShapes(prevState => produce(prevState, (draft) => {
             draft[selectedMatrix].push({ id: nanoid(), ...randomPosition, ...verticalLineObj });
@@ -225,6 +220,52 @@ export default function Toolbox(props) {
             draft[selectedMatrix].push({ id: nanoid(), ...randomPosition, ...orthogonalObj });
           }));
           break;
+        case SHAPE_TYPES.CIRCLE:
+          setShapes(prevState => produce(prevState, (draft) => {
+            draft[selectedMatrix].push({ id: nanoid(), ...randomPosition, ...circleObj });
+          }));
+          break;
+        case SHAPE_TYPES.SEMICIRCLE:
+          setShapes(prevState => produce(prevState, (draft) => {
+            draft[selectedMatrix].push({ id: nanoid(), ...randomPosition, ...semicircleObj });
+          }));
+          break;
+        case SHAPE_TYPES.C_CIRCLE:
+          setShapes(prevState => produce(prevState, (draft) => {
+            draft[selectedMatrix].push({ id: nanoid(), ...randomPosition, ...cCircleObj });
+          }));
+          break;
+        case SHAPE_TYPES.CIRCLE_20MIN:
+          setShapes(prevState => produce(prevState, (draft) => {
+            draft[selectedMatrix].push({ id: nanoid(), ...randomPosition, ...circle20MinObj });
+          }));
+          break;
+        case SHAPE_TYPES.QUARTER_CIRCLE:
+          setShapes(prevState => produce(prevState, (draft) => {
+            draft[selectedMatrix].push({ id: nanoid(), ...randomPosition, ...quarterCircleObj });
+          }));
+          break;
+        case SHAPE_TYPES.CIRCLE_10MIN:
+          setShapes(prevState => produce(prevState, (draft) => {
+            draft[selectedMatrix].push({ id: nanoid(), ...randomPosition, ...circle10MinObj });
+          }));
+          break;
+        case SHAPE_TYPES.ELLIPSE_VERTICAL:
+          setShapes(prevState => produce(prevState, (draft) => {
+            draft[selectedMatrix].push({ id: nanoid(), ...randomPosition, ...ellipseVerticalObj });
+          }));
+          break;
+        case SHAPE_TYPES.ELLIPSE_DIAGONAL:
+          setShapes(prevState => produce(prevState, (draft) => {
+            draft[selectedMatrix].push({ id: nanoid(), ...randomPosition, ...ellipseDiagonalObj });
+          }));
+          break;
+        case SHAPE_TYPES.ELLIPSE_FOLDED:
+          setShapes(prevState => produce(prevState, (draft) => {
+            draft[selectedMatrix].push({ id: nanoid(), ...randomPosition, ...ellipseFoldedObj });
+          }));
+          break;
+
         default:
           console.log("Case not found")
           break;
@@ -268,6 +309,15 @@ export default function Toolbox(props) {
 
           <Typography mb={1}>Circles</Typography>
           <ToggleButton size="large" value={SHAPE_TYPES.CIRCLE} shape={SHAPE_TYPES.CIRCLE} draggable onDragStart={handleDragStart} onClick={handleClick}><CircleOutlined /></ToggleButton>
+          <ToggleButton size="large" value={SHAPE_TYPES.SEMICIRCLE} shape={SHAPE_TYPES.SEMICIRCLE} draggable onDragStart={handleDragStart} onClick={handleClick}>Semi</ToggleButton>
+          <ToggleButton size="large" value={SHAPE_TYPES.C_CIRCLE} shape={SHAPE_TYPES.C_CIRCLE} draggable onDragStart={handleDragStart} onClick={handleClick}>C</ToggleButton>
+          <ToggleButton size="large" value={SHAPE_TYPES.CIRCLE_20MIN} shape={SHAPE_TYPES.CIRCLE_20MIN} draggable onDragStart={handleDragStart} onClick={handleClick}>20min</ToggleButton>
+          <ToggleButton size="large" value={SHAPE_TYPES.QUARTER_CIRCLE} shape={SHAPE_TYPES.QUARTER_CIRCLE} draggable onDragStart={handleDragStart} onClick={handleClick}>quarter</ToggleButton>
+          <ToggleButton size="large" value={SHAPE_TYPES.CIRCLE_10MIN} shape={SHAPE_TYPES.CIRCLE_10MIN} draggable onDragStart={handleDragStart} onClick={handleClick}>10min</ToggleButton>
+          <ToggleButton size="large" value={SHAPE_TYPES.ELLIPSE_VERTICAL} shape={SHAPE_TYPES.ELLIPSE_VERTICAL} draggable onDragStart={handleDragStart} onClick={handleClick}>O</ToggleButton>
+          <ToggleButton size="large" value={SHAPE_TYPES.ELLIPSE_DIAGONAL} shape={SHAPE_TYPES.ELLIPSE_DIAGONAL} draggable onDragStart={handleDragStart} onClick={handleClick}>o</ToggleButton>
+          <ToggleButton size="large" value={SHAPE_TYPES.ELLIPSE_FOLDED} shape={SHAPE_TYPES.ELLIPSE_FOLDED} draggable onDragStart={handleDragStart} onClick={handleClick}>oo</ToggleButton>
+
 
           
         </Box>

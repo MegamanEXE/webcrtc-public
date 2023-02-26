@@ -2,7 +2,7 @@ import { padding } from "@mui/system";
 import produce from "immer";
 import Konva from "konva";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Circle, Ellipse, Group, Line, Rect, Shape, Star, Transformer } from "react-konva";
+import { Arc, Circle, Ellipse, Group, Line, Rect, Shape, Star, Transformer } from "react-konva";
 import { DEFAULTS, LIMITS, SHAPE_TYPES } from "./ShapesData";
 
 //Utility clamp function
@@ -170,12 +170,6 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
         <Rect ref={shapeRef} {...props} draggable isSelected={isSelected} onClick={handleSelect} onTap={handleSelect} onDragStart={handleSelect} onDragEnd={handleDrag} onTransformEnd={handleTransform} />
         {isSelected && (<Transformer anchorSize={5} rotateAnchorOffset={20} borderDash={[6, 2]} ref={transformerRef} boundBoxFunc={boundBoxCallbackForRectangle} />)}
       </>
-    case SHAPE_TYPES.CIRCLE:
-      return <>
-        <Circle ref={shapeRef} {...props} draggable isSelected={isSelected} onClick={handleSelect} onTap={handleSelect} onDragStart={handleSelect} onDragEnd={handleDrag} onTransformEnd={handleTransform}
-        />
-        {isSelected && (<Transformer anchorSize={5} rotateAnchorOffset={20} borderDash={[6, 2]} ref={transformerRef} rotateEnabled={false} enabledAnchors={["top-left", "top-right", "bottom-right", "bottom-left"]} boundBoxFunc={boundBoxCallbackForCircle} />)}
-      </>
     case SHAPE_TYPES.VERTICAL_LINE:
       return <>
         <Line ref={shapeRef} {...props} draggable isSelected={isSelected} onClick={handleSelect} onTap={handleSelect} onDragStart={handleSelect} onDragEnd={handleDrag} onTransformEnd={handleTransform} />
@@ -267,7 +261,7 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
       </>
 
     case SHAPE_TYPES.FOLDED_RECT:
-      const {x,y,rotation, ...other} = props;
+      let {x,y,rotation, ...other} = props;
       return <>
         <Group x={x} y={y} rotation={rotation}
           ref={shapeRef} draggable isSelected={isSelected} onClick={handleSelect} onTap={handleSelect} onDragStart={handleSelect} onDragEnd={handleDrag} >
@@ -379,6 +373,57 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
         {shapeRef.current && customTransformerBox()}
         {isSelected && (<Transformer anchorSize={5} rotateAnchorOffset={20} borderDash={[6, 2]} ref={transformerRef} rotationSnaps={snaps} boundBoxFunc={boundBoxCallbackForRectangle} />)}
       </>
+    case SHAPE_TYPES.CIRCLE:
+      return <>
+        <Circle ref={shapeRef} {...props} draggable isSelected={isSelected} onClick={handleSelect} onTap={handleSelect} onDragStart={handleSelect} onDragEnd={handleDrag} onTransformEnd={handleTransform} />
+        {isSelected && (<Transformer anchorSize={5} rotateAnchorOffset={20} borderDash={[6, 2]} ref={transformerRef} rotateEnabled={false} enabledAnchors={["top-left", "top-right", "bottom-right", "bottom-left"]} boundBoxFunc={boundBoxCallbackForCircle} />)}
+      </>
+    case SHAPE_TYPES.SEMICIRCLE:
+    case SHAPE_TYPES.C_CIRCLE:
+    case SHAPE_TYPES.CIRCLE_20MIN:
+    case SHAPE_TYPES.QUARTER_CIRCLE:
+    case SHAPE_TYPES.CIRCLE_10MIN:
+      return <>
+        <Arc ref={shapeRef} {...props} draggable isSelected={isSelected} onClick={handleSelect} onTap={handleSelect} onDragStart={handleSelect} onDragEnd={handleDrag} onTransformEnd={handleTransform} />
+        {isSelected && (<Transformer anchorSize={5} rotateAnchorOffset={20} borderDash={[6, 2]} ref={transformerRef} rotationSnaps={snaps} enabledAnchors={["top-left", "top-right", "bottom-right", "bottom-left"]} boundBoxFunc={boundBoxCallbackForCircle} />)}
+      </>
+
+    case SHAPE_TYPES.ELLIPSE_VERTICAL:
+    case SHAPE_TYPES.ELLIPSE_DIAGONAL:
+      return <>
+        <Ellipse ref={shapeRef} {...props} draggable isSelected={isSelected} onClick={handleSelect} onTap={handleSelect} onDragStart={handleSelect} onDragEnd={handleDrag} onTransformEnd={handleTransform} />
+        {isSelected && (<Transformer anchorSize={5} rotateAnchorOffset={20} borderDash={[6, 2]} ref={transformerRef} rotationSnaps={snaps} enabledAnchors={["top-left", "top-right", "bottom-right", "bottom-left"]} boundBoxFunc={boundBoxCallbackForCircle} />)}
+      </>
+    case SHAPE_TYPES.ELLIPSE_FOLDED:
+      return <>
+        <Shape ref={shapeRef} {...props} draggable isSelected={isSelected} onClick={handleSelect} onTap={handleSelect} onDragStart={handleSelect} onDragEnd={handleDrag} onTransformEnd={handleTransform}
+          sceneFunc={(c, s) => {
+            const w = props.width;
+            const h = props.height;
+
+            c.beginPath();
+            c.moveTo(0, 0);
+            c.bezierCurveTo(
+              -w*0.75, h, 
+              0, h, 
+              w*0.75, 0 
+            )
+            c.closePath();
+
+            c.moveTo(0, 0);
+            c.bezierCurveTo(
+              w * 0.75, h,
+              w * 1.5, h,
+              w * 0.75, 0
+            )
+            
+            c.fillStrokeShape(s);
+          }}
+        />
+        {shapeRef.current && customTransformerBox()}
+        {isSelected && (<Transformer anchorSize={5} rotateAnchorOffset={20} borderDash={[6, 2]} ref={transformerRef} rotationSnaps={snaps} boundBoxFunc={boundBoxCallbackForRectangle} />)}
+      </>
+
 
 
     default:

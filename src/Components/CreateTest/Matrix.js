@@ -6,7 +6,7 @@ import produce from "immer";
 import { nanoid } from "nanoid";
 import { DEFAULTS, LIMITS, SHAPE_TYPES } from "./ShapesData";
 import GenericShape from "./GenericShape";
-import { circleObj, cLineObj, cRectObj, crossObj, diamondObj, eightLineObj, foldedRectObj, orthogonalObj, plusObj, sLineObj, squareObj, starMediumObj, starObj, starThinObj, tallFatRectObj, tallRectObj, tallThinRectObj, tiltedLineObj, tiltedRectObj, topLeftRectObj, verticalLineObj } from "./ShapeObjects";
+import { cCircleObj, circle10MinObj, circle20MinObj, circleObj, cLineObj, cRectObj, crossObj, diamondObj, eightLineObj, ellipseDiagonalObj, ellipseFoldedObj, ellipseVerticalObj, foldedRectObj, orthogonalObj, plusObj, quarterCircleObj, semicircleObj, sLineObj, squareObj, starMediumObj, starObj, starThinObj, tallFatRectObj, tallRectObj, tallThinRectObj, tiltedLineObj, tiltedRectObj, topLeftRectObj, verticalLineObj } from "./ShapeObjects";
 
 export default function Matrix(props){
   const [dimensions, setDimensions] = useState({ width: null, height: null });
@@ -77,11 +77,6 @@ export default function Matrix(props){
         createSquare({
           x: coords.x - (DEFAULTS.SQUARE.WIDTH / 2),
           y: coords.y - (DEFAULTS.SQUARE.HEIGHT / 2),
-        });
-      } else if (type === SHAPE_TYPES.CIRCLE) {
-        createCircle({
-          x: coords.x,
-          y: coords.y,
         });
       } else if (type === SHAPE_TYPES.VERTICAL_LINE) {
         createVerticalLine({
@@ -178,6 +173,51 @@ export default function Matrix(props){
           x: coords.x - (DEFAULTS.ORTHOGONAL.WIDTH / 2),
           y: coords.y - (DEFAULTS.ORTHOGONAL.HEIGHT / 2),
         });
+      } else if (type === SHAPE_TYPES.CIRCLE) {
+        createCircle({
+          x: coords.x,
+          y: coords.y,
+        });
+      } else if (type === SHAPE_TYPES.SEMICIRCLE) {
+        createSemicircle({
+          x: coords.x,
+          y: coords.y,
+        });
+      } else if (type === SHAPE_TYPES.C_CIRCLE) {
+        createCCircle({
+          x: coords.x,
+          y: coords.y,
+        });
+      } else if (type === SHAPE_TYPES.CIRCLE_20MIN) {
+        createCircle20Min({
+          x: coords.x,
+          y: coords.y,
+        });
+      } else if (type === SHAPE_TYPES.QUARTER_CIRCLE) {
+        createQuarterCircle({
+          x: coords.x,
+          y: coords.y,
+        });
+      } else if (type === SHAPE_TYPES.CIRCLE_10MIN) {
+        createCircle10Min({
+          x: coords.x,
+          y: coords.y,
+        });
+      } else if (type === SHAPE_TYPES.ELLIPSE_VERTICAL) {
+        createEllipseVertical({
+          x: coords.x,
+          y: coords.y,
+        });
+      } else if (type === SHAPE_TYPES.ELLIPSE_DIAGONAL) {
+        createEllipseDiagonal({
+          x: coords.x,
+          y: coords.y,
+        });
+      } else if (type === SHAPE_TYPES.ELLIPSE_FOLDED) {
+        createEllipseFolded({
+          x: coords.x,
+          y: coords.y,
+        });
       }
     }
   }
@@ -212,12 +252,7 @@ export default function Matrix(props){
   // Creation functions
   //There are good reasons why it finally looks like this.
   //Read ShapeObjects.js for more info
-  function createCircle({ x, y }) {
-    props.setShapes(prevState => produce(prevState, (draft) => {
-      draft[matrixNumber].push({id:nanoid(), x, y, ...circleObj})
-    }));
-  }
-
+  
   //Lines
   function createVerticalLine({ x, y }) {
     props.setShapes(prevState => produce(prevState, (draft) => {
@@ -340,6 +375,63 @@ export default function Matrix(props){
       draft[matrixNumber].push({ id: nanoid(), x, y, ...orthogonalObj })
     }));
   }
+
+  //Circles
+  function createCircle({ x, y }) {
+    props.setShapes(prevState => produce(prevState, (draft) => {
+      draft[matrixNumber].push({ id: nanoid(), x, y, ...circleObj })
+    }));
+  }
+
+  function createSemicircle({ x, y }) {
+    props.setShapes(prevState => produce(prevState, (draft) => {
+      draft[matrixNumber].push({ id: nanoid(), x, y, ...semicircleObj })
+    }));
+  }
+  
+  function createCCircle({ x, y }) {
+    props.setShapes(prevState => produce(prevState, (draft) => {
+      draft[matrixNumber].push({ id: nanoid(), x, y, ...cCircleObj })
+    }));
+  }
+
+  function createCircle20Min({ x, y }) {
+    props.setShapes(prevState => produce(prevState, (draft) => {
+      draft[matrixNumber].push({ id: nanoid(), x, y, ...circle20MinObj })
+    }));
+  }
+
+  function createQuarterCircle({ x, y }) {
+    props.setShapes(prevState => produce(prevState, (draft) => {
+      draft[matrixNumber].push({ id: nanoid(), x, y, ...quarterCircleObj })
+    }));
+  }
+
+  function createCircle10Min({ x, y }) {
+    props.setShapes(prevState => produce(prevState, (draft) => {
+      draft[matrixNumber].push({ id: nanoid(), x, y, ...circle10MinObj })
+    }));
+  }
+
+  function createEllipseVertical({ x, y }) {
+    props.setShapes(prevState => produce(prevState, (draft) => {
+      draft[matrixNumber].push({ id: nanoid(), x, y, ...ellipseVerticalObj })
+    }));
+  }
+
+  function createEllipseDiagonal({ x, y }) {
+    props.setShapes(prevState => produce(prevState, (draft) => {
+      draft[matrixNumber].push({ id: nanoid(), x, y, ...ellipseDiagonalObj })
+    }));
+  }
+
+  function createEllipseFolded({ x, y }) {
+    props.setShapes(prevState => produce(prevState, (draft) => {
+      draft[matrixNumber].push({ id: nanoid(), x, y, ...ellipseFoldedObj })
+    }));
+  }
+
+
 
 
 }
