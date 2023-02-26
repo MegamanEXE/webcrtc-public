@@ -8,10 +8,10 @@ import LineStyleIcon from '@mui/icons-material/LineStyle';
 import { useState } from "react";
 import Draggable from "react-draggable";
 import PopupState, { bindMenu, bindTrigger } from "material-ui-popup-state";
-import { TbMinusVertical } from "react-icons/tb"
+import { TbMinusVertical, TbTriangle } from "react-icons/tb"
 import { RxSlash } from "react-icons/rx"
 import { nanoid } from "nanoid";
-import { cCircleObj, circle10MinObj, circle20MinObj, circleObj, cLineObj, cRectObj, crossObj, diamondObj, eightLineObj, ellipseDiagonalObj, ellipseFoldedObj, ellipseVerticalObj, foldedRectObj, orthogonalObj, plusObj, quarterCircleObj, semicircleObj, sLineObj, squareObj, starMediumObj, starObj, starThinObj, tallFatRectObj, tallRectObj, tallThinRectObj, tiltedLineObj, tiltedRectObj, topLeftRectObj, verticalLineObj } from "./ShapeObjects";
+import { cCircleObj, circle10MinObj, circle20MinObj, circleObj, cLineObj, cRectObj, crossObj, diamondObj, eightLineObj, ellipseDiagonalObj, ellipseFoldedObj, ellipseVerticalObj, foldedRectObj, orthogonalObj, plusObj, quarterCircleObj, semicircleObj, simpleTriObj, sLineObj, squareObj, starMediumObj, starObj, starThinObj, tallFatRectObj, tallRectObj, tallThinRectObj, tiltedLineObj, tiltedRectObj, topLeftRectObj, verticalLineObj } from "./ShapeObjects";
 
 const customIconSize = "1.5em";
 
@@ -86,7 +86,7 @@ export default function Toolbox(props) {
 
   //Line style (dashed)
   const handleLineStyle = () => {
-    const dashStyles = [[0, 0], [5, 2], [10, 5], [3,5]];
+    const dashStyles = [[0, 0], [5, 2], [10, 5], [3,3]];
 
     if (selectedShapeID !== null) {
       let currentValue = shapes[selectedMatrix].find(s => s.id === selectedShapeID).dash;
@@ -265,6 +265,11 @@ export default function Toolbox(props) {
             draft[selectedMatrix].push({ id: nanoid(), ...randomPosition, ...ellipseFoldedObj });
           }));
           break;
+        case SHAPE_TYPES.SIMPLE_TRI:
+          setShapes(prevState => produce(prevState, (draft) => {
+            draft[selectedMatrix].push({ id: nanoid(), ...randomPosition, ...simpleTriObj });
+          }));
+          break;
 
         default:
           console.log("Case not found")
@@ -318,6 +323,8 @@ export default function Toolbox(props) {
           <ToggleButton size="large" value={SHAPE_TYPES.ELLIPSE_DIAGONAL} shape={SHAPE_TYPES.ELLIPSE_DIAGONAL} draggable onDragStart={handleDragStart} onClick={handleClick}>o</ToggleButton>
           <ToggleButton size="large" value={SHAPE_TYPES.ELLIPSE_FOLDED} shape={SHAPE_TYPES.ELLIPSE_FOLDED} draggable onDragStart={handleDragStart} onClick={handleClick}>oo</ToggleButton>
 
+          <Typography mb={1}>Triangles</Typography>
+          <ToggleButton size="large" value={SHAPE_TYPES.SIMPLE_TRI} shape={SHAPE_TYPES.SIMPLE_TRI} draggable onDragStart={handleDragStart} onClick={handleClick}><TbTriangle /></ToggleButton>
 
           
         </Box>

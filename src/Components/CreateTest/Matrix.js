@@ -6,7 +6,7 @@ import produce from "immer";
 import { nanoid } from "nanoid";
 import { DEFAULTS, LIMITS, SHAPE_TYPES } from "./ShapesData";
 import GenericShape from "./GenericShape";
-import { cCircleObj, circle10MinObj, circle20MinObj, circleObj, cLineObj, cRectObj, crossObj, diamondObj, eightLineObj, ellipseDiagonalObj, ellipseFoldedObj, ellipseVerticalObj, foldedRectObj, orthogonalObj, plusObj, quarterCircleObj, semicircleObj, sLineObj, squareObj, starMediumObj, starObj, starThinObj, tallFatRectObj, tallRectObj, tallThinRectObj, tiltedLineObj, tiltedRectObj, topLeftRectObj, verticalLineObj } from "./ShapeObjects";
+import { cCircleObj, circle10MinObj, circle20MinObj, circleObj, cLineObj, cRectObj, crossObj, diamondObj, eightLineObj, ellipseDiagonalObj, ellipseFoldedObj, ellipseVerticalObj, foldedRectObj, orthogonalObj, plusObj, quarterCircleObj, semicircleObj, simpleTriObj, sLineObj, squareObj, starMediumObj, starObj, starThinObj, tallFatRectObj, tallRectObj, tallThinRectObj, tiltedLineObj, tiltedRectObj, topLeftRectObj, verticalLineObj } from "./ShapeObjects";
 
 export default function Matrix(props){
   const [dimensions, setDimensions] = useState({ width: null, height: null });
@@ -216,7 +216,12 @@ export default function Matrix(props){
       } else if (type === SHAPE_TYPES.ELLIPSE_FOLDED) {
         createEllipseFolded({
           x: coords.x,
-          y: coords.y,
+          y: coords.y - DEFAULTS.ELLIPSE_FOLDED.HEIGHT/2,
+        });
+      } else if (type === SHAPE_TYPES.SIMPLE_TRI) {
+        createSimpleTri({
+          x: coords.x,
+          y: coords.y - DEFAULTS.SIMPLE_TRI.HEIGHT / 2,
         });
       }
     }
@@ -431,6 +436,12 @@ export default function Matrix(props){
     }));
   }
 
+  //Triangles
+  function createSimpleTri({ x, y }) {
+    props.setShapes(prevState => produce(prevState, (draft) => {
+      draft[matrixNumber].push({ id: nanoid(), x, y, ...simpleTriObj })
+    }));
+  }
 
 
 

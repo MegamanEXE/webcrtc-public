@@ -60,6 +60,9 @@ export const SHAPE_TYPES = {
 
 };
 
+//While these do seem redundant at first, they are more useful
+//than expected whenever fine-tuning is required for shapes
+//this is the one-stop place for a lot of shape modification
 export const DEFAULTS = {
   SQUARE: {
     STROKE: defaultStroke,
@@ -343,26 +346,106 @@ export const DEFAULTS = {
     ROTATION: 0,
     DASH: defaultDash,
   },
-  SIMPLE_TRI_SMALL: "simple_triangle_small",
-  SIMPLE_TRI_BIG: "simple_triangle_big",
-  SQUASHED_TRI: "squashed_triangle",
-  RIGHT_TRI: "right_triangle",
-  RIGHT_TRI_THIN: "right_triangle_thin",
-  OBTUSE_TRI_SMALL: "obtuse_triangle_small",
-  OBTUSE_TRI_BIG: "obtuse_triangle_big",
-  OBTUSE_TRI_FOLDED: "obtuse_triangle_folded",
-  OBTUSE_TRI_SLIGHT: "obtuse_triangle_slight",
-  CONE: "cone",
+  SIMPLE_TRI_SMALL: {
+    STROKE: defaultStroke,
+    STROKE_WIDTH: defaultStrokeWidth,
+    FILL: defaultFill,
+    WIDTH: defaultWidth,
+    HEIGHT: defaultHeight,
+    ROTATION: 0,
+    DASH: defaultDash,
+  },
+  SIMPLE_TRI_BIG: {
+    STROKE: defaultStroke,
+    STROKE_WIDTH: defaultStrokeWidth,
+    FILL: defaultFill,
+    WIDTH: defaultWidth,
+    HEIGHT: defaultHeight,
+    ROTATION: 0,
+    DASH: defaultDash,
+  },
+  SQUASHED_TRI: {
+    STROKE: defaultStroke,
+    STROKE_WIDTH: defaultStrokeWidth,
+    FILL: defaultFill,
+    WIDTH: defaultWidth,
+    HEIGHT: defaultHeight,
+    ROTATION: 0,
+    DASH: defaultDash,
+  },
+  RIGHT_TRI: {
+    STROKE: defaultStroke,
+    STROKE_WIDTH: defaultStrokeWidth,
+    FILL: defaultFill,
+    WIDTH: defaultWidth,
+    HEIGHT: defaultHeight,
+    ROTATION: 0,
+    DASH: defaultDash,
+  },
+  RIGHT_TRI_THIN: {
+    STROKE: defaultStroke,
+    STROKE_WIDTH: defaultStrokeWidth,
+    FILL: defaultFill,
+    WIDTH: defaultWidth,
+    HEIGHT: defaultHeight,
+    ROTATION: 0,
+    DASH: defaultDash,
+  },
+  OBTUSE_TRI_SMALL: {
+    STROKE: defaultStroke,
+    STROKE_WIDTH: defaultStrokeWidth,
+    FILL: defaultFill,
+    WIDTH: defaultWidth,
+    HEIGHT: defaultHeight,
+    ROTATION: 0,
+    DASH: defaultDash,
+  },
+  OBTUSE_TRI_BIG: {
+    STROKE: defaultStroke,
+    STROKE_WIDTH: defaultStrokeWidth,
+    FILL: defaultFill,
+    WIDTH: defaultWidth,
+    HEIGHT: defaultHeight,
+    ROTATION: 0,
+    DASH: defaultDash,
+  },
+  OBTUSE_TRI_FOLDED: {
+    STROKE: defaultStroke,
+    STROKE_WIDTH: defaultStrokeWidth,
+    FILL: defaultFill,
+    WIDTH: defaultWidth,
+    HEIGHT: defaultHeight,
+    ROTATION: 0,
+    DASH: defaultDash,
+  },
+  OBTUSE_TRI_SLIGHT: {
+    STROKE: defaultStroke,
+    STROKE_WIDTH: defaultStrokeWidth,
+    FILL: defaultFill,
+    WIDTH: defaultWidth,
+    HEIGHT: defaultHeight,
+    ROTATION: 0,
+    DASH: defaultDash,
+  },
+  CONE: {
+    STROKE: defaultStroke,
+    STROKE_WIDTH: defaultStrokeWidth,
+    FILL: defaultFill,
+    WIDTH: defaultWidth,
+    HEIGHT: defaultHeight,
+    ROTATION: 0,
+    DASH: defaultDash,
+  },
 
 };
 
 export const LIMITS = {
   RECT: {
-    MAX: 125,
+    MAX: 180,
     MIN: 10,
   },
   CIRCLE: {
-    MAX: 150,
+    MAX: 180,
     MIN: 10,
   },
 };
