@@ -6,7 +6,7 @@ import produce from "immer";
 import { nanoid } from "nanoid";
 import { DEFAULTS, LIMITS, SHAPE_TYPES } from "./ShapesData";
 import GenericShape from "./GenericShape";
-import { cCircleObj, circle10MinObj, circle20MinObj, circleObj, cLineObj, cRectObj, crossObj, diamondObj, eightLineObj, ellipseDiagonalObj, ellipseFoldedObj, ellipseVerticalObj, foldedRectObj, orthogonalObj, plusObj, quarterCircleObj, semicircleObj, simpleTriObj, sLineObj, squareObj, starMediumObj, starObj, starThinObj, tallFatRectObj, tallRectObj, tallThinRectObj, tiltedLineObj, tiltedRectObj, topLeftRectObj, verticalLineObj } from "./ShapeObjects";
+import { cCircleObj, circle10MinObj, circle20MinObj, circleObj, cLineObj, coneObj, cRectObj, crossObj, diamondObj, eightLineObj, ellipseDiagonalObj, ellipseFoldedObj, ellipseVerticalObj, foldedRectObj, obtuseTriBigObj, obtuseTriFoldedObj, obtuseTriSlightObj, obtuseTriSmallObj, obtuseTriThinObj, orthogonalObj, plusObj, quarterCircleObj, rightTriObj, rightTriThinObj, semicircleObj, simpleTriBigObj, simpleTriObj, simpleTriSmallObj, sLineObj, squareObj, squashedTriObj, starMediumObj, starObj, starThinObj, tallFatRectObj, tallRectObj, tallThinRectObj, tiltedLineObj, tiltedRectObj, topLeftRectObj, verticalLineObj } from "./ShapeObjects";
 
 export default function Matrix(props){
   const [dimensions, setDimensions] = useState({ width: null, height: null });
@@ -222,6 +222,56 @@ export default function Matrix(props){
         createSimpleTri({
           x: coords.x,
           y: coords.y - DEFAULTS.SIMPLE_TRI.HEIGHT / 2,
+        });
+      } else if (type === SHAPE_TYPES.SIMPLE_TRI_SMALL) {
+        createSimpleTriSmall({
+          x: coords.x,
+          y: coords.y - DEFAULTS.SIMPLE_TRI_SMALL.HEIGHT / 2,
+        });
+      } else if (type === SHAPE_TYPES.SIMPLE_TRI_BIG) {
+        createSimpleTriBig({
+          x: coords.x,
+          y: coords.y - DEFAULTS.SIMPLE_TRI_BIG.HEIGHT / 2,
+        });
+      } else if (type === SHAPE_TYPES.SQUASHED_TRI) {
+        createSquashedTri({
+          x: coords.x,
+          y: coords.y - DEFAULTS.SQUASHED_TRI.HEIGHT / 2,
+        });
+      } else if (type === SHAPE_TYPES.RIGHT_TRI) {
+        createRightTri({
+          x: coords.x,
+          y: coords.y - DEFAULTS.RIGHT_TRI.HEIGHT / 2,
+        });
+      } else if (type === SHAPE_TYPES.RIGHT_TRI_THIN) {
+        createRightTriThin({
+          x: coords.x,
+          y: coords.y - DEFAULTS.RIGHT_TRI_THIN.HEIGHT / 2,
+        });
+      } else if (type === SHAPE_TYPES.OBTUSE_TRI_SMALL) {
+        createObtuseTriSmall({
+          x: coords.x,
+          y: coords.y - DEFAULTS.OBTUSE_TRI_SMALL.HEIGHT / 2,
+        });
+      } else if (type === SHAPE_TYPES.OBTUSE_TRI_BIG) {
+        createObtuseTriBig({
+          x: coords.x,
+          y: coords.y - DEFAULTS.OBTUSE_TRI_BIG.HEIGHT / 2,
+        });
+      } else if (type === SHAPE_TYPES.OBTUSE_TRI_FOLDED) {
+        createObtuseTriFolded({
+          x: coords.x - DEFAULTS.OBTUSE_TRI_FOLDED.WIDTH,
+          y: coords.y,
+        });
+      } else if (type === SHAPE_TYPES.OBTUSE_TRI_SMALL) {
+        createObtuseTriSlight({
+          x: coords.x,
+          y: coords.y - DEFAULTS.OBTUSE_TRI_SLIGHT.HEIGHT / 2,
+        });
+      } else if (type === SHAPE_TYPES.CONE) {
+        createCone({
+          x: coords.x,
+          y: coords.y - DEFAULTS.CONE.HEIGHT / 2,
         });
       }
     }
@@ -440,6 +490,66 @@ export default function Matrix(props){
   function createSimpleTri({ x, y }) {
     props.setShapes(prevState => produce(prevState, (draft) => {
       draft[matrixNumber].push({ id: nanoid(), x, y, ...simpleTriObj })
+    }));
+  }
+
+  function createSimpleTriSmall({ x, y }) {
+    props.setShapes(prevState => produce(prevState, (draft) => {
+      draft[matrixNumber].push({ id: nanoid(), x, y, ...simpleTriSmallObj })
+    }));
+  }
+
+  function createSimpleTriBig({ x, y }) {
+    props.setShapes(prevState => produce(prevState, (draft) => {
+      draft[matrixNumber].push({ id: nanoid(), x, y, ...simpleTriBigObj })
+    }));
+  }
+
+  function createSquashedTri({ x, y }) {
+    props.setShapes(prevState => produce(prevState, (draft) => {
+      draft[matrixNumber].push({ id: nanoid(), x, y, ...squashedTriObj })
+    }));
+  }
+
+  function createRightTri({ x, y }) {
+    props.setShapes(prevState => produce(prevState, (draft) => {
+      draft[matrixNumber].push({ id: nanoid(), x, y, ...rightTriObj })
+    }));
+  }
+
+  function createRightTriThin({ x, y }) {
+    props.setShapes(prevState => produce(prevState, (draft) => {
+      draft[matrixNumber].push({ id: nanoid(), x, y, ...rightTriThinObj })
+    }));
+  }
+
+  function createObtuseTriSmall({ x, y }) {
+    props.setShapes(prevState => produce(prevState, (draft) => {
+      draft[matrixNumber].push({ id: nanoid(), x, y, ...obtuseTriSmallObj })
+    }));
+  }
+
+  function createObtuseTriBig({ x, y }) {
+    props.setShapes(prevState => produce(prevState, (draft) => {
+      draft[matrixNumber].push({ id: nanoid(), x, y, ...obtuseTriBigObj})
+    }));
+  }
+
+  function createObtuseTriFolded({ x, y }) {
+    props.setShapes(prevState => produce(prevState, (draft) => {
+      draft[matrixNumber].push({ id: nanoid(), x, y, ...obtuseTriFoldedObj })
+    }));
+  }
+
+  function createObtuseTriSlight({ x, y }) {
+    props.setShapes(prevState => produce(prevState, (draft) => {
+      draft[matrixNumber].push({ id: nanoid(), x, y, ...obtuseTriSlightObj })
+    }));
+  }
+
+  function createCone({ x, y }) {
+    props.setShapes(prevState => produce(prevState, (draft) => {
+      draft[matrixNumber].push({ id: nanoid(), x, y, ...coneObj })
     }));
   }
 

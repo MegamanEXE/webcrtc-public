@@ -463,5 +463,4 @@ export const coneObj = {
   dash: DEFAULTS.CONE.DASH,
 }
 
-const TEST=322;
 

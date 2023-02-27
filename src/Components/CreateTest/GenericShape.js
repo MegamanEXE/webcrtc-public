@@ -150,10 +150,19 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
     const w = props.width;
     const h = props.height;
     switch(props.type){
+      //See, I told you this would come in handy
       case SHAPE_TYPES.ELLIPSE_FOLDED:
-        //See, I told you this would come in handy
         shapeRef.current.getSelfRect = () => { return { x: 0, y: 0, width: w+(w/3.1), height: h - (h/3.8) }; }
         break;
+      case SHAPE_TYPES.OBTUSE_TRI_FOLDED:
+        shapeRef.current.getSelfRect = () => { return { x: 0, y: 0, width: w*2, height: (h/2) }; }
+        break;
+      case SHAPE_TYPES.OBTUSE_TRI_SMALL: 
+      case SHAPE_TYPES.OBTUSE_TRI_BIG: 
+      case SHAPE_TYPES.OBTUSE_TRI_SLIGHT:
+        shapeRef.current.getSelfRect = () => { return { x: 0, y: 0, width: w * 1.5, height: h }; }
+        break;
+        
 
       default:
         shapeRef.current.getSelfRect = () => { return { x: 0, y: 0, width: props.width, height: props.height }; }
@@ -431,12 +440,6 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
     case SHAPE_TYPES.SIMPLE_TRI_SMALL: 
     case SHAPE_TYPES.SIMPLE_TRI_BIG:
     case SHAPE_TYPES.SQUASHED_TRI: 
-    case SHAPE_TYPES.RIGHT_TRI:
-    case SHAPE_TYPES.RIGHT_TRI_THIN: 
-    case SHAPE_TYPES.OBTUSE_TRI_SMALL:
-    case SHAPE_TYPES.OBTUSE_TRI_BIG:
-    case SHAPE_TYPES.OBTUSE_TRI_FOLDED:
-    case SHAPE_TYPES.OBTUSE_TRI_SLIGHT:
     case SHAPE_TYPES.CONE:
           return <>
             <Shape ref={shapeRef} {...props} draggable isSelected={isSelected} onClick={handleSelect} onTap={handleSelect} onDragStart={handleSelect} onDragEnd={handleDrag} onTransformEnd={handleTransform}
@@ -450,15 +453,99 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
                 c.lineTo(w,h);
                 c.closePath()
 
-
                 c.fillStrokeShape(s);
               }}
             />
             {shapeRef.current && customTransformerBox()}
             {isSelected && (<Transformer anchorSize={5} rotateAnchorOffset={20} borderDash={[6, 2]} ref={transformerRef} rotationSnaps={snaps} boundBoxFunc={boundBoxCallbackForRectangle} />)}
           </>
+    case SHAPE_TYPES.RIGHT_TRI:
+      return <>
+        <Shape ref={shapeRef} {...props} draggable isSelected={isSelected} onClick={handleSelect} onTap={handleSelect} onDragStart={handleSelect} onDragEnd={handleDrag} onTransformEnd={handleTransform}
+          sceneFunc={(c, s) => {
+            const w = props.width;
+            const h = props.height;
 
+            c.beginPath();
+            c.moveTo(0, 0);
+            c.lineTo(0, h);
+            c.lineTo(w, h);
+            c.closePath()
 
+            c.fillStrokeShape(s);
+          }}
+        />
+        {shapeRef.current && customTransformerBox()}
+        {isSelected && (<Transformer anchorSize={5} rotateAnchorOffset={20} borderDash={[6, 2]} ref={transformerRef} rotationSnaps={snaps} boundBoxFunc={boundBoxCallbackForRectangle} />)}
+      </>
+    case SHAPE_TYPES.RIGHT_TRI_THIN:
+      return <>
+        <Shape ref={shapeRef} {...props} draggable isSelected={isSelected} onClick={handleSelect} onTap={handleSelect} onDragStart={handleSelect} onDragEnd={handleDrag} onTransformEnd={handleTransform}
+          sceneFunc={(c, s) => {
+            const w = props.width;
+            const h = props.height;
+
+            c.beginPath();
+            c.moveTo(w, 0);
+            c.lineTo(w, h);
+            c.lineTo(0, h);
+            c.closePath()
+
+            c.fillStrokeShape(s);
+          }}
+        />
+        {shapeRef.current && customTransformerBox()}
+        {isSelected && (<Transformer anchorSize={5} rotateAnchorOffset={20} borderDash={[6, 2]} ref={transformerRef} rotationSnaps={snaps} boundBoxFunc={boundBoxCallbackForRectangle} />)}
+      </>
+    case SHAPE_TYPES.OBTUSE_TRI_SMALL:
+    case SHAPE_TYPES.OBTUSE_TRI_BIG:
+    case SHAPE_TYPES.OBTUSE_TRI_SLIGHT:
+      return <>
+        <Shape ref={shapeRef} {...props} draggable isSelected={isSelected} onClick={handleSelect} onTap={handleSelect} onDragStart={handleSelect} onDragEnd={handleDrag} onTransformEnd={handleTransform}
+          sceneFunc={(c, s) => {
+            const w = props.width;
+            const h = props.height;
+
+            c.beginPath();
+            c.moveTo(w*1.5, 0);
+            c.lineTo(w, h);
+            c.lineTo(0, h);
+            c.closePath()
+
+            c.fillStrokeShape(s);
+          }}
+        />
+        {shapeRef.current && customTransformerBox()}
+        {isSelected && (<Transformer anchorSize={5} rotateAnchorOffset={20} borderDash={[6, 2]} ref={transformerRef} rotationSnaps={snaps} boundBoxFunc={boundBoxCallbackForRectangle} />)}
+      </>
+    case SHAPE_TYPES.OBTUSE_TRI_FOLDED:
+      return <>
+        <Shape ref={shapeRef} {...props} draggable isSelected={isSelected} onClick={handleSelect} onTap={handleSelect} onDragStart={handleSelect} onDragEnd={handleDrag} onTransformEnd={handleTransform}
+          sceneFunc={(c, s) => {
+            const w = props.width;
+            const h = props.height;
+
+            c.beginPath();
+            c.moveTo(w*1.5, 0);
+            c.lineTo(w, 0);
+            c.lineTo(0, h/2);
+            c.lineTo(w,h/2);
+            c.closePath()
+
+            c.moveTo(w, 0);
+            c.lineTo(w*1.5, 0);
+            c.lineTo(w*2, h/2);
+            c.closePath();
+
+            c.fillStrokeShape(s);
+          }}
+          lineJoin={"bevel"}
+        />
+        {shapeRef.current && customTransformerBox()}
+        {isSelected && (<Transformer anchorSize={5} rotateAnchorOffset={20} borderDash={[6, 2]} ref={transformerRef} rotationSnaps={snaps} boundBoxFunc={boundBoxCallbackForRectangle} />)}
+      </>
+
+      
 
     default:
       return null

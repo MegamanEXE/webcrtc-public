@@ -1,4 +1,4 @@
-import { CircleOutlined, DiamondOutlined, LineStyle, Padding, SquareOutlined } from "@mui/icons-material";
+import { CircleOutlined, DiamondOutlined, Icecream, LineStyle, Padding, SquareOutlined } from "@mui/icons-material";
 import { Button, IconButton, Menu, MenuItem, Paper, Popover, ToggleButton, Tooltip, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import produce from "immer";
@@ -11,7 +11,7 @@ import PopupState, { bindMenu, bindTrigger } from "material-ui-popup-state";
 import { TbMinusVertical, TbTriangle } from "react-icons/tb"
 import { RxSlash } from "react-icons/rx"
 import { nanoid } from "nanoid";
-import { cCircleObj, circle10MinObj, circle20MinObj, circleObj, cLineObj, cRectObj, crossObj, diamondObj, eightLineObj, ellipseDiagonalObj, ellipseFoldedObj, ellipseVerticalObj, foldedRectObj, orthogonalObj, plusObj, quarterCircleObj, semicircleObj, simpleTriObj, sLineObj, squareObj, starMediumObj, starObj, starThinObj, tallFatRectObj, tallRectObj, tallThinRectObj, tiltedLineObj, tiltedRectObj, topLeftRectObj, verticalLineObj } from "./ShapeObjects";
+import { cCircleObj, circle10MinObj, circle20MinObj, circleObj, cLineObj, coneObj, cRectObj, crossObj, diamondObj, eightLineObj, ellipseDiagonalObj, ellipseFoldedObj, ellipseVerticalObj, foldedRectObj, obtuseTriBigObj, obtuseTriFoldedObj, obtuseTriSlightObj, obtuseTriSmallObj, orthogonalObj, plusObj, quarterCircleObj, rightTriObj, rightTriThinObj, semicircleObj, simpleTriBigObj, simpleTriObj, simpleTriSmallObj, sLineObj, squareObj, squashedTriObj, starMediumObj, starObj, starThinObj, tallFatRectObj, tallRectObj, tallThinRectObj, tiltedLineObj, tiltedRectObj, topLeftRectObj, verticalLineObj } from "./ShapeObjects";
 
 const customIconSize = "1.5em";
 
@@ -265,9 +265,61 @@ export default function Toolbox(props) {
             draft[selectedMatrix].push({ id: nanoid(), ...randomPosition, ...ellipseFoldedObj });
           }));
           break;
+        
+        //TRIANGLES
         case SHAPE_TYPES.SIMPLE_TRI:
           setShapes(prevState => produce(prevState, (draft) => {
             draft[selectedMatrix].push({ id: nanoid(), ...randomPosition, ...simpleTriObj });
+          }));
+          break;
+        case SHAPE_TYPES.SIMPLE_TRI_SMALL:
+          setShapes(prevState => produce(prevState, (draft) => {
+            draft[selectedMatrix].push({ id: nanoid(), ...randomPosition, ...simpleTriSmallObj });
+          }));
+          break;
+        case SHAPE_TYPES.SIMPLE_TRI_BIG:
+          setShapes(prevState => produce(prevState, (draft) => {
+            draft[selectedMatrix].push({ id: nanoid(), ...randomPosition, ...simpleTriBigObj });
+          }));
+          break;
+        case SHAPE_TYPES.SQUASHED_TRI:
+          setShapes(prevState => produce(prevState, (draft) => {
+            draft[selectedMatrix].push({ id: nanoid(), ...randomPosition, ...squashedTriObj });
+          }));
+          break;
+        case SHAPE_TYPES.RIGHT_TRI:
+          setShapes(prevState => produce(prevState, (draft) => {
+            draft[selectedMatrix].push({ id: nanoid(), ...randomPosition, ...rightTriObj });
+          }));
+          break;
+        case SHAPE_TYPES.RIGHT_TRI_THIN:
+          setShapes(prevState => produce(prevState, (draft) => {
+            draft[selectedMatrix].push({ id: nanoid(), ...randomPosition, ...rightTriThinObj });
+          }));
+          break;
+        case SHAPE_TYPES.OBTUSE_TRI_SMALL:
+          setShapes(prevState => produce(prevState, (draft) => {
+            draft[selectedMatrix].push({ id: nanoid(), ...randomPosition, ...obtuseTriSmallObj });
+          }));
+          break;
+        case SHAPE_TYPES.OBTUSE_TRI_BIG:
+          setShapes(prevState => produce(prevState, (draft) => {
+            draft[selectedMatrix].push({ id: nanoid(), ...randomPosition, ...obtuseTriBigObj });
+          }));
+          break;
+        case SHAPE_TYPES.OBTUSE_TRI_FOLDED:
+          setShapes(prevState => produce(prevState, (draft) => {
+            draft[selectedMatrix].push({ id: nanoid(), ...randomPosition, ...obtuseTriFoldedObj });
+          }));
+          break;
+        case SHAPE_TYPES.OBTUSE_TRI_SLIGHT:
+          setShapes(prevState => produce(prevState, (draft) => {
+            draft[selectedMatrix].push({ id: nanoid(), ...randomPosition, ...obtuseTriSlightObj });
+          }));
+          break;
+        case SHAPE_TYPES.CONE:
+          setShapes(prevState => produce(prevState, (draft) => {
+            draft[selectedMatrix].push({ id: nanoid(), ...randomPosition, ...coneObj });
           }));
           break;
 
@@ -325,6 +377,16 @@ export default function Toolbox(props) {
 
           <Typography mb={1}>Triangles</Typography>
           <ToggleButton size="large" value={SHAPE_TYPES.SIMPLE_TRI} shape={SHAPE_TYPES.SIMPLE_TRI} draggable onDragStart={handleDragStart} onClick={handleClick}><TbTriangle /></ToggleButton>
+          <ToggleButton size="large" value={SHAPE_TYPES.SIMPLE_TRI_SMALL} shape={SHAPE_TYPES.SIMPLE_TRI_SMALL} draggable onDragStart={handleDragStart} onClick={handleClick}><TbTriangle /></ToggleButton>
+          <ToggleButton size="large" value={SHAPE_TYPES.SIMPLE_TRI_BIG} shape={SHAPE_TYPES.SIMPLE_TRI_BIG} draggable onDragStart={handleDragStart} onClick={handleClick}><TbTriangle /></ToggleButton>
+          <ToggleButton size="large" value={SHAPE_TYPES.SQUASHED_TRI} shape={SHAPE_TYPES.SQUASHED_TRI} draggable onDragStart={handleDragStart} onClick={handleClick}><TbTriangle /></ToggleButton>
+          <ToggleButton size="large" value={SHAPE_TYPES.RIGHT_TRI} shape={SHAPE_TYPES.RIGHT_TRI} draggable onDragStart={handleDragStart} onClick={handleClick}><TbTriangle /></ToggleButton>
+          <ToggleButton size="large" value={SHAPE_TYPES.RIGHT_TRI_THIN} shape={SHAPE_TYPES.RIGHT_TRI_THIN} draggable onDragStart={handleDragStart} onClick={handleClick}><TbTriangle /></ToggleButton>
+          <ToggleButton size="large" value={SHAPE_TYPES.OBTUSE_TRI_SMALL} shape={SHAPE_TYPES.OBTUSE_TRI_SMALL} draggable onDragStart={handleDragStart} onClick={handleClick}><TbTriangle /></ToggleButton>
+          <ToggleButton size="large" value={SHAPE_TYPES.OBTUSE_TRI_BIG} shape={SHAPE_TYPES.OBTUSE_TRI_BIG} draggable onDragStart={handleDragStart} onClick={handleClick}><TbTriangle />Big</ToggleButton>
+          <ToggleButton size="large" value={SHAPE_TYPES.OBTUSE_TRI_FOLDED} shape={SHAPE_TYPES.OBTUSE_TRI_FOLDED} draggable onDragStart={handleDragStart} onClick={handleClick}><TbTriangle />F</ToggleButton>
+          <ToggleButton size="large" value={SHAPE_TYPES.OBTUSE_TRI_SLIGHT} shape={SHAPE_TYPES.OBTUSE_TRI_SLIGHT} draggable onDragStart={handleDragStart} onClick={handleClick}><TbTriangle /></ToggleButton>
+          <ToggleButton size="large" value={SHAPE_TYPES.CONE} shape={SHAPE_TYPES.CONE} draggable onDragStart={handleDragStart} onClick={handleClick}><Icecream /></ToggleButton>
 
           
         </Box>
