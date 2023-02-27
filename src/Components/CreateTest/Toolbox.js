@@ -1,13 +1,10 @@
-import { CircleOutlined, DiamondOutlined, Icecream, LineStyle, Padding, SquareOutlined } from "@mui/icons-material";
+import { Circle, CircleOutlined, DiamondOutlined, Hexagon, HexagonOutlined, Icecream, LineStyle, Padding, Square, SquareOutlined } from "@mui/icons-material";
 import { Button, IconButton, Menu, MenuItem, Paper, Popover, ToggleButton, Tooltip, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import produce from "immer";
-import { DEFAULTS, SHAPE_ACTIONS, SHAPE_TYPES } from "./ShapesData";
+import { SHAPE_ACTIONS, SHAPE_TYPES } from "./ShapesData";
 import LineWeightIcon from '@mui/icons-material/LineWeight';
 import LineStyleIcon from '@mui/icons-material/LineStyle';
-import { useState } from "react";
-import Draggable from "react-draggable";
-import PopupState, { bindMenu, bindTrigger } from "material-ui-popup-state";
 import { TbMinusVertical, TbTriangle } from "react-icons/tb"
 import { RxSlash } from "react-icons/rx"
 import { nanoid } from "nanoid";
@@ -20,7 +17,7 @@ function randomInt(min, max) {
 }
 
 const handleDragStart = (event) => {
-  const type = event.target.attributes.shape.value;
+  const type = event.currentTarget.attributes.shape.value;
 
   if (type) {
     // x,y coordinates of the mouse pointer relative to the position of the padding edge of the target node
@@ -107,10 +104,13 @@ export default function Toolbox(props) {
     let type = event.currentTarget.attributes.shape.value;
 
     const matrix_size = 150; //Match this up with matrix_size in Matrix.js. Not needed generally.
+
+    //Not needed apparently; Looks better without
     const randPadding = matrix_size/4;
+    const paddingOffset = 30;
 
     const defaultPosition = {x: matrix_size/3, y: matrix_size/3} //if center position desired instead of random
-    const randomPosition = {x: randomInt(randPadding,matrix_size-randPadding), y:randomInt(randPadding,matrix_size-randPadding)}
+    const randomPosition = {x: randomInt(0,matrix_size), y:randomInt(0,matrix_size)}
     
     if (type) {
       setShapes(prevState => produce(prevState, (draft) => {
@@ -119,8 +119,6 @@ export default function Toolbox(props) {
 
     }
   }
-
-
 
   return (
     <Box p={1.5} sx={{ height: '100%' }}>
@@ -178,7 +176,22 @@ export default function Toolbox(props) {
           <ToggleButton size="large" value={SHAPE_TYPES.OBTUSE_TRI_SLIGHT} shape={SHAPE_TYPES.OBTUSE_TRI_SLIGHT} draggable onDragStart={handleDragStart} onClick={handleClick}><TbTriangle /></ToggleButton>
           <ToggleButton size="large" value={SHAPE_TYPES.CONE} shape={SHAPE_TYPES.CONE} draggable onDragStart={handleDragStart} onClick={handleClick}><Icecream /></ToggleButton>
 
+          <Typography mb={1}>Hexagons</Typography>
+          <ToggleButton size="large" value={SHAPE_TYPES.HEXAGON} shape={SHAPE_TYPES.HEXAGON} draggable onDragStart={handleDragStart} onClick={handleClick}><HexagonOutlined /></ToggleButton>
+          <ToggleButton size="large" value={SHAPE_TYPES.SEMIHEXAGON} shape={SHAPE_TYPES.SEMIHEXAGON} draggable onDragStart={handleDragStart} onClick={handleClick}><HexagonOutlined /></ToggleButton>
+          <ToggleButton size="large" value={SHAPE_TYPES.C_HEXAGON} shape={SHAPE_TYPES.C_HEXAGON} draggable onDragStart={handleDragStart} onClick={handleClick}><HexagonOutlined />C</ToggleButton>
+          <ToggleButton size="large" value={SHAPE_TYPES.RHOMBUS} shape={SHAPE_TYPES.RHOMBUS} draggable onDragStart={handleDragStart} onClick={handleClick}><Square /></ToggleButton>
           
+          <Typography mb={1}>Dots</Typography>
+          <ToggleButton size="large" value={SHAPE_TYPES.DOT_HOLLOW} shape={SHAPE_TYPES.DOT_HOLLOW} draggable onDragStart={handleDragStart} onClick={handleClick}><CircleOutlined /></ToggleButton>
+          <ToggleButton size="large" value={SHAPE_TYPES.DOT_FILLED} shape={SHAPE_TYPES.DOT_FILLED} draggable onDragStart={handleDragStart} onClick={handleClick}><Circle /></ToggleButton>
+          <ToggleButton size="large" value={SHAPE_TYPES.DOT4_HOLLOW} shape={SHAPE_TYPES.DOT4_HOLLOW} draggable onDragStart={handleDragStart} onClick={handleClick}><CircleOutlined />4</ToggleButton>
+          <ToggleButton size="large" value={SHAPE_TYPES.DOT4_FILLED} shape={SHAPE_TYPES.DOT4_FILLED} draggable onDragStart={handleDragStart} onClick={handleClick}><Circle />4</ToggleButton>
+          <ToggleButton size="large" value={SHAPE_TYPES.DOT_SQUARE_HOLLOW} shape={SHAPE_TYPES.DOT_SQUARE_HOLLOW} draggable onDragStart={handleDragStart} onClick={handleClick}><SquareOutlined /></ToggleButton>
+          <ToggleButton size="large" value={SHAPE_TYPES.DOT_SQUARE_FILLED} shape={SHAPE_TYPES.DOT_SQUARE_FILLED} draggable onDragStart={handleDragStart} onClick={handleClick}><Square /></ToggleButton>
+          <ToggleButton size="large" value={SHAPE_TYPES.DOT4_SQUARE_HOLLOW} shape={SHAPE_TYPES.DOT4_SQUARE_HOLLOW} draggable onDragStart={handleDragStart} onClick={handleClick}><SquareOutlined />4</ToggleButton>
+          <ToggleButton size="large" value={SHAPE_TYPES.DOT4_SQUARE_FILLED} shape={SHAPE_TYPES.DOT4_SQUARE_FILLED} draggable onDragStart={handleDragStart} onClick={handleClick}><Square />4</ToggleButton>
+
         </Box>
 
         <Box>

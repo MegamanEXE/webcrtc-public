@@ -2,7 +2,7 @@ import { padding } from "@mui/system";
 import produce from "immer";
 import Konva from "konva";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Arc, Circle, Ellipse, Group, Line, Rect, Shape, Star, Transformer } from "react-konva";
+import { Arc, Circle, Ellipse, Group, Line, Rect, RegularPolygon, Shape, Star, Transformer } from "react-konva";
 import { DEFAULTS, LIMITS, SHAPE_TYPES } from "./ShapesData";
 
 //Utility clamp function
@@ -92,11 +92,10 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
         } else if ([SHAPE_TYPES.C_LINE, SHAPE_TYPES.S_LINE, SHAPE_TYPES.EIGHT_LINE,
         SHAPE_TYPES.FOLDED_RECT].includes(d.type)) {
           d.rotation = node.rotation();
-
           d.width = node.width()*scaleX;
           d.height = node.height()*scaleY;
 
-        }  else {
+        } else {
 
           d.rotation = node.rotation();
 
@@ -162,15 +161,22 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
       case SHAPE_TYPES.OBTUSE_TRI_SLIGHT:
         shapeRef.current.getSelfRect = () => { return { x: 0, y: 0, width: w * 1.5, height: h }; }
         break;
-        
+      case SHAPE_TYPES.SEMIHEXAGON:
+        shapeRef.current.getSelfRect = () => { return { x: 0, y: 0, width: props.width/2, height: props.height }; }
+        break;
 
       default:
         shapeRef.current.getSelfRect = () => { return { x: 0, y: 0, width: props.width, height: props.height }; }
       }
   }
 
+  //Used where <Group>...</Group> is used aka folded-rect and dots
+  const { x, y, rotation, ...other } = props;
+  
   //MAIN return
   switch (props.type) {
+
+
     case SHAPE_TYPES.SQUARE:
       return <>
         <Rect ref={shapeRef} {...props} draggable isSelected={isSelected} onClick={handleSelect} onTap={handleSelect} onDragStart={handleSelect} onDragEnd={handleDrag} onTransformEnd={handleTransform} />
@@ -272,14 +278,18 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
       </>
 
     case SHAPE_TYPES.FOLDED_RECT:
-      let {x,y,rotation, ...other} = props;
+      //THIS IS NOT LOCAL TO THIS CASE. This was used here for the first time.
+      //Used again later in Dots. This cannot be redefined so I'll leave this here
+      // let {x,y,rotation, ...other} = props;
+
+      //In hindsight, Should have just created a custom shape instead
       return <>
         <Group x={x} y={y} rotation={rotation}
           ref={shapeRef} draggable isSelected={isSelected} onClick={handleSelect} onTap={handleSelect} onDragStart={handleSelect} onDragEnd={handleDrag} >
           <Rect {...other} skewX={-0.5} onTransformEnd={handleTransform} />
           <Rect {...other} skewX={0.5} onTransformEnd={handleTransform} />
         </Group>
-        {isSelected && (<Transformer anchorSize={5} rotateAnchorOffset={20} borderDash={[6, 2]} ref={transformerRef} rotationSnaps={snaps} boundBoxFunc={boundBoxCallbackForRectangle} />)}
+        {isSelected && (<Transformer ignoreStroke anchorSize={5} rotateAnchorOffset={20} borderDash={[6, 2]} ref={transformerRef} rotationSnaps={snaps} boundBoxFunc={boundBoxCallbackForRectangle} />)}
       </>
 
     case SHAPE_TYPES.C_RECT:
@@ -544,6 +554,131 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
         {shapeRef.current && customTransformerBox()}
         {isSelected && (<Transformer anchorSize={5} rotateAnchorOffset={20} borderDash={[6, 2]} ref={transformerRef} rotationSnaps={snaps} boundBoxFunc={boundBoxCallbackForRectangle} />)}
       </>
+
+    case SHAPE_TYPES.HEXAGON:
+    
+      return <>
+        <RegularPolygon sides={6} ref={shapeRef} {...props} draggable isSelected={isSelected} onClick={handleSelect} onTap={handleSelect} onDragStart={handleSelect} onDragEnd={handleDrag} onTransformEnd={handleTransform} />
+        {isSelected && (<Transformer anchorSize={5} rotateAnchorOffset={20} borderDash={[6, 2]} ref={transformerRef} rotationSnaps={snaps} boundBoxFunc={boundBoxCallbackForRectangle} />)}
+      </>
+    case SHAPE_TYPES.SEMIHEXAGON:
+    case SHAPE_TYPES.C_HEXAGON:
+      return <>
+        <Shape ref={shapeRef} {...props} draggable isSelected={isSelected} onClick={handleSelect} onTap={handleSelect} onDragStart={handleSelect} onDragEnd={handleDrag} onTransformEnd={handleTransform}
+          sceneFunc={(c, s) => {
+            const w = props.width;
+            const h = props.height;
+
+            c.beginPath();
+            c.moveTo(w*0.5, 0);
+            c.lineTo(0, h*0.25);
+            c.lineTo(0, h*0.75);
+            c.lineTo(w*0.5, h);
+
+            if(props.type === SHAPE_TYPES.SEMIHEXAGON)
+              c.closePath();
+            
+            c.fillStrokeShape(s);
+          }}
+          lineJoin={"bevel"}
+        />
+        {shapeRef.current && customTransformerBox()}
+        {isSelected && (<Transformer anchorSize={5} rotateAnchorOffset={20} borderDash={[6, 2]} ref={transformerRef} rotationSnaps={snaps} boundBoxFunc={boundBoxCallbackForRectangle} />)}
+      </>
+    case SHAPE_TYPES.RHOMBUS:
+      //Technically it's not even supposed to be a rhombus
+      return <>
+        <Shape ref={shapeRef} {...props} draggable isSelected={isSelected} onClick={handleSelect} onTap={handleSelect} onDragStart={handleSelect} onDragEnd={handleDrag} onTransformEnd={handleTransform}
+          sceneFunc={(c, s) => {
+            const w = props.width;
+            const h = props.height;
+
+            c.beginPath();
+            c.moveTo(0, h*0.33);
+            c.lineTo(0, h);
+            c.lineTo(w, h*0.67);
+            c.lineTo(w, 0);
+            c.closePath();
+
+            c.fillStrokeShape(s);
+          }}
+          lineJoin={"bevel"}
+        />
+        {shapeRef.current && customTransformerBox()}
+        {isSelected && (<Transformer anchorSize={5} rotateAnchorOffset={20} borderDash={[6, 2]} ref={transformerRef} rotationSnaps={snaps} boundBoxFunc={boundBoxCallbackForRectangle} />)}
+      </>
+
+    case SHAPE_TYPES.DOT_HOLLOW:
+    case SHAPE_TYPES.DOT_FILLED:
+      return <>
+        <Circle ref={shapeRef} {...props} draggable isSelected={isSelected} onClick={handleSelect} onTap={handleSelect} onDragStart={handleSelect} onDragEnd={handleDrag} onTransformEnd={handleTransform} />
+        {isSelected && (<Transformer anchorSize={5} rotateAnchorOffset={20} borderDash={[6, 2]} ref={transformerRef} rotateEnabled={false} enabledAnchors={["top-left", "top-right", "bottom-right", "bottom-left"]} boundBoxFunc={boundBoxCallbackForCircle} />)}
+      </>
+    case SHAPE_TYPES.DOT4_HOLLOW:
+    case SHAPE_TYPES.DOT4_FILLED:
+      return <>
+        <Shape ref={shapeRef} {...props} draggable isSelected={isSelected} onClick={handleSelect} onTap={handleSelect} onDragStart={handleSelect} onDragEnd={handleDrag} onTransformEnd={handleTransform}
+          sceneFunc={(c, s) => {
+            const w = props.width;
+            const h = props.height;
+            const r = props.radius;
+
+            c.beginPath();
+            c.arc(0+r, r, r, 0, 2 * Math.PI);
+            c.closePath();
+            c.fillStrokeShape(s);
+
+            c.beginPath();
+            c.arc(w-r, 0+r , r, 0, 2 * Math.PI);
+            c.closePath();
+            c.fillStrokeShape(s);
+
+            c.beginPath();
+            c.arc(0 + r, h-r, r, 0, 2 * Math.PI);
+            c.closePath();
+            c.fillStrokeShape(s);
+
+            c.beginPath();
+            c.arc(w-r, h-r, r, 0, 2 * Math.PI);
+            c.closePath();
+            c.fillStrokeShape(s);
+          }}
+        />
+        {shapeRef.current && customTransformerBox()}
+        {isSelected && (<Transformer anchorSize={5} rotateAnchorOffset={20} borderDash={[6, 2]} ref={transformerRef} rotationSnaps={snaps} boundBoxFunc={boundBoxCallbackForRectangle} />)}
+      </>
+
+    case SHAPE_TYPES.DOT_SQUARE_HOLLOW:
+    case SHAPE_TYPES.DOT_SQUARE_FILLED:
+      return <>
+        <Rect ref={shapeRef} {...props} draggable isSelected={isSelected} onClick={handleSelect} onTap={handleSelect} onDragStart={handleSelect} onDragEnd={handleDrag} onTransformEnd={handleTransform} />
+        {isSelected && (<Transformer anchorSize={5} rotateAnchorOffset={20} borderDash={[6, 2]} ref={transformerRef} rotationSnaps={snaps} boundBoxFunc={boundBoxCallbackForRectangle} />)}
+      </>
+    case SHAPE_TYPES.DOT4_SQUARE_HOLLOW:
+    case SHAPE_TYPES.DOT4_SQUARE_FILLED:
+      return <>
+        <Shape ref={shapeRef} {...props} draggable isSelected={isSelected} onClick={handleSelect} onTap={handleSelect} onDragStart={handleSelect} onDragEnd={handleDrag} onTransformEnd={handleTransform}
+          sceneFunc={(c, s) => {
+            const w = props.width;
+            const h = props.height;
+            const size = w/3;
+
+            c.beginPath();
+            c.rect(0, 0, size,size)
+            c.rect(w-size, 0, size, size)
+            c.rect(0, h-size, size, size)
+            c.rect(w-size, h-size, size, size)
+            c.closePath();
+            c.fillStrokeShape(s);
+            
+          }}
+        />
+        {shapeRef.current && customTransformerBox()}
+        {isSelected && (<Transformer anchorSize={5} rotateAnchorOffset={20} borderDash={[6, 2]} ref={transformerRef} rotationSnaps={snaps} boundBoxFunc={boundBoxCallbackForRectangle} />)}
+      </>
+
+
+
 
       
 

@@ -313,6 +313,78 @@ export default function Matrix(props) {
           y: coords.y - DEFAULTS.CONE.HEIGHT / 2,
           shapeType: type
         });
+      } else if (type === SHAPE_TYPES.HEXAGON) {
+        createShape({
+          x: coords.x,
+          y: coords.y,
+          shapeType: type
+        });
+      } else if (type === SHAPE_TYPES.SEMIHEXAGON) {
+        createShape({
+          x: coords.x - (DEFAULTS.SEMIHEXAGON.WIDTH / 2),
+          y: coords.y - (DEFAULTS.SEMIHEXAGON.HEIGHT / 2),
+          shapeType: type
+        });
+      } else if (type === SHAPE_TYPES.C_HEXAGON) {
+        createShape({
+          x: coords.x - (DEFAULTS.C_HEXAGON.WIDTH / 2),
+          y: coords.y - (DEFAULTS.C_HEXAGON.HEIGHT / 2),
+          shapeType: type
+        });
+      } else if (type === SHAPE_TYPES.RHOMBUS) {
+        createShape({
+          x: coords.x - (DEFAULTS.RHOMBUS.WIDTH / 2),
+          y: coords.y - (DEFAULTS.RHOMBUS.HEIGHT / 2),
+          shapeType: type
+        });
+      } else if (type === SHAPE_TYPES.DOT_HOLLOW) {
+        createShape({
+          x: coords.x - (DEFAULTS.DOT_HOLLOW.WIDTH / 2),
+          y: coords.y - (DEFAULTS.DOT_HOLLOW.HEIGHT / 2),
+          shapeType: type
+        });
+      } else if (type === SHAPE_TYPES.DOT_FILLED) {
+        createShape({
+          x: coords.x - (DEFAULTS.DOT_FILLED.WIDTH / 2),
+          y: coords.y - (DEFAULTS.DOT_FILLED.HEIGHT / 2),
+          shapeType: type
+        });
+      } else if (type === SHAPE_TYPES.DOT4_HOLLOW) {
+        createShape({
+          x: coords.x - (DEFAULTS.DOT4_HOLLOW.WIDTH / 2),
+          y: coords.y - (DEFAULTS.DOT4_HOLLOW.HEIGHT / 2),
+          shapeType: type
+        });
+      } else if (type === SHAPE_TYPES.DOT4_FILLED) {
+        createShape({
+          x: coords.x - (DEFAULTS.DOT4_FILLED.WIDTH / 2),
+          y: coords.y - (DEFAULTS.DOT4_FILLED.HEIGHT / 2),
+          shapeType: type
+        });
+      } else if (type === SHAPE_TYPES.DOT_SQUARE_HOLLOW) {
+        createShape({
+          x: coords.x - (DEFAULTS.DOT_SQUARE_HOLLOW.WIDTH / 2),
+          y: coords.y - (DEFAULTS.DOT_SQUARE_HOLLOW.HEIGHT / 2),
+          shapeType: type
+        });
+      } else if (type === SHAPE_TYPES.DOT_SQUARE_FILLED) {
+        createShape({
+          x: coords.x - (DEFAULTS.DOT_SQUARE_FILLED.WIDTH / 2),
+          y: coords.y - (DEFAULTS.DOT_SQUARE_FILLED.HEIGHT / 2),
+          shapeType: type
+        });
+      } else if (type === SHAPE_TYPES.DOT4_SQUARE_HOLLOW) {
+        createShape({
+          x: coords.x - (DEFAULTS.DOT4_SQUARE_HOLLOW.WIDTH / 2),
+          y: coords.y - (DEFAULTS.DOT4_SQUARE_HOLLOW.HEIGHT / 2),
+          shapeType: type
+        });
+      } else if (type === SHAPE_TYPES.DOT4_SQUARE_FILLED) {
+        createShape({
+          x: coords.x - (DEFAULTS.DOT4_SQUARE_FILLED.WIDTH / 2),
+          y: coords.y - (DEFAULTS.DOT4_SQUARE_FILLED.HEIGHT / 2),
+          shapeType: type
+        });
       }
     }
   }
