@@ -11,7 +11,7 @@ import PopupState, { bindMenu, bindTrigger } from "material-ui-popup-state";
 import { TbMinusVertical, TbTriangle } from "react-icons/tb"
 import { RxSlash } from "react-icons/rx"
 import { nanoid } from "nanoid";
-import { ShapeObject } from "./ShapeObjects";
+import { cCircleObj, circle10MinObj, circle20MinObj, circleObj, cLineObj, coneObj, cRectObj, crossObj, diamondObj, eightLineObj, ellipseDiagonalObj, ellipseFoldedObj, ellipseVerticalObj, foldedRectObj, obtuseTriBigObj, obtuseTriFoldedObj, obtuseTriSlightObj, obtuseTriSmallObj, orthogonalObj, plusObj, quarterCircleObj, rightTriObj, rightTriThinObj, semicircleObj, simpleTriBigObj, simpleTriObj, simpleTriSmallObj, sLineObj, squareObj, squashedTriObj, starMediumObj, starObj, starThinObj, tallFatRectObj, tallRectObj, tallThinRectObj, tiltedLineObj, tiltedRectObj, topLeftRectObj, verticalLineObj } from "./ShapeObjects";
 
 const customIconSize = "1.5em";
 
@@ -115,14 +115,218 @@ export default function Toolbox(props) {
     const matrix_size = 150; //Match this up with matrix_size in Matrix.js. Not needed generally.
     const randPadding = matrix_size/4;
 
-    const defaultPosition = {x: matrix_size/3, y: matrix_size/3} //if center position desired instead of random
+    const defaultPosition = {x: matrix_size/3, y: matrix_size/3}
     const randomPosition = {x: randomInt(randPadding,matrix_size-randPadding), y:randomInt(randPadding,matrix_size-randPadding)}
     
     if (type) {
-      setShapes(prevState => produce(prevState, (draft) => {
-        draft[selectedMatrix].push({ id: nanoid(), ...randomPosition, ...ShapeObject[type] });
-      }));
+      switch(type){
+        case SHAPE_TYPES.SQUARE:
+          setShapes(prevState => produce(prevState, (draft) => {
+            draft[selectedMatrix].push({ id:nanoid(), ...randomPosition, ...squareObj});
+          }));
+          break;
+        case SHAPE_TYPES.VERTICAL_LINE:
+          setShapes(prevState => produce(prevState, (draft) => {
+            draft[selectedMatrix].push({ id: nanoid(), ...randomPosition, ...verticalLineObj });
+          }));
+          break;
+        case SHAPE_TYPES.TILTED_LINE:
+          setShapes(prevState => produce(prevState, (draft) => {
+            draft[selectedMatrix].push({ id: nanoid(), ...randomPosition, ...tiltedLineObj });
+          }));
+          break;
+        case SHAPE_TYPES.C_LINE:
+          setShapes(prevState => produce(prevState, (draft) => {
+            draft[selectedMatrix].push({ id: nanoid(), ...randomPosition, ...cLineObj });
+          }));
+          break;
+        case SHAPE_TYPES.S_LINE:
+          setShapes(prevState => produce(prevState, (draft) => {
+            draft[selectedMatrix].push({ id: nanoid(), ...randomPosition, ...sLineObj });
+          }));
+          break;
+        case SHAPE_TYPES.EIGHT_LINE:
+          setShapes(prevState => produce(prevState, (draft) => {
+            draft[selectedMatrix].push({ id: nanoid(), ...randomPosition, ...eightLineObj });
+          }));
+          break;
+        case SHAPE_TYPES.DIAMOND:
+          setShapes(prevState => produce(prevState, (draft) => {
+            draft[selectedMatrix].push({ id: nanoid(), ...randomPosition, ...diamondObj });
+          }));
+          break;
+        case SHAPE_TYPES.TALL_FAT_RECT:
+          setShapes(prevState => produce(prevState, (draft) => {
+            draft[selectedMatrix].push({ id: nanoid(), ...randomPosition, ...tallFatRectObj });
+          }));
+          break;
+        case SHAPE_TYPES.TALL_THIN_RECT:
+          setShapes(prevState => produce(prevState, (draft) => {
+            draft[selectedMatrix].push({ id: nanoid(), ...randomPosition, ...tallThinRectObj });
+          }));
+          break;
+        case SHAPE_TYPES.TILTED_RECT:
+          setShapes(prevState => produce(prevState, (draft) => {
+            draft[selectedMatrix].push({ id: nanoid(), ...randomPosition, ...tiltedRectObj });
+          }));
+          break;
+        case SHAPE_TYPES.FOLDED_RECT:
+          setShapes(prevState => produce(prevState, (draft) => {
+            draft[selectedMatrix].push({ id: nanoid(), ...randomPosition, ...foldedRectObj });
+          }));
+          break;
+        case SHAPE_TYPES.TALL_RECT:
+          setShapes(prevState => produce(prevState, (draft) => {
+            draft[selectedMatrix].push({ id: nanoid(), ...randomPosition, ...tallRectObj });
+          }));
+          break;
+        case SHAPE_TYPES.C_RECT:
+          setShapes(prevState => produce(prevState, (draft) => {
+            draft[selectedMatrix].push({ id: nanoid(), ...randomPosition, ...cRectObj });
+          }));
+          break;
+        case SHAPE_TYPES.TOP_LEFT_RECT:
+          setShapes(prevState => produce(prevState, (draft) => {
+            draft[selectedMatrix].push({ id: nanoid(), ...randomPosition, ...topLeftRectObj });
+          }));
+          break;
+        case SHAPE_TYPES.STAR:
+          setShapes(prevState => produce(prevState, (draft) => {
+            draft[selectedMatrix].push({ id: nanoid(), ...randomPosition, ...starObj });
+          }));
+          break;
+        case SHAPE_TYPES.STAR_MEDIUM:
+          setShapes(prevState => produce(prevState, (draft) => {
+            draft[selectedMatrix].push({ id: nanoid(), ...randomPosition, ...starMediumObj });
+          }));
+          break;
+        case SHAPE_TYPES.STAR_THIN:
+          setShapes(prevState => produce(prevState, (draft) => {
+            draft[selectedMatrix].push({ id: nanoid(), ...randomPosition, ...starThinObj });
+          }));
+          break;
+        case SHAPE_TYPES.PLUS:
+          setShapes(prevState => produce(prevState, (draft) => {
+            draft[selectedMatrix].push({ id: nanoid(), ...randomPosition, ...plusObj });
+          }));
+          break;
+        case SHAPE_TYPES.CROSS:
+          setShapes(prevState => produce(prevState, (draft) => {
+            draft[selectedMatrix].push({ id: nanoid(), ...randomPosition, ...crossObj });
+          }));
+          break;
+        case SHAPE_TYPES.ORTHOGONAL:
+          setShapes(prevState => produce(prevState, (draft) => {
+            draft[selectedMatrix].push({ id: nanoid(), ...randomPosition, ...orthogonalObj });
+          }));
+          break;
+        case SHAPE_TYPES.CIRCLE:
+          setShapes(prevState => produce(prevState, (draft) => {
+            draft[selectedMatrix].push({ id: nanoid(), ...randomPosition, ...circleObj });
+          }));
+          break;
+        case SHAPE_TYPES.SEMICIRCLE:
+          setShapes(prevState => produce(prevState, (draft) => {
+            draft[selectedMatrix].push({ id: nanoid(), ...randomPosition, ...semicircleObj });
+          }));
+          break;
+        case SHAPE_TYPES.C_CIRCLE:
+          setShapes(prevState => produce(prevState, (draft) => {
+            draft[selectedMatrix].push({ id: nanoid(), ...randomPosition, ...cCircleObj });
+          }));
+          break;
+        case SHAPE_TYPES.CIRCLE_20MIN:
+          setShapes(prevState => produce(prevState, (draft) => {
+            draft[selectedMatrix].push({ id: nanoid(), ...randomPosition, ...circle20MinObj });
+          }));
+          break;
+        case SHAPE_TYPES.QUARTER_CIRCLE:
+          setShapes(prevState => produce(prevState, (draft) => {
+            draft[selectedMatrix].push({ id: nanoid(), ...randomPosition, ...quarterCircleObj });
+          }));
+          break;
+        case SHAPE_TYPES.CIRCLE_10MIN:
+          setShapes(prevState => produce(prevState, (draft) => {
+            draft[selectedMatrix].push({ id: nanoid(), ...randomPosition, ...circle10MinObj });
+          }));
+          break;
+        case SHAPE_TYPES.ELLIPSE_VERTICAL:
+          setShapes(prevState => produce(prevState, (draft) => {
+            draft[selectedMatrix].push({ id: nanoid(), ...randomPosition, ...ellipseVerticalObj });
+          }));
+          break;
+        case SHAPE_TYPES.ELLIPSE_DIAGONAL:
+          setShapes(prevState => produce(prevState, (draft) => {
+            draft[selectedMatrix].push({ id: nanoid(), ...randomPosition, ...ellipseDiagonalObj });
+          }));
+          break;
+        case SHAPE_TYPES.ELLIPSE_FOLDED:
+          setShapes(prevState => produce(prevState, (draft) => {
+            draft[selectedMatrix].push({ id: nanoid(), ...randomPosition, ...ellipseFoldedObj });
+          }));
+          break;
+        
+        //TRIANGLES
+        case SHAPE_TYPES.SIMPLE_TRI:
+          setShapes(prevState => produce(prevState, (draft) => {
+            draft[selectedMatrix].push({ id: nanoid(), ...randomPosition, ...simpleTriObj });
+          }));
+          break;
+        case SHAPE_TYPES.SIMPLE_TRI_SMALL:
+          setShapes(prevState => produce(prevState, (draft) => {
+            draft[selectedMatrix].push({ id: nanoid(), ...randomPosition, ...simpleTriSmallObj });
+          }));
+          break;
+        case SHAPE_TYPES.SIMPLE_TRI_BIG:
+          setShapes(prevState => produce(prevState, (draft) => {
+            draft[selectedMatrix].push({ id: nanoid(), ...randomPosition, ...simpleTriBigObj });
+          }));
+          break;
+        case SHAPE_TYPES.SQUASHED_TRI:
+          setShapes(prevState => produce(prevState, (draft) => {
+            draft[selectedMatrix].push({ id: nanoid(), ...randomPosition, ...squashedTriObj });
+          }));
+          break;
+        case SHAPE_TYPES.RIGHT_TRI:
+          setShapes(prevState => produce(prevState, (draft) => {
+            draft[selectedMatrix].push({ id: nanoid(), ...randomPosition, ...rightTriObj });
+          }));
+          break;
+        case SHAPE_TYPES.RIGHT_TRI_THIN:
+          setShapes(prevState => produce(prevState, (draft) => {
+            draft[selectedMatrix].push({ id: nanoid(), ...randomPosition, ...rightTriThinObj });
+          }));
+          break;
+        case SHAPE_TYPES.OBTUSE_TRI_SMALL:
+          setShapes(prevState => produce(prevState, (draft) => {
+            draft[selectedMatrix].push({ id: nanoid(), ...randomPosition, ...obtuseTriSmallObj });
+          }));
+          break;
+        case SHAPE_TYPES.OBTUSE_TRI_BIG:
+          setShapes(prevState => produce(prevState, (draft) => {
+            draft[selectedMatrix].push({ id: nanoid(), ...randomPosition, ...obtuseTriBigObj });
+          }));
+          break;
+        case SHAPE_TYPES.OBTUSE_TRI_FOLDED:
+          setShapes(prevState => produce(prevState, (draft) => {
+            draft[selectedMatrix].push({ id: nanoid(), ...randomPosition, ...obtuseTriFoldedObj });
+          }));
+          break;
+        case SHAPE_TYPES.OBTUSE_TRI_SLIGHT:
+          setShapes(prevState => produce(prevState, (draft) => {
+            draft[selectedMatrix].push({ id: nanoid(), ...randomPosition, ...obtuseTriSlightObj });
+          }));
+          break;
+        case SHAPE_TYPES.CONE:
+          setShapes(prevState => produce(prevState, (draft) => {
+            draft[selectedMatrix].push({ id: nanoid(), ...randomPosition, ...coneObj });
+          }));
+          break;
 
+        default:
+          console.log("Case not found")
+          break;
+    }
     }
   }
 
