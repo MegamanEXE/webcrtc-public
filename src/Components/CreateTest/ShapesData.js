@@ -583,6 +583,9 @@ export const SHAPE_ACTIONS = {
   STROKE_DASHED: "stroke_dashed",
   FLIP_HORIZONTAL: "flip_horizontal",
   FLIP_VERTICAL: "flip_vertical",
+  ROTATE: "rotate_shape",
+  INCREASE_SIZE: "increase_size",
+  DECREASE_SIZE: "decrease_size",
   FILL_TEXTURE: "fill_texture"
 }
 

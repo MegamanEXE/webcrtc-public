@@ -1,4 +1,4 @@
-import { Circle, CircleOutlined, DiamondOutlined, Hexagon, HexagonOutlined, Icecream, LineStyle, Padding, Square, SquareOutlined, Texture } from "@mui/icons-material";
+import { Circle, CircleOutlined, DiamondOutlined, Hexagon, HexagonOutlined, Icecream, LineStyle, Padding, RotateRight, Square, SquareOutlined, Texture } from "@mui/icons-material";
 import { Button, IconButton, Menu, MenuItem, Paper, Popover, ToggleButton, Tooltip, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import produce from "immer";
@@ -136,6 +136,48 @@ export default function Toolbox(props) {
     }  
   }
 
+  //Flip vertical (synchronize this with whatever changes in flipHorizontal)
+  const handleFlipVertical = () => {
+    if (selectedShapeID !== null) {
+      const shape = shapes[selectedMatrix].find(s => s.id === selectedShapeID);
+
+      const nodeBefore = props.shapeNode.current; //DOM Konva node
+      const oldScaleY = nodeBefore.scaleY();
+   
+      updateAttribute("scaleY", -oldScaleY);
+
+      const nodeAfter = props.shapeNode.current;
+
+      updateAttribute("x", nodeAfter.x());
+      updateAttribute("y", nodeAfter.y());
+      updateAttribute("rotation", nodeAfter.rotation());
+
+      updateAttribute("width", shape.width);
+      updateAttribute("height", shape.height);
+    }
+  }
+
+  //Rotate button
+  const handleRotate = () => {
+    if (selectedShapeID !== null) {
+      const shape = shapes[selectedMatrix].find(s => s.id === selectedShapeID);
+
+      const nodeBefore = props.shapeNode.current; //DOM Konva node
+      let oldRotation = nodeBefore.rotation();
+      if (oldRotation>=360) oldRotation -= 360; 
+
+      updateAttribute("rotation", oldRotation+45);
+
+      const nodeAfter = props.shapeNode.current;
+
+      updateAttribute("x", nodeAfter.x());
+      updateAttribute("y", nodeAfter.y());
+
+      updateAttribute("width", shape.width);
+      updateAttribute("height", shape.height);
+    }
+  }
+
   const handleClick = (event) => {
     // console.log(event.currentTarget)
     let type = event.currentTarget.attributes.shape.value;
@@ -237,7 +279,8 @@ export default function Toolbox(props) {
           <ToggleButton size="large" value={SHAPE_ACTIONS.STROKE_BOLD} onClick={handleLineWeight}><LineWeightIcon /></ToggleButton>
 
           <ToggleButton size="large" value={SHAPE_ACTIONS.FLIP_HORIZONTAL} onClick={handleFlipHorizontal}><TbFlipVertical size={customIconSize} /></ToggleButton>
-          <ToggleButton size="large" value={SHAPE_ACTIONS.FLIP_VERTICAL} onClick={handleFlipHorizontal}><TbFlipHorizontal size={customIconSize} /></ToggleButton>
+          <ToggleButton size="large" value={SHAPE_ACTIONS.FLIP_VERTICAL} onClick={handleFlipVertical}><TbFlipHorizontal size={customIconSize} /></ToggleButton>
+          <ToggleButton size="large" value={SHAPE_ACTIONS.ROTATE} onClick={handleRotate}><RotateRight size={customIconSize} /></ToggleButton>
           <ToggleButton size="large" value={SHAPE_ACTIONS.FILL_TEXTURE} onClick={handleFlipHorizontal}><Texture /></ToggleButton>
 
         </Box>
