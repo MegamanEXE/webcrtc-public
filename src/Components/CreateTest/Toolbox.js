@@ -236,18 +236,13 @@ export default function Toolbox(props) {
 
   //HANDLE COPY
   //Copies the currently selected MATRIX (not shape) and puts it into clipboard
-  const handleCopy = useCallback(_ => {
+  const handleCopy = () => {
     const thumbnail = stageNode.current.toDataURL();
     const entry = { thumbnail: thumbnail, data: shapes[selectedMatrix] }
 
     setClipboard(prevState => produce(prevState, (d) => {
       d.push(entry)
     }))
-  },[] )
-
-  //HANDLE PASTE
-  const handlePaste = () => {
-      
   }
 
 
@@ -357,7 +352,6 @@ export default function Toolbox(props) {
           <ToggleButton size="large" value={SHAPE_ACTIONS.INCREASE_SIZE} onClick={handleIncreaseSize}><TbArrowsMaximize size={customIconSize} /></ToggleButton>
           <ToggleButton size="large" value={SHAPE_ACTIONS.DECREASE_SIZE} onClick={handleDecreaseSize}><TbArrowsMinimize size={customIconSize} /></ToggleButton>
           <ToggleButton size="large" value={SHAPE_ACTIONS.COPY} onClick={handleCopy}><CopyAll /></ToggleButton>
-          <ToggleButton size="large" value={SHAPE_ACTIONS.PASTE} onClick={handlePaste}><ContentPaste /></ToggleButton>
 
           <ToggleButton size="large" value={TEXTURES.DIAGONAL_RIGHT} onClick={handleTexture}><Texture /></ToggleButton>
           <ToggleButton size="large" value={TEXTURES.DIAGONAL_LEFT} onClick={handleTexture}><Texture /></ToggleButton>

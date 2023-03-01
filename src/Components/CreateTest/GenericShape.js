@@ -123,7 +123,6 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
     setSelectedShapeID(props.id);
     setSelectedMatrix(matrixNumber);
     setIsSelected(selectedShapeID === props.id)
-    // console.log(event.target);
   }, [selectedShapeID]
   );
 

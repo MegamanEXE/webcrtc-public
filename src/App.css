@@ -415,6 +415,7 @@ a:active {
 
 #canvasWorkspace{
   width: 65%;
+  height: 85vh;
 
   border-radius: 4px;
   box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
@@ -429,6 +430,8 @@ a:active {
 
 #rightBar {
   width: 20%;
+  max-height: 95vh;
+  
 }
 
 .stage {
@@ -451,4 +454,9 @@ a:active {
   display: flex;
   justify-content: center;
   align-self: center;
+}
+
+.clipboardItem {
+  width: fit-content;
+  border: 5px solid gray;
 }
