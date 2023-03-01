@@ -1,33 +1,33 @@
 
 import { useEffect, useState } from 'react';
 import componentLibraries from '../../data/componentLibraries.json'
-const Debugger = () => {
-  const [DATA, setDATA] = useState([]);
-  const DATA2 = componentLibraries;
+import GestureRecognizer from '@2players/dollar1-unistroke-recognizer';
 
-  useEffect(() => {
-    setDATA(componentLibraries);
-  }, []);
+export default function Debugger()  {
+  const gr = new GestureRecognizer({ defaultStrokes: false });
+  const stroke = [
+    310, 230 ,
+     333, 186 ,
+    
+  ]
 
-  useEffect(() => {
-    function foo() {
-      let ticked = [];
-      for (const [k, v] of Object.entries(DATA2[1]["components"]["Lines"]["shapes"])) {
-        if (DATA2[1]["components"]["Lines"]["shapes"][k] === true) {
-          console.log(`${k} ${v}`)
-          ticked.push(k);
+  gr.add('a-name', [
+    { x: 310, y: 230 },
+    { x: 333, y: 186 },
+    { x: 356, y: 215 },
+    { x: 375, y: 186 },
+    { x: 399, y: 216 },
+    { x: 418, y: 186 },
+  ])
 
-        }
-      }
-      //console.log(ticked)
-    }
-
-    foo()
-  },[DATA]);
+  gr.add('b-name', [
+    310, 230,
+    333, 186,
+  ])
+ 
+  let x = gr.recognize(stroke, true)
 
   return (
-    <div>yeet</div>
+    <div>{x}</div>
   )
 }
-
-export default Debugger

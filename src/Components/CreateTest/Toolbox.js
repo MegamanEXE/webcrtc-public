@@ -1,11 +1,11 @@
-import { Circle, CircleOutlined, DiamondOutlined, Hexagon, HexagonOutlined, Icecream, LineStyle, Padding, Square, SquareOutlined } from "@mui/icons-material";
+import { Circle, CircleOutlined, DiamondOutlined, Hexagon, HexagonOutlined, Icecream, LineStyle, Padding, Square, SquareOutlined, Texture } from "@mui/icons-material";
 import { Button, IconButton, Menu, MenuItem, Paper, Popover, ToggleButton, Tooltip, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import produce from "immer";
 import { SHAPE_ACTIONS, SHAPE_TYPES } from "./ShapesData";
 import LineWeightIcon from '@mui/icons-material/LineWeight';
 import LineStyleIcon from '@mui/icons-material/LineStyle';
-import { TbMinusVertical, TbTriangle } from "react-icons/tb"
+import { TbFlipHorizontal, TbFlipVertical, TbMinusVertical, TbTriangle } from "react-icons/tb"
 import { RxSlash } from "react-icons/rx"
 import { nanoid } from "nanoid";
 import { ShapeObject } from "./ShapeObjects";
@@ -40,6 +40,8 @@ const handleDragStart = (event) => {
     event.dataTransfer.setData("dragged_shape", dragPayload);
   }
 };
+
+
 
 
 
@@ -99,6 +101,41 @@ export default function Toolbox(props) {
     }
   }
 
+  //Flip Horizontal
+  //Note: Seems easy enough but this caused me to refactor the code which resulted in a reduction of a few hundred lines 
+  //of code to make this work as expected
+
+  //TODO: Does it what it should, but buggy sometimes, fixing this should enable me to use 
+  //useSingleNodeRotation(false) in GenericShape
+  const handleFlipHorizontal = () => {
+    if (selectedShapeID !== null) {
+      const shape = shapes[selectedMatrix].find(s => s.id === selectedShapeID);
+
+      const nodeBefore = props.shapeNode.current; //DOM Konva node
+      const oldScaleX = nodeBefore.scaleX();
+      // const cr = nodeBefore.getClientRect();
+
+      // nodeBefore.offsetX(nodeBefore.width()/2)
+      // nodeBefore.scaleX(-oldScaleX);
+      // nodeBefore.offsetX(0)
+
+      //This should be enough
+      updateAttribute("scaleX", -oldScaleX);
+      
+      const nodeAfter = props.shapeNode.current;
+
+      updateAttribute("x", nodeAfter.x());
+      updateAttribute("y", nodeAfter.y());
+      updateAttribute("rotation", nodeAfter.rotation());
+
+      updateAttribute("width", shape.width);
+      updateAttribute("height", shape.height);
+
+      // console.log(`old: ${nodeBefore.x()}. new: ${nodeAfter.x()}`)
+    
+    }  
+  }
+
   const handleClick = (event) => {
     // console.log(event.currentTarget)
     let type = event.currentTarget.attributes.shape.value;
@@ -110,7 +147,7 @@ export default function Toolbox(props) {
     const paddingOffset = 30;
 
     const defaultPosition = {x: matrix_size/3, y: matrix_size/3} //if center position desired instead of random
-    const randomPosition = {x: randomInt(0,matrix_size), y:randomInt(0,matrix_size)}
+    const randomPosition = {x: randomInt(paddingOffset,matrix_size-paddingOffset), y:randomInt(paddingOffset,matrix_size-paddingOffset)}
     
     if (type) {
       setShapes(prevState => produce(prevState, (draft) => {
@@ -198,6 +235,11 @@ export default function Toolbox(props) {
           <Typography mb={1}>Actions</Typography>
           <ToggleButton size="large" value={SHAPE_ACTIONS.STROKE_DASHED} onClick={handleLineStyle}><LineStyleIcon /></ToggleButton>
           <ToggleButton size="large" value={SHAPE_ACTIONS.STROKE_BOLD} onClick={handleLineWeight}><LineWeightIcon /></ToggleButton>
+
+          <ToggleButton size="large" value={SHAPE_ACTIONS.FLIP_HORIZONTAL} onClick={handleFlipHorizontal}><TbFlipVertical size={customIconSize} /></ToggleButton>
+          <ToggleButton size="large" value={SHAPE_ACTIONS.FLIP_VERTICAL} onClick={handleFlipHorizontal}><TbFlipHorizontal size={customIconSize} /></ToggleButton>
+          <ToggleButton size="large" value={SHAPE_ACTIONS.FILL_TEXTURE} onClick={handleFlipHorizontal}><Texture /></ToggleButton>
+
         </Box>
 
       </Paper>

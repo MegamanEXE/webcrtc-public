@@ -12,6 +12,7 @@ import Matrix from "./Matrix";
 export default function Canvas() {
 
   const [selectedShapeID, setSelectedShapeID] = useState(null);
+  const shapeNode = useRef(null); //Avoid using unnecesarrily
 
   //Lift these up to CreateTestContainer later for submit button
   //Nothing wrong with being explicit. This way is easier to debug
@@ -35,7 +36,11 @@ export default function Canvas() {
     let gridItems = []
     for (let i = 1; i <= 9; i++) {
       gridItems.push(<Grid item className="gridMatrix" key={`matrixKey-${i}`} xs={4}>
-        <Matrix id={`matrix-${i}`} shapes={shapes[i.toString()]} setShapes={setShapes} selectedShapeID={selectedShapeID} setSelectedShapeID={setSelectedShapeID} selectedMatrix={selectedMatrix} setSelectedMatrix={setSelectedMatrix} />
+        <Matrix id={`matrix-${i}`} shapes={shapes[i.toString()]} 
+          setShapes={setShapes} selectedShapeID={selectedShapeID} setSelectedShapeID={setSelectedShapeID} 
+          selectedMatrix={selectedMatrix} setSelectedMatrix={setSelectedMatrix} 
+          shapeNode={shapeNode}
+           />
       </Grid>);
     }
 
@@ -46,7 +51,7 @@ export default function Canvas() {
     <Box id="canvasContainer">
 
       <Box id="toolbox" >
-        <Toolbox selectedShapeID={selectedShapeID} shapes={shapes} setShapes={setShapes} selectedMatrix={selectedMatrix} />
+        <Toolbox selectedShapeID={selectedShapeID} shapes={shapes} setShapes={setShapes} selectedMatrix={selectedMatrix} shapeNode={shapeNode} />
       </Box>
 
 

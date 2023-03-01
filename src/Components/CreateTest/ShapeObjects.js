@@ -23,6 +23,8 @@ export const ShapeObject = {
     dash: DEFAULTS.VERTICAL_LINE.DASH,
     rotation: DEFAULTS.VERTICAL_LINE.ROTATION,
     points: [0, 0, 0, DEFAULTS.VERTICAL_LINE.HEIGHT],
+
+    offsetY: DEFAULTS.VERTICAL_LINE.HEIGHT / 2,
   },
 
   [SHAPE_TYPES.TILTED_LINE]: {
@@ -32,6 +34,9 @@ export const ShapeObject = {
     dash: DEFAULTS.TILTED_LINE.DASH,
     rotation: DEFAULTS.TILTED_LINE.ROTATION,
     points: [0, 0, 0, DEFAULTS.TILTED_LINE.HEIGHT],
+
+    offsetX: -DEFAULTS.TILTED_LINE.HEIGHT / 3,
+    offsetY: DEFAULTS.TILTED_LINE.HEIGHT / 2.
   },
 
   [SHAPE_TYPES.C_LINE]: {
@@ -42,6 +47,8 @@ export const ShapeObject = {
     strokeWidth: DEFAULTS.C_LINE.STROKE_WIDTH,
     dash: DEFAULTS.C_LINE.DASH,
     rotation: DEFAULTS.C_LINE.ROTATION,
+
+    offsetY: DEFAULTS.C_LINE.HEIGHT / 2,
   },
 
   [SHAPE_TYPES.S_LINE]: {
@@ -52,6 +59,9 @@ export const ShapeObject = {
     strokeWidth: DEFAULTS.S_LINE.STROKE_WIDTH,
     dash: DEFAULTS.S_LINE.DASH,
     rotation: DEFAULTS.S_LINE.ROTATION,
+
+    offsetX: DEFAULTS.S_LINE.WIDTH / 2,
+    offsetY: DEFAULTS.S_LINE.HEIGHT / 2,
   },
 
   [SHAPE_TYPES.EIGHT_LINE]: {
@@ -62,6 +72,9 @@ export const ShapeObject = {
     strokeWidth: DEFAULTS.EIGHT_LINE.STROKE_WIDTH,
     dash: DEFAULTS.EIGHT_LINE.DASH,
     rotation: DEFAULTS.EIGHT_LINE.ROTATION,
+
+    offsetX: DEFAULTS.EIGHT_LINE.WIDTH / 2,
+    offsetY: DEFAULTS.EIGHT_LINE.HEIGHT / 2.
   },
 
   // RECT
@@ -74,6 +87,9 @@ export const ShapeObject = {
     strokeWidth: DEFAULTS.SQUARE.STROKE_WIDTH,
     dash: DEFAULTS.SQUARE.DASH,
     rotation: DEFAULTS.SQUARE.ROTATION,
+
+    offsetX: DEFAULTS.SQUARE.WIDTH / 2,
+    offsetY: DEFAULTS.SQUARE.HEIGHT / 2,
   },
 
   [SHAPE_TYPES.DIAMOND]: {
@@ -85,6 +101,9 @@ export const ShapeObject = {
     strokeWidth: DEFAULTS.DIAMOND.STROKE_WIDTH,
     dash: DEFAULTS.DIAMOND.DASH,
     rotation: DEFAULTS.DIAMOND.ROTATION,
+
+    offsetX: DEFAULTS.DIAMOND.WIDTH / 2,
+    offsetY: DEFAULTS.DIAMOND.HEIGHT / 2,
   },
 
   [SHAPE_TYPES.TALL_FAT_RECT]: {
@@ -96,6 +115,9 @@ export const ShapeObject = {
     strokeWidth: DEFAULTS.TALL_FAT_RECT.STROKE_WIDTH,
     dash: DEFAULTS.TALL_FAT_RECT.DASH,
     rotation: DEFAULTS.TALL_FAT_RECT.ROTATION,
+
+    offsetX: DEFAULTS.TALL_FAT_RECT.WIDTH / 2,
+    offsetY: DEFAULTS.TALL_FAT_RECT.HEIGHT / 2,
   },
 
   [SHAPE_TYPES.TALL_THIN_RECT]: {
@@ -107,6 +129,9 @@ export const ShapeObject = {
     strokeWidth: DEFAULTS.TALL_THIN_RECT.STROKE_WIDTH,
     dash: DEFAULTS.TALL_THIN_RECT.DASH,
     rotation: DEFAULTS.TALL_THIN_RECT.ROTATION,
+
+    offsetX: DEFAULTS.TALL_THIN_RECT.WIDTH / 2,
+    offsetY: DEFAULTS.TALL_THIN_RECT.HEIGHT / 2
   },
 
   [SHAPE_TYPES.TILTED_RECT]: {
@@ -119,6 +144,9 @@ export const ShapeObject = {
     dash: DEFAULTS.TILTED_RECT.DASH,
     rotation: DEFAULTS.TILTED_RECT.ROTATION,
     skewX: DEFAULTS.TILTED_RECT.SKEWX,
+
+    offsetX: DEFAULTS.TILTED_RECT.WIDTH / 2,
+    offsetY: DEFAULTS.TILTED_RECT.HEIGHT / 2
   },
 
   [SHAPE_TYPES.FOLDED_RECT]: {
@@ -130,6 +158,9 @@ export const ShapeObject = {
     strokeWidth: DEFAULTS.FOLDED_RECT.STROKE_WIDTH,
     dash: DEFAULTS.FOLDED_RECT.DASH,
     rotation: DEFAULTS.FOLDED_RECT.ROTATION,
+
+    offsetX: DEFAULTS.FOLDED_RECT.WIDTH / 2,
+    offsetY: DEFAULTS.FOLDED_RECT.HEIGHT / 2,
   },
 
   [SHAPE_TYPES.TALL_RECT]: {
@@ -141,6 +172,9 @@ export const ShapeObject = {
     strokeWidth: DEFAULTS.TALL_RECT.STROKE_WIDTH,
     dash: DEFAULTS.TALL_RECT.DASH,
     rotation: DEFAULTS.TALL_RECT.ROTATION,
+
+    offsetX: DEFAULTS.TALL_RECT.WIDTH / 2,
+    offsetY: DEFAULTS.TALL_RECT.HEIGHT / 2
   },
 
   [SHAPE_TYPES.C_RECT]: {
@@ -152,6 +186,9 @@ export const ShapeObject = {
     strokeWidth: DEFAULTS.C_RECT.STROKE_WIDTH,
     dash: DEFAULTS.C_RECT.DASH,
     rotation: DEFAULTS.C_RECT.ROTATION,
+
+    offsetX: DEFAULTS.C_RECT.WIDTH / 2,
+    offsetY: DEFAULTS.C_RECT.HEIGHT/ 2
   },
 
   [SHAPE_TYPES.TOP_LEFT_RECT]: {
@@ -163,6 +200,9 @@ export const ShapeObject = {
     strokeWidth: DEFAULTS.TOP_LEFT_RECT.STROKE_WIDTH,
     dash: DEFAULTS.TOP_LEFT_RECT.DASH,
     rotation: DEFAULTS.TOP_LEFT_RECT.ROTATION,
+
+    offsetX: DEFAULTS.TOP_LEFT_RECT.WIDTH / 2,
+    offsetY: DEFAULTS.TOP_LEFT_RECT.HEIGHT / 2,
   },
 
   [SHAPE_TYPES.STAR]: {
@@ -175,6 +215,9 @@ export const ShapeObject = {
     dash: DEFAULTS.STAR.DASH,
     rotation: DEFAULTS.STAR.ROTATION,
 
+    offsetX: DEFAULTS.C_RECT.WIDTH / 2,
+    offsetY: DEFAULTS.C_RECT.HEIGHT/ 2,
+
   },
 
   [SHAPE_TYPES.STAR_MEDIUM]: {
@@ -186,6 +229,9 @@ export const ShapeObject = {
     strokeWidth: DEFAULTS.STAR_MEDIUM.STROKE_WIDTH,
     dash: DEFAULTS.STAR_MEDIUM.DASH,
     rotation: DEFAULTS.STAR_MEDIUM.ROTATION,
+
+    offsetX: DEFAULTS.STAR_MEDIUM.WIDTH / 2,
+    offsetY: DEFAULTS.STAR_MEDIUM.HEIGHT/ 2,
   },
 
   [SHAPE_TYPES.STAR_THIN]: {
@@ -197,6 +243,9 @@ export const ShapeObject = {
     strokeWidth: DEFAULTS.STAR_THIN.STROKE_WIDTH,
     dash: DEFAULTS.STAR_THIN.DASH,
     rotation: DEFAULTS.STAR_THIN.ROTATION,
+
+    offsetX: DEFAULTS.STAR_THIN.WIDTH / 2,
+    offsetY: DEFAULTS.STAR_THIN.HEIGHT / 2,
   },
 
   //CROSS
@@ -209,6 +258,9 @@ export const ShapeObject = {
     strokeWidth: DEFAULTS.PLUS.STROKE_WIDTH,
     dash: DEFAULTS.PLUS.DASH,
     rotation: DEFAULTS.PLUS.ROTATION,
+    
+    offsetX: DEFAULTS.PLUS.WIDTH / 2,
+    offsetY: DEFAULTS.PLUS.HEIGHT / 2,
   },
 
   [SHAPE_TYPES.CROSS]: {
@@ -220,6 +272,9 @@ export const ShapeObject = {
     strokeWidth: DEFAULTS.CROSS.STROKE_WIDTH,
     dash: DEFAULTS.CROSS.DASH,
     rotation: DEFAULTS.CROSS.ROTATION,
+
+    offsetX: DEFAULTS.CROSS.WIDTH / 2,
+    offsetY: DEFAULTS.CROSS.HEIGHT / 2,
   },
 
   [SHAPE_TYPES.ORTHOGONAL]: {
@@ -231,6 +286,9 @@ export const ShapeObject = {
     strokeWidth: DEFAULTS.ORTHOGONAL.STROKE_WIDTH,
     dash: DEFAULTS.ORTHOGONAL.DASH,
     rotation: DEFAULTS.ORTHOGONAL.ROTATION,
+
+    offsetX: DEFAULTS.ORTHOGONAL.WIDTH / 2,
+    offsetY: DEFAULTS.ORTHOGONAL.HEIGHT / 2,
   },
 
   //CIRCLES
@@ -350,6 +408,8 @@ export const ShapeObject = {
     rotation: DEFAULTS.ELLIPSE_FOLDED.ROTATION,
     radiusX: DEFAULTS.ELLIPSE_FOLDED.RADIUS_X,
     radiusY: DEFAULTS.ELLIPSE_FOLDED.RADIUS_Y,
+
+    offsetY: DEFAULTS.ELLIPSE_FOLDED.HEIGHT / 2,
   },
 
   //TRIANGLES
@@ -361,6 +421,9 @@ export const ShapeObject = {
     stroke: DEFAULTS.SIMPLE_TRI.STROKE,
     strokeWidth: DEFAULTS.SIMPLE_TRI.STROKE_WIDTH,
     dash: DEFAULTS.SIMPLE_TRI.DASH,
+
+    offsetX: DEFAULTS.SIMPLE_TRI.WIDTH / 2,
+    offsetY: DEFAULTS.SIMPLE_TRI.HEIGHT / 2,
   },
 
   [SHAPE_TYPES.SIMPLE_TRI_SMALL]: {
@@ -371,6 +434,9 @@ export const ShapeObject = {
     stroke: DEFAULTS.SIMPLE_TRI_SMALL.STROKE,
     strokeWidth: DEFAULTS.SIMPLE_TRI_SMALL.STROKE_WIDTH,
     dash: DEFAULTS.SIMPLE_TRI_SMALL.DASH,
+
+    offsetX: DEFAULTS.OBTUSE_TRI_SMALL.WIDTH / 2,
+    offsetY: DEFAULTS.OBTUSE_TRI_SMALL.HEIGHT / 2,
   },
 
   [SHAPE_TYPES.SIMPLE_TRI_BIG]: {
@@ -381,6 +447,9 @@ export const ShapeObject = {
     stroke: DEFAULTS.SIMPLE_TRI_BIG.STROKE,
     strokeWidth: DEFAULTS.SIMPLE_TRI_BIG.STROKE_WIDTH,
     dash: DEFAULTS.SIMPLE_TRI_BIG.DASH,
+
+    offsetX: DEFAULTS.SIMPLE_TRI_BIG.WIDTH / 2,
+    offsetY: DEFAULTS.SIMPLE_TRI_BIG.HEIGHT / 2,
   },
 
   [SHAPE_TYPES.SQUASHED_TRI]: {
@@ -391,6 +460,9 @@ export const ShapeObject = {
     stroke: DEFAULTS.SQUASHED_TRI.STROKE,
     strokeWidth: DEFAULTS.SQUASHED_TRI.STROKE_WIDTH,
     dash: DEFAULTS.SQUASHED_TRI.DASH,
+
+    offsetX: DEFAULTS.SQUASHED_TRI.WIDTH / 2,
+    offsetY: DEFAULTS.SQUASHED_TRI.HEIGHT / 2,
   },
 
   [SHAPE_TYPES.RIGHT_TRI]: {
@@ -401,6 +473,9 @@ export const ShapeObject = {
     stroke: DEFAULTS.RIGHT_TRI.STROKE,
     strokeWidth: DEFAULTS.RIGHT_TRI.STROKE_WIDTH,
     dash: DEFAULTS.RIGHT_TRI.DASH,
+
+    offsetX: DEFAULTS.RIGHT_TRI.WIDTH / 2,
+    offsetY: DEFAULTS.RIGHT_TRI.HEIGHT / 2,
   },
 
   [SHAPE_TYPES.RIGHT_TRI_THIN]: {
@@ -411,6 +486,9 @@ export const ShapeObject = {
     stroke: DEFAULTS.RIGHT_TRI_THIN.STROKE,
     strokeWidth: DEFAULTS.RIGHT_TRI_THIN.STROKE_WIDTH,
     dash: DEFAULTS.RIGHT_TRI_THIN.DASH,
+
+    offsetX: DEFAULTS.RIGHT_TRI_THIN.WIDTH / 2,
+    offsetY: DEFAULTS.RIGHT_TRI_THIN.HEIGHT / 2,
   },
 
   [SHAPE_TYPES.OBTUSE_TRI_SMALL]: {
@@ -421,6 +499,9 @@ export const ShapeObject = {
     stroke: DEFAULTS.OBTUSE_TRI_SMALL.STROKE,
     strokeWidth: DEFAULTS.OBTUSE_TRI_SMALL.STROKE_WIDTH,
     dash: DEFAULTS.OBTUSE_TRI_SMALL.DASH,
+
+    offsetX: DEFAULTS.OBTUSE_TRI_SMALL.WIDTH / 2,
+    offsetY: DEFAULTS.OBTUSE_TRI_SMALL.HEIGHT / 2,
   },
 
   [SHAPE_TYPES.OBTUSE_TRI_BIG]: {
@@ -431,6 +512,9 @@ export const ShapeObject = {
     stroke: DEFAULTS.OBTUSE_TRI_BIG.STROKE,
     strokeWidth: DEFAULTS.OBTUSE_TRI_BIG.STROKE_WIDTH,
     dash: DEFAULTS.OBTUSE_TRI_BIG.DASH,
+
+    offsetX: DEFAULTS.OBTUSE_TRI_BIG.WIDTH / 2,
+    offsetY: DEFAULTS.OBTUSE_TRI_BIG.HEIGHT / 2,
   },
 
   [SHAPE_TYPES.OBTUSE_TRI_FOLDED]: {
@@ -441,6 +525,8 @@ export const ShapeObject = {
     stroke: DEFAULTS.OBTUSE_TRI_FOLDED.STROKE,
     strokeWidth: DEFAULTS.OBTUSE_TRI_FOLDED.STROKE_WIDTH,
     dash: DEFAULTS.OBTUSE_TRI_FOLDED.DASH,
+
+    offsetX: DEFAULTS.OBTUSE_TRI_FOLDED.WIDTH,
   },
 
   [SHAPE_TYPES.OBTUSE_TRI_SLIGHT]: {
@@ -451,6 +537,9 @@ export const ShapeObject = {
     stroke: DEFAULTS.OBTUSE_TRI_SLIGHT.STROKE,
     strokeWidth: DEFAULTS.OBTUSE_TRI_SLIGHT.STROKE_WIDTH,
     dash: DEFAULTS.OBTUSE_TRI_SLIGHT.DASH,
+
+    offsetX: DEFAULTS.OBTUSE_TRI_SLIGHT.WIDTH / 2,
+    offsetY: DEFAULTS.OBTUSE_TRI_SLIGHT.HEIGHT / 2,
   },
 
   [SHAPE_TYPES.CONE]: {
@@ -461,6 +550,9 @@ export const ShapeObject = {
     stroke: DEFAULTS.CONE.STROKE,
     strokeWidth: DEFAULTS.CONE.STROKE_WIDTH,
     dash: DEFAULTS.CONE.DASH,
+
+    offsetX: DEFAULTS.CONE.WIDTH / 2,
+    offsetY: DEFAULTS.CONE.HEIGHT / 2,
   },
 
   //HEXAGONS
@@ -472,6 +564,9 @@ export const ShapeObject = {
     stroke: DEFAULTS.HEXAGON.STROKE,
     strokeWidth: DEFAULTS.HEXAGON.STROKE_WIDTH,
     dash: DEFAULTS.HEXAGON.DASH,
+
+    offsetX: DEFAULTS.HEXAGON.WIDTH / 2,
+    offsetY: DEFAULTS.HEXAGON.HEIGHT / 2,
   },
 
   [SHAPE_TYPES.SEMIHEXAGON]: {
@@ -482,6 +577,9 @@ export const ShapeObject = {
     stroke: DEFAULTS.SEMIHEXAGON.STROKE,
     strokeWidth: DEFAULTS.SEMIHEXAGON.STROKE_WIDTH,
     dash: DEFAULTS.SEMIHEXAGON.DASH,
+
+    offsetX: DEFAULTS.SEMIHEXAGON.WIDTH / 2,
+    offsetY: DEFAULTS.SEMIHEXAGON.HEIGHT / 2,
   },
 
   [SHAPE_TYPES.C_HEXAGON]: {
@@ -492,6 +590,9 @@ export const ShapeObject = {
     stroke: DEFAULTS.C_HEXAGON.STROKE,
     strokeWidth: DEFAULTS.C_HEXAGON.STROKE_WIDTH,
     dash: DEFAULTS.C_HEXAGON.DASH,
+
+    offsetX: DEFAULTS.C_HEXAGON.WIDTH / 2,
+    offsetY: DEFAULTS.C_HEXAGON.HEIGHT / 2,
   },
 
   [SHAPE_TYPES.RHOMBUS]: {
@@ -502,6 +603,9 @@ export const ShapeObject = {
     stroke: DEFAULTS.RHOMBUS.STROKE,
     strokeWidth: DEFAULTS.RHOMBUS.STROKE_WIDTH,
     dash: DEFAULTS.RHOMBUS.DASH,
+
+    offsetX: DEFAULTS.RHOMBUS.WIDTH / 2,
+    offsetY: DEFAULTS.RHOMBUS.HEIGHT / 2,
   },
 
   //DOTS
@@ -514,6 +618,9 @@ export const ShapeObject = {
     strokeWidth: DEFAULTS.DOT_HOLLOW.STROKE_WIDTH,
     dash: DEFAULTS.DOT_HOLLOW.DASH,
     radius: DEFAULTS.DOT_HOLLOW.RADIUS,
+
+    offsetX: DEFAULTS.DOT_HOLLOW.WIDTH / 2,
+    offsetY: DEFAULTS.DOT_HOLLOW.HEIGHT / 2,
   },
 
   [SHAPE_TYPES.DOT_FILLED]: {
@@ -537,6 +644,9 @@ export const ShapeObject = {
     strokeWidth: DEFAULTS.DOT4_HOLLOW.STROKE_WIDTH,
     dash: DEFAULTS.DOT4_HOLLOW.DASH,
     radius: DEFAULTS.DOT_HOLLOW.RADIUS,
+
+    offsetX: DEFAULTS.DOT4_HOLLOW.WIDTH / 2,
+    offsetY: DEFAULTS.DOT4_HOLLOW.HEIGHT / 2,
   },
 
   [SHAPE_TYPES.DOT4_FILLED]: {
@@ -549,6 +659,9 @@ export const ShapeObject = {
     dash: DEFAULTS.DOT4_FILLED.DASH,
     radius: DEFAULTS.DOT_HOLLOW.RADIUS,
 
+    offsetX: DEFAULTS.DOT4_FILLED.WIDTH / 2,
+    offsetY: DEFAULTS.DOT4_FILLED.HEIGHT / 2,
+
   },
 
   [SHAPE_TYPES.DOT_SQUARE_HOLLOW]: {
@@ -559,6 +672,9 @@ export const ShapeObject = {
     stroke: DEFAULTS.DOT_SQUARE_HOLLOW.STROKE,
     strokeWidth: DEFAULTS.DOT_SQUARE_HOLLOW.STROKE_WIDTH,
     dash: DEFAULTS.DOT_SQUARE_HOLLOW.DASH,
+
+    offsetX: DEFAULTS.DOT_SQUARE_HOLLOW.WIDTH / 2,
+    offsetY: DEFAULTS.DOT_SQUARE_HOLLOW.HEIGHT / 2,
   },
 
   [SHAPE_TYPES.DOT_SQUARE_FILLED]: {
@@ -570,6 +686,9 @@ export const ShapeObject = {
     strokeWidth: DEFAULTS.DOT_SQUARE_FILLED.STROKE_WIDTH,
     dash: DEFAULTS.DOT_SQUARE_FILLED.DASH,
 
+    offsetX: DEFAULTS.DOT_SQUARE_FILLED.WIDTH / 2,
+    offsetY: DEFAULTS.DOT_SQUARE_FILLED.HEIGHT / 2,
+
   },
 
   [SHAPE_TYPES.DOT4_SQUARE_HOLLOW]: {
@@ -580,6 +699,9 @@ export const ShapeObject = {
     stroke: DEFAULTS.DOT4_SQUARE_HOLLOW.STROKE,
     strokeWidth: DEFAULTS.DOT4_SQUARE_HOLLOW.STROKE_WIDTH,
     dash: DEFAULTS.DOT4_SQUARE_HOLLOW.DASH,
+
+    offsetX: DEFAULTS.DOT4_SQUARE_HOLLOW.WIDTH / 2,
+    offsetY: DEFAULTS.DOT4_SQUARE_HOLLOW.HEIGHT / 2,
   },
 
   [SHAPE_TYPES.DOT4_SQUARE_FILLED]: {
@@ -590,6 +712,9 @@ export const ShapeObject = {
     stroke: DEFAULTS.DOT4_SQUARE_FILLED.STROKE,
     strokeWidth: DEFAULTS.DOT4_SQUARE_FILLED.STROKE_WIDTH,
     dash: DEFAULTS.DOT4_SQUARE_FILLED.DASH,
+
+    offsetX: DEFAULTS.DOT4_SQUARE_FILLED.WIDTH / 2,
+    offsetY: DEFAULTS.DOT4_SQUARE_FILLED.HEIGHT / 2,
 
   },
 }

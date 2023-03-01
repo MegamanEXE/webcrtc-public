@@ -581,5 +581,11 @@ export const LIMITS = {
 export const SHAPE_ACTIONS = {
   STROKE_BOLD: "stroke_bold",
   STROKE_DASHED: "stroke_dashed",
+  FLIP_HORIZONTAL: "flip_horizontal",
+  FLIP_VERTICAL: "flip_vertical",
   FILL_TEXTURE: "fill_texture"
+}
+
+export const TEXTURES = {
+  CW_LINES: "cw_lines"
 }

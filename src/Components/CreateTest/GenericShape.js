@@ -40,8 +40,11 @@ const snaps = [0, 45, 90, 135, 180, 225, 270, 315];
 export default function GenericShape({ selectedShapeID, setSelectedShapeID, matrixNumber, setSelectedMatrix, shapes, setShapes, layerRef, ...props }) {
   const [isSelected, setIsSelected] = useState(false);
 
-  const shapeRef = useRef();
+  
   const transformerRef = useRef();
+  const shapeRef = useRef(); //local to this file, used for coupling transformers to shapes
+
+  const shapeNode = props.shapeNode; //This is to share the actual Konva node. Basically so Toolbox has access to the full shape node, not just the shapes array
 
   //Handle moving shapes, which also updates it in API
   const moveShape = (id, e) => {
@@ -118,13 +121,20 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
     setSelectedShapeID(props.id);
     setSelectedMatrix(matrixNumber);
     setIsSelected(selectedShapeID === props.id)
+    // console.log(event.target);
   }, [selectedShapeID]
   );
 
   //Add transformer nodes to selected shape
   useEffect(() => {
     if (isSelected) {
+      //Make the rotation anchor always above top. Currently bugged;
+      //the transformer goes to minimum height if flip is used
+
+      // transformerRef.current.useSingleNodeRotation(false); 
+
       transformerRef.current.nodes([shapeRef.current]);
+      shapeNode.current = shapeRef.current
       transformerRef.current.getLayer().batchDraw();
     }
   }, [isSelected]);
@@ -168,6 +178,7 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
       default:
         shapeRef.current.getSelfRect = () => { return { x: 0, y: 0, width: props.width, height: props.height }; }
       }
+
   }
 
   //Used where <Group>...</Group> is used aka folded-rect and dots
@@ -185,17 +196,17 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
     case SHAPE_TYPES.RECT:
       return <>
         <Rect ref={shapeRef} {...props} draggable isSelected={isSelected} onClick={handleSelect} onTap={handleSelect} onDragStart={handleSelect} onDragEnd={handleDrag} onTransformEnd={handleTransform} />
-        {isSelected && (<Transformer anchorSize={5} rotateAnchorOffset={20} borderDash={[6, 2]} ref={transformerRef} boundBoxFunc={boundBoxCallbackForRectangle} />)}
+        {isSelected && (<Transformer anchorSize={5} rotateAnchorOffset={20} borderDash={[6, 2]} ref={transformerRef} rotationSnaps={snaps} boundBoxFunc={boundBoxCallbackForRectangle} />)}
       </>
     case SHAPE_TYPES.VERTICAL_LINE:
       return <>
         <Line ref={shapeRef} {...props} draggable isSelected={isSelected} onClick={handleSelect} onTap={handleSelect} onDragStart={handleSelect} onDragEnd={handleDrag} onTransformEnd={handleTransform} />
-        {isSelected && (<Transformer padding={10} rotateAnchorOffset={20} anchorSize={8} borderDash={[6, 2]} ref={transformerRef} enabledAnchors={['top-center', 'bottom-center']}  boundBoxFunc={boundBoxCallbackForLine} />) }
+        {isSelected && (<Transformer padding={10} rotateAnchorOffset={20} anchorSize={8} borderDash={[6, 2]} ref={transformerRef} rotationSnaps={snaps} enabledAnchors={['top-center', 'bottom-center']}  boundBoxFunc={boundBoxCallbackForLine} />) }
       </>
     case SHAPE_TYPES.TILTED_LINE:
       return <>
         <Line ref={shapeRef} {...props} draggable isSelected={isSelected} onClick={handleSelect} onTap={handleSelect} onDragStart={handleSelect} onDragEnd={handleDrag} onTransformEnd={handleTransform} />
-        {isSelected && (<Transformer padding={10} rotateAnchorOffset={20} anchorSize={8} borderDash={[6, 2]} ref={transformerRef} enabledAnchors={['top-center', 'bottom-center']} boundBoxFunc={boundBoxCallbackForLine} />)}
+        {isSelected && (<Transformer padding={10} rotateAnchorOffset={20} anchorSize={8} borderDash={[6, 2]} ref={transformerRef} rotationSnaps={snaps} enabledAnchors={['top-center', 'bottom-center']} boundBoxFunc={boundBoxCallbackForLine} />)}
       </>
     case SHAPE_TYPES.C_LINE:
       return <>
@@ -214,7 +225,7 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
         
         />
         {shapeRef.current && customTransformerBox()}
-        {isSelected && (<Transformer padding={10} ignoreStroke={true} rotateAnchorOffset={20} anchorSize={8} borderDash={[6, 2]} ref={transformerRef} rotationSnaps={snaps} enabledAnchors={['top-center', 'bottom-center']} boundBoxFunc={boundBoxCallbackForLine} />)}
+        {isSelected && (<Transformer padding={10} ignoreStroke={true} rotateAnchorOffset={20} anchorSize={8} borderDash={[6, 2]} ref={transformerRef}  rotationSnaps={snaps} enabledAnchors={['top-center', 'bottom-center']} boundBoxFunc={boundBoxCallbackForLine} />)}
       </>
     case SHAPE_TYPES.S_LINE:
       return <>
@@ -556,7 +567,6 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
       </>
 
     case SHAPE_TYPES.HEXAGON:
-    
       return <>
         <RegularPolygon sides={6} ref={shapeRef} {...props} draggable isSelected={isSelected} onClick={handleSelect} onTap={handleSelect} onDragStart={handleSelect} onDragEnd={handleDrag} onTransformEnd={handleTransform} />
         {isSelected && (<Transformer anchorSize={5} rotateAnchorOffset={20} borderDash={[6, 2]} ref={transformerRef} rotationSnaps={snaps} boundBoxFunc={boundBoxCallbackForRectangle} />)}
