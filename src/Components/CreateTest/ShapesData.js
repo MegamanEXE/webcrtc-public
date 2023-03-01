@@ -586,9 +586,12 @@ export const SHAPE_ACTIONS = {
   ROTATE: "rotate_shape",
   INCREASE_SIZE: "increase_size",
   DECREASE_SIZE: "decrease_size",
-  FILL_TEXTURE: "fill_texture"
+  FILL_TEXTURE: "fill_texture",
+  COPY: "copy",
+  PASTE: "paste",
 }
 
 export const TEXTURES = {
-  CW_LINES: "cw_lines"
+  DIAGONAL_RIGHT: "diagonal_right",
+  DIAGONAL_LEFT: "diagonal_left"
 }

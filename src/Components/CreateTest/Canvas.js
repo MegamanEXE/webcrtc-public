@@ -12,7 +12,7 @@ import Matrix from "./Matrix";
 export default function Canvas() {
 
   const [selectedShapeID, setSelectedShapeID] = useState(null);
-  const shapeNode = useRef(null); //Avoid using unnecesarrily
+  const shapeNode = useRef(null); //Avoid using unnecesarrily, update state instead of calling Konva node methods to set anything
 
   //Lift these up to CreateTestContainer later for submit button
   //Nothing wrong with being explicit. This way is easier to debug
@@ -31,6 +31,7 @@ export default function Canvas() {
   //Set this in events to properly update what matrix is being used. Is helpful in general
   //to implement matrix features. Remember, a proper value for this is a string, not an int
   const [selectedMatrix, setSelectedMatrix] = useState("1");
+  const [clipboard, setClipboard] = useState([]);
 
   const generateGridItems = () => {
     let gridItems = []
@@ -40,6 +41,7 @@ export default function Canvas() {
           setShapes={setShapes} selectedShapeID={selectedShapeID} setSelectedShapeID={setSelectedShapeID} 
           selectedMatrix={selectedMatrix} setSelectedMatrix={setSelectedMatrix} 
           shapeNode={shapeNode}
+          clipboard={clipboard} setClipboard={setClipboard}
            />
       </Grid>);
     }
@@ -51,7 +53,11 @@ export default function Canvas() {
     <Box id="canvasContainer">
 
       <Box id="toolbox" >
-        <Toolbox selectedShapeID={selectedShapeID} shapes={shapes} setShapes={setShapes} selectedMatrix={selectedMatrix} shapeNode={shapeNode} />
+        <Toolbox selectedShapeID={selectedShapeID} 
+          shapes={shapes} setShapes={setShapes} 
+          selectedMatrix={selectedMatrix} 
+          shapeNode={shapeNode} 
+          clipboard={clipboard} setClipboard={setClipboard} />
       </Box>
 
 
@@ -65,7 +71,10 @@ export default function Canvas() {
 
 
       <Box id="rightBar">
-        <RightBar selectedShapeID={selectedShapeID} shapes={shapes} setShapes={setShapes} selectedMatrix={selectedMatrix} />
+        <RightBar selectedShapeID={selectedShapeID} 
+          shapes={shapes} setShapes={setShapes} 
+          selectedMatrix={selectedMatrix}
+          clipboard={clipboard} setClipboard={setClipboard} />
       </Box>
 
 

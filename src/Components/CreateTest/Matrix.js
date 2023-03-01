@@ -14,6 +14,8 @@ export default function Matrix(props) {
   const selectedShapeID = props.selectedShapeID;
   const setSelectedShapeID = props.setSelectedShapeID;
   const setSelectedMatrix = props.setSelectedMatrix;
+  const clipboard = props.clipboard;
+  const setClipboard = props.setClipboard;
   const divRef = useRef(null);
   const stageRef = useRef(null);
   const layerRef = useRef(null);

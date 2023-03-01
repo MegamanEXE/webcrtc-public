@@ -1,14 +1,17 @@
-import { Circle, CircleOutlined, DiamondOutlined, Hexagon, HexagonOutlined, Icecream, LineStyle, Padding, RotateRight, Square, SquareOutlined, Texture } from "@mui/icons-material";
+import { Circle, CircleOutlined, ContentPaste, CopyAll, DiamondOutlined, Hexagon, HexagonOutlined, Icecream, LineStyle, Padding, RotateRight, Square, SquareOutlined, Texture } from "@mui/icons-material";
 import { Button, IconButton, Menu, MenuItem, Paper, Popover, ToggleButton, Tooltip, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import produce from "immer";
-import { SHAPE_ACTIONS, SHAPE_TYPES } from "./ShapesData";
+import { SHAPE_ACTIONS, SHAPE_TYPES, TEXTURES } from "./ShapesData";
 import LineWeightIcon from '@mui/icons-material/LineWeight';
 import LineStyleIcon from '@mui/icons-material/LineStyle';
-import { TbFlipHorizontal, TbFlipVertical, TbMinusVertical, TbTriangle } from "react-icons/tb"
+import { TbArrowsMaximize, TbArrowsMinimize, TbFlipHorizontal, TbFlipVertical, TbMaximize, TbMinusVertical, TbTriangle } from "react-icons/tb"
 import { RxSlash } from "react-icons/rx"
 import { nanoid } from "nanoid";
 import { ShapeObject } from "./ShapeObjects";
+import useImage from "use-image";
+import { useEffect } from "react";
+import { TEXTURE_IMAGES } from "./Textures";
 
 const customIconSize = "1.5em";
 
@@ -50,6 +53,8 @@ export default function Toolbox(props) {
   const shapes = props.shapes;
   const setShapes = props.setShapes;
   const selectedMatrix = props.selectedMatrix;
+  const clipboard = props.clipboard;
+  const setClipboard = props.setClipboard;
 
 
   //attr: fill or stroke
@@ -178,6 +183,57 @@ export default function Toolbox(props) {
     }
   }
 
+  //Increase Size
+  const handleIncreaseSize = () => {
+    if (selectedShapeID !== null) {
+      const shape = shapes[selectedMatrix].find(s => s.id === selectedShapeID);
+      const increment = 20;
+
+      const node = props.shapeNode.current; //DOM Konva node
+
+      updateAttribute("offsetX", (node.width()+increment)/2);
+      updateAttribute("offsetY", (node.height()+increment)/2);
+      updateAttribute("width", node.width() +increment);
+      updateAttribute("height", node.height() +increment);
+      
+    }
+  }
+
+  //Decrease Size
+  const handleDecreaseSize = () => {
+    if (selectedShapeID !== null) {
+      const shape = shapes[selectedMatrix].find(s => s.id === selectedShapeID);
+      const increment = 20;
+
+      const node = props.shapeNode.current; //DOM Konva node
+
+      updateAttribute("offsetX", (node.width() - increment) / 2);
+      updateAttribute("offsetY", (node.height() - increment) / 2);
+      updateAttribute("width", node.width() - increment);
+      updateAttribute("height", node.height() - increment);
+
+    }
+  }
+
+  //Handle Texture
+
+
+  const handleTexture = (e) => {
+    if (selectedShapeID !== null) {
+      const shape = shapes[selectedMatrix].find(s => s.id === selectedShapeID);
+      const node = props.shapeNode.current; //DOM Konva node
+
+      const textureName = e.currentTarget.value;
+      const patternImg = new Image();
+      patternImg.src = TEXTURE_IMAGES[textureName];
+      
+      updateAttribute("fill", null)
+      updateAttribute("fillPatternImage", patternImg);
+      
+
+    }
+  }
+
   const handleClick = (event) => {
     // console.log(event.currentTarget)
     let type = event.currentTarget.attributes.shape.value;
@@ -281,7 +337,13 @@ export default function Toolbox(props) {
           <ToggleButton size="large" value={SHAPE_ACTIONS.FLIP_HORIZONTAL} onClick={handleFlipHorizontal}><TbFlipVertical size={customIconSize} /></ToggleButton>
           <ToggleButton size="large" value={SHAPE_ACTIONS.FLIP_VERTICAL} onClick={handleFlipVertical}><TbFlipHorizontal size={customIconSize} /></ToggleButton>
           <ToggleButton size="large" value={SHAPE_ACTIONS.ROTATE} onClick={handleRotate}><RotateRight size={customIconSize} /></ToggleButton>
-          <ToggleButton size="large" value={SHAPE_ACTIONS.FILL_TEXTURE} onClick={handleFlipHorizontal}><Texture /></ToggleButton>
+          <ToggleButton size="large" value={SHAPE_ACTIONS.INCREASE_SIZE} onClick={handleIncreaseSize}><TbArrowsMaximize size={customIconSize} /></ToggleButton>
+          <ToggleButton size="large" value={SHAPE_ACTIONS.DECREASE_SIZE} onClick={handleDecreaseSize}><TbArrowsMinimize size={customIconSize} /></ToggleButton>
+          <ToggleButton size="large" value={SHAPE_ACTIONS.COPY} onClick={handleTexture}><CopyAll /></ToggleButton>
+          <ToggleButton size="large" value={SHAPE_ACTIONS.PASTE} onClick={handleTexture}><ContentPaste /></ToggleButton>
+
+          <ToggleButton size="large" value={TEXTURES.DIAGONAL_RIGHT} onClick={handleTexture}><Texture /></ToggleButton>
+          <ToggleButton size="large" value={TEXTURES.DIAGONAL_LEFT} onClick={handleTexture}><Texture /></ToggleButton>
 
         </Box>
 
