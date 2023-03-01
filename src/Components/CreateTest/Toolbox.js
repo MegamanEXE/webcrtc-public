@@ -12,6 +12,7 @@ import { ShapeObject } from "./ShapeObjects";
 import useImage from "use-image";
 import { useEffect } from "react";
 import { TEXTURE_IMAGES } from "./Textures";
+import { useCallback } from "react";
 
 const customIconSize = "1.5em";
 
@@ -55,9 +56,10 @@ export default function Toolbox(props) {
   const selectedMatrix = props.selectedMatrix;
   const clipboard = props.clipboard;
   const setClipboard = props.setClipboard;
+  const stageNode = props.stageNode;
 
 
-  //attr: fill or stroke
+  //UTILITY FUNCTION TO UPDATE STATE FROM ATTRIBUTE VALUE
   const updateAttribute = (attr, value) => {
     const shapeIdx = shapes[selectedMatrix].findIndex(s => s.id === selectedShapeID);
 
@@ -70,7 +72,7 @@ export default function Toolbox(props) {
   };
 
 
-  //Line Weight
+  //LINE BOLDNESS
   const handleLineWeight = () => {
     const lineWeights = [2, 4, 6];
 
@@ -88,7 +90,7 @@ export default function Toolbox(props) {
     }
   }
 
-  //Line style (dashed)
+  //LINE STYLE (DASHED)
   const handleLineStyle = () => {
     const dashStyles = [[0, 0], [5, 2], [10, 5], [3,3]];
 
@@ -106,7 +108,7 @@ export default function Toolbox(props) {
     }
   }
 
-  //Flip Horizontal
+  //FLIP HORIZONTAL
   //Note: Seems easy enough but this caused me to refactor the code which resulted in a reduction of a few hundred lines 
   //of code to make this work as expected
 
@@ -141,7 +143,7 @@ export default function Toolbox(props) {
     }  
   }
 
-  //Flip vertical (synchronize this with whatever changes in flipHorizontal)
+  //FLIP VERTICAL (synchronize this with whatever changes in flipHorizontal)
   const handleFlipVertical = () => {
     if (selectedShapeID !== null) {
       const shape = shapes[selectedMatrix].find(s => s.id === selectedShapeID);
@@ -162,7 +164,7 @@ export default function Toolbox(props) {
     }
   }
 
-  //Rotate button
+  //ROTATE BUTTON
   const handleRotate = () => {
     if (selectedShapeID !== null) {
       const shape = shapes[selectedMatrix].find(s => s.id === selectedShapeID);
@@ -183,7 +185,7 @@ export default function Toolbox(props) {
     }
   }
 
-  //Increase Size
+  //INCREASE SIZE
   const handleIncreaseSize = () => {
     if (selectedShapeID !== null) {
       const shape = shapes[selectedMatrix].find(s => s.id === selectedShapeID);
@@ -199,7 +201,7 @@ export default function Toolbox(props) {
     }
   }
 
-  //Decrease Size
+  //DECREASE SIZE
   const handleDecreaseSize = () => {
     if (selectedShapeID !== null) {
       const shape = shapes[selectedMatrix].find(s => s.id === selectedShapeID);
@@ -215,9 +217,7 @@ export default function Toolbox(props) {
     }
   }
 
-  //Handle Texture
-
-
+  //HANDLE TEXTURE
   const handleTexture = (e) => {
     if (selectedShapeID !== null) {
       const shape = shapes[selectedMatrix].find(s => s.id === selectedShapeID);
@@ -233,6 +233,23 @@ export default function Toolbox(props) {
 
     }
   }
+
+  //HANDLE COPY
+  //Copies the currently selected MATRIX (not shape) and puts it into clipboard
+  const handleCopy = useCallback(_ => {
+    const thumbnail = stageNode.current.toDataURL();
+    const entry = { thumbnail: thumbnail, data: shapes[selectedMatrix] }
+
+    setClipboard(prevState => produce(prevState, (d) => {
+      d.push(entry)
+    }))
+  },[] )
+
+  //HANDLE PASTE
+  const handlePaste = () => {
+      
+  }
+
 
   const handleClick = (event) => {
     // console.log(event.currentTarget)
@@ -339,8 +356,8 @@ export default function Toolbox(props) {
           <ToggleButton size="large" value={SHAPE_ACTIONS.ROTATE} onClick={handleRotate}><RotateRight size={customIconSize} /></ToggleButton>
           <ToggleButton size="large" value={SHAPE_ACTIONS.INCREASE_SIZE} onClick={handleIncreaseSize}><TbArrowsMaximize size={customIconSize} /></ToggleButton>
           <ToggleButton size="large" value={SHAPE_ACTIONS.DECREASE_SIZE} onClick={handleDecreaseSize}><TbArrowsMinimize size={customIconSize} /></ToggleButton>
-          <ToggleButton size="large" value={SHAPE_ACTIONS.COPY} onClick={handleTexture}><CopyAll /></ToggleButton>
-          <ToggleButton size="large" value={SHAPE_ACTIONS.PASTE} onClick={handleTexture}><ContentPaste /></ToggleButton>
+          <ToggleButton size="large" value={SHAPE_ACTIONS.COPY} onClick={handleCopy}><CopyAll /></ToggleButton>
+          <ToggleButton size="large" value={SHAPE_ACTIONS.PASTE} onClick={handlePaste}><ContentPaste /></ToggleButton>
 
           <ToggleButton size="large" value={TEXTURES.DIAGONAL_RIGHT} onClick={handleTexture}><Texture /></ToggleButton>
           <ToggleButton size="large" value={TEXTURES.DIAGONAL_LEFT} onClick={handleTexture}><Texture /></ToggleButton>

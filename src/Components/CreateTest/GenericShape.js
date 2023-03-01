@@ -72,6 +72,8 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
         let d = draft[matrixNumber][shapeIdx];
         d.x = node.x();
         d.y = node.y();
+        d.offsetX = node.offsetX();
+        d.offsetY = node.offsetY();
 
         //Handle specific cases here
         if (d.type === SHAPE_TYPES.CIRCLE) {

@@ -5,6 +5,11 @@ import produce from "immer";
 export default function RightBar(props){
   const clipboard = props.clipboard;
   const setClipboard = props.setClipboard;
+
+  const renderClipboardItems = () => {
+      console.log(clipboard)
+      return clipboard.map((c,i) => <div key={i}><img src={c.thumbnail} alt="clipboard-item" /></div>)
+  }
   
 
   return (
@@ -13,6 +18,7 @@ export default function RightBar(props){
 
       <Box>
         <Typography mb={1}>Clipboard</Typography>
+        {clipboard.length>0 && renderClipboardItems()}
       </Box>
 
     </Paper>

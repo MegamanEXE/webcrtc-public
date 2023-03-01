@@ -10,12 +10,12 @@ import { cCircleObj, circle10MinObj, circle20MinObj, circleObj, cLineObj, coneOb
 
 export default function Matrix(props) {
   const [dimensions, setDimensions] = useState({ width: null, height: null });
-  // const [selectedShapeID, setSelectedShapeID] = useState(null);
   const selectedShapeID = props.selectedShapeID;
   const setSelectedShapeID = props.setSelectedShapeID;
   const setSelectedMatrix = props.setSelectedMatrix;
   const clipboard = props.clipboard;
   const setClipboard = props.setClipboard;
+  const stageNode = props.stageNode;
   const divRef = useRef(null);
   const stageRef = useRef(null);
   const layerRef = useRef(null);
@@ -92,9 +92,14 @@ export default function Matrix(props) {
     }));
   }
 
+  useEffect(() => {
+    stageNode.current = stageRef.current;
+  },[selectedShapeID, stageNode, props.shapes]);
+
   const handleCanvasClick = () => {
     setSelectedMatrix(matrixNumber);
     setSelectedShapeID(null);
+    stageNode.current = stageRef.current;
   }
 
   /* Note only the first one has a ref, other matrices just use the same value calculated using this one */

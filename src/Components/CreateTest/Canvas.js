@@ -13,6 +13,7 @@ export default function Canvas() {
 
   const [selectedShapeID, setSelectedShapeID] = useState(null);
   const shapeNode = useRef(null); //Avoid using unnecesarrily, update state instead of calling Konva node methods to set anything
+  const stageNode = useRef(null); //stageRef alreadys exists in Matrix.js so I don't want to mess with it because of past experience, this is like a global stageRef
 
   //Lift these up to CreateTestContainer later for submit button
   //Nothing wrong with being explicit. This way is easier to debug
@@ -40,7 +41,7 @@ export default function Canvas() {
         <Matrix id={`matrix-${i}`} shapes={shapes[i.toString()]} 
           setShapes={setShapes} selectedShapeID={selectedShapeID} setSelectedShapeID={setSelectedShapeID} 
           selectedMatrix={selectedMatrix} setSelectedMatrix={setSelectedMatrix} 
-          shapeNode={shapeNode}
+          shapeNode={shapeNode} stageNode={stageNode}
           clipboard={clipboard} setClipboard={setClipboard}
            />
       </Grid>);
@@ -56,7 +57,7 @@ export default function Canvas() {
         <Toolbox selectedShapeID={selectedShapeID} 
           shapes={shapes} setShapes={setShapes} 
           selectedMatrix={selectedMatrix} 
-          shapeNode={shapeNode} 
+          shapeNode={shapeNode} stageNode={stageNode} 
           clipboard={clipboard} setClipboard={setClipboard} />
       </Box>
 
