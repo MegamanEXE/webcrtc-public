@@ -51,6 +51,7 @@ const handleDragStart = (event) => {
 
 export default function Toolbox(props) {
   const selectedShapeID = props.selectedShapeID;
+  const setSelectedShapeID = props.setSelectedShapeID; //Only to remove the transformer before a screenshot is taken for clipboard, used nowhere else
   const shapes = props.shapes;
   const setShapes = props.setShapes;
   const selectedMatrix = props.selectedMatrix;
@@ -226,9 +227,11 @@ export default function Toolbox(props) {
       const textureName = e.currentTarget.value;
       const patternImg = new Image();
       patternImg.src = TEXTURE_IMAGES[textureName];
+      patternImg.onload = () => {
+        updateAttribute("fill", null)
+        updateAttribute("fillPatternImage", patternImg);
+      }
       
-      updateAttribute("fill", null)
-      updateAttribute("fillPatternImage", patternImg);
       
 
     }
@@ -237,6 +240,7 @@ export default function Toolbox(props) {
   //HANDLE COPY
   //Copies the currently selected MATRIX (not shape) and puts it into clipboard
   const handleCopy = () => {
+    setSelectedShapeID(null); //otherwise the bounding box shows up in the thumbnail lol
     const thumbnail = stageNode.current.toDataURL();
     const entry = { thumbnail: thumbnail, data: shapes[selectedMatrix] }
 
@@ -270,6 +274,7 @@ export default function Toolbox(props) {
   return (
     <Box p={1.5} sx={{ height: '100%' }}>
       <Paper sx={{ height: '100%', p: 1.5 }}>
+        <ToggleButton size="large" value={SHAPE_TYPES.RECT} shape={SHAPE_TYPES.RECT}><TbMinusVertical size={customIconSize} /></ToggleButton>
 
         <Box>
           <Typography mb={1}>Lines</Typography>

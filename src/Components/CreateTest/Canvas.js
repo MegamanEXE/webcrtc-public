@@ -54,7 +54,8 @@ export default function Canvas() {
     <Box id="canvasContainer">
 
       <Box id="toolbox" >
-        <Toolbox selectedShapeID={selectedShapeID} 
+        <Toolbox 
+          selectedShapeID={selectedShapeID} setSelectedShapeID={setSelectedShapeID}
           shapes={shapes} setShapes={setShapes} 
           selectedMatrix={selectedMatrix} 
           shapeNode={shapeNode} stageNode={stageNode} 

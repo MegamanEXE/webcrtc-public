@@ -2,13 +2,20 @@ import { Box, Grid, Paper, ToggleButton, Typography } from "@mui/material";
 import produce from "immer";
 import ClipboardItem from "./ClipboardItem";
 
+//TODO: Add delete all button. Not hard
+
 
 export default function RightBar(props){
   const clipboard = props.clipboard;
   const setClipboard = props.setClipboard;
+  const setShapes = props.setShapes;
 
   const renderClipboardItems = () => {
-      return clipboard.map((c,i) => <ClipboardItem key={`cb-${i}`} src={c.thumbnail} clipboard={clipboard} setClipboard={setClipboard} />)
+    return clipboard.map((c, i) => <ClipboardItem key={`cb-${i}`} id={`cb-${i}`} src={c.thumbnail} data={c.data}
+      clipboard={clipboard} setClipboard={setClipboard}
+      setShapes={setShapes}
+      selectedMatrix={props.selectedMatrix} shapes={props.shapes}
+    />)
   }
   
 
