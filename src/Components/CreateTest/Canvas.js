@@ -34,32 +34,39 @@ export default function Canvas() {
   const [selectedMatrix, setSelectedMatrix] = useState("1");
   const [clipboard, setClipboard] = useState([]);
 
+
+  const passProps = {
+    selectedShapeID: selectedShapeID, setSelectedShapeID: setSelectedShapeID,
+    shapes: shapes, setShapes: setShapes,
+    selectedMatrix: selectedMatrix,
+    shapeNode: shapeNode, stageNode: stageNode,
+    clipboard: clipboard, setClipboard: setClipboard,
+  }
+
   const generateGridItems = () => {
     let gridItems = []
     for (let i = 1; i <= 9; i++) {
       gridItems.push(<Grid item className="gridMatrix" key={`matrixKey-${i}`} xs={4}>
-        <Matrix id={`matrix-${i}`} shapes={shapes[i.toString()]} 
-          setShapes={setShapes} selectedShapeID={selectedShapeID} setSelectedShapeID={setSelectedShapeID} 
-          selectedMatrix={selectedMatrix} setSelectedMatrix={setSelectedMatrix} 
+        <Matrix id={`matrix-${i}`} shapes={shapes[i.toString()]}
+          setShapes={setShapes} selectedShapeID={selectedShapeID} setSelectedShapeID={setSelectedShapeID}
+          selectedMatrix={selectedMatrix} setSelectedMatrix={setSelectedMatrix}
           shapeNode={shapeNode} stageNode={stageNode}
           clipboard={clipboard} setClipboard={setClipboard}
-           />
+        />
       </Grid>);
     }
 
     return gridItems;
   }
 
+
+
+
   return (
     <Box id="canvasContainer">
 
       <Box id="toolbox" >
-        <Toolbox 
-          selectedShapeID={selectedShapeID} setSelectedShapeID={setSelectedShapeID}
-          shapes={shapes} setShapes={setShapes} 
-          selectedMatrix={selectedMatrix} 
-          shapeNode={shapeNode} stageNode={stageNode} 
-          clipboard={clipboard} setClipboard={setClipboard} />
+        <Toolbox {...passProps} />
       </Box>
 
 
@@ -73,10 +80,7 @@ export default function Canvas() {
 
 
       <Box id="rightBar">
-        <RightBar selectedShapeID={selectedShapeID} 
-          shapes={shapes} setShapes={setShapes} 
-          selectedMatrix={selectedMatrix}
-          clipboard={clipboard} setClipboard={setClipboard} />
+        <RightBar {...passProps} />
       </Box>
 
 

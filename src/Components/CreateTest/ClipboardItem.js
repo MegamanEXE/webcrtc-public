@@ -17,15 +17,19 @@ export default function ClipboardItem(props){
 
   const [hovered, setHovered] = useState(false);
   const handleClick = (e) => {
-    //Because you can't have duplicate id/key
-    let newShapes = data.map(s => {
-      return { ...s, id: nanoid()}
-    })
-    
 
-    setShapes(prevState => produce(prevState, (draft) => {
-      draft[selectedMatrix].push(...newShapes);
-    }));
+    console.log(e)
+    if (e.target.id === "hoverDiv") {
+      //Because you can't have duplicate id/key
+      let newShapes = data.map(s => {
+        return { ...s, id: nanoid() }
+      })
+
+
+      setShapes(prevState => produce(prevState, (draft) => {
+        draft[selectedMatrix].push(...newShapes);
+      }));
+    }
   }
 
   const deleteItem = () => {
@@ -46,11 +50,13 @@ export default function ClipboardItem(props){
 
         <img src={props.src} id={props.id} alt="clipboard-item"  />
 
-        <Box hidden={!hovered} 
+        <Box 
+          id="hoverDiv"
+          hidden={!hovered} 
           onClick={handleClick}
           sx={{ position: 'absolute', left: 0, top: 0, width:'100%', height:'100%',backgroundColor: 'rgba(0, 0, 0, 0.1)' }}>
           
-          <Fab sx={{float:'right', marginRight:'0.4em', marginTop:'0.4em'}} color="error" size="small" onClick={deleteItem}><Close fontSize="small" /></Fab>
+          <Fab value="delBtn" sx={{float:'right', marginRight:'0.4em', marginTop:'0.4em', zIndex:20}} color="error" size="small" onClick={deleteItem}><Close fontSize="small" /></Fab>
           
         </Box>
 
