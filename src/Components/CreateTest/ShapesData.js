@@ -177,7 +177,7 @@ export const DEFAULTS = {
     STROKE: defaultStroke,
     STROKE_WIDTH: defaultStrokeWidth,
     FILL: null,
-    WIDTH: defaultWidth-30,
+    WIDTH: defaultWidth+30,
     HEIGHT: (defaultHeight+30)/2,
     ROTATION: 0,
     DASH: defaultDash,

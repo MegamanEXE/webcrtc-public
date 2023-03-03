@@ -182,8 +182,6 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
 
   }
 
-  //Used where <Group>...</Group> is used aka folded-rect and dots
-  const { x, y, rotation, ...other } = props;
   
   //MAIN return
   switch (props.type) {
@@ -290,18 +288,31 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
       </>
 
     case SHAPE_TYPES.FOLDED_RECT:
-      //THIS IS NOT LOCAL TO THIS CASE. This was used here for the first time.
-      //Used again later in Dots. This cannot be redefined so I'll leave this here
-      // let {x,y,rotation, ...other} = props;
-
-      //In hindsight, Should have just created a custom shape instead
       return <>
-        <Group x={x} y={y} rotation={rotation}
-          ref={shapeRef} draggable isSelected={isSelected} onClick={handleSelect} onTap={handleSelect} onDragStart={handleSelect} onDragEnd={handleDrag} >
-          <Rect {...other} skewX={-0.5} onTransformEnd={handleTransform} />
-          <Rect {...other} skewX={0.5} onTransformEnd={handleTransform} />
-        </Group>
-        {isSelected && (<Transformer ignoreStroke anchorSize={5} rotateAnchorOffset={20} borderDash={[6, 2]} ref={transformerRef} rotationSnaps={snaps} boundBoxFunc={boundBoxCallbackForRectangle} />)}
+        <Shape ref={shapeRef} {...props} draggable isSelected={isSelected} onClick={handleSelect} onTap={handleSelect} onDragStart={handleSelect} onDragEnd={handleDrag} onTransformEnd={handleTransform}
+          sceneFunc={(c, s) => {
+            const w = props.width;
+            const h = props.height;
+
+            c.beginPath();
+            c.moveTo(w*0.33, 0);
+            c.lineTo(0, h);
+            c.lineTo(w*0.33, h);
+            c.lineTo(w*0.66, 0);
+            c.closePath()
+
+            c.moveTo(w * 0.33, 0);
+            c.lineTo(w*0.66, 0);
+            c.lineTo(w, h);
+            c.lineTo(w*0.66, h);
+            c.closePath()
+            
+            c.fillStrokeShape(s);
+          }}
+
+        />
+        {shapeRef.current && customTransformerBox()}
+        {isSelected && (<Transformer anchorSize={5} rotateAnchorOffset={20} borderDash={[6, 2]} ref={transformerRef} rotationSnaps={snaps} boundBoxFunc={boundBoxCallbackForRectangle} />)}
       </>
 
     case SHAPE_TYPES.C_RECT:
@@ -687,12 +698,6 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
         {shapeRef.current && customTransformerBox()}
         {isSelected && (<Transformer anchorSize={5} rotateAnchorOffset={20} borderDash={[6, 2]} ref={transformerRef} rotationSnaps={snaps} boundBoxFunc={boundBoxCallbackForRectangle} />)}
       </>
-
-
-
-
-      
-
     default:
       return null
   }
