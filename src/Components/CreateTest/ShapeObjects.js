@@ -565,8 +565,6 @@ export const ShapeObject = {
     strokeWidth: DEFAULTS.HEXAGON.STROKE_WIDTH,
     dash: DEFAULTS.HEXAGON.DASH,
 
-    offsetX: DEFAULTS.HEXAGON.WIDTH / 2,
-    offsetY: DEFAULTS.HEXAGON.HEIGHT / 2,
   },
 
   [SHAPE_TYPES.SEMIHEXAGON]: {

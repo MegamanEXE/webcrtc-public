@@ -336,7 +336,7 @@ export default function Toolbox(props) {
 
         </CategoryButton>
 
-        <CategoryButton name="Hexagons" icon={<TrianglesIcon />}>
+        <CategoryButton name="Hexagons" icon={<HexagonsIcon />}>
           <ToggleButton size="large" value={SHAPE_TYPES.HEXAGON} shape={SHAPE_TYPES.HEXAGON} draggable onDragStart={handleDragStart} onClick={handleClick}><HexagonOutlined /></ToggleButton>
           <ToggleButton size="large" value={SHAPE_TYPES.SEMIHEXAGON} shape={SHAPE_TYPES.SEMIHEXAGON} draggable onDragStart={handleDragStart} onClick={handleClick}><SemihexagonIcon /></ToggleButton>
           <ToggleButton size="large" value={SHAPE_TYPES.C_HEXAGON} shape={SHAPE_TYPES.C_HEXAGON} draggable onDragStart={handleDragStart} onClick={handleClick}><CHexagonIcon /></ToggleButton>
