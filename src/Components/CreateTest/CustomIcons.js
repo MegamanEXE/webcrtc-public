@@ -889,3 +889,244 @@ export const RhombusIcon = (props) => (
   </svg>
 )
 
+//DOTS
+export const DotHollowIcon = (props) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={24}
+    height={24}
+    xmlSpace="preserve"
+    {...props}
+  >
+    <circle
+      fill="none"
+      stroke="#8B8B8B"
+      strokeWidth={2}
+      strokeMiterlimit={10}
+      cx={12}
+      cy={12}
+      r={1.792}
+    />
+  </svg>
+)
+
+export const DotFilledIcon = (props) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={24}
+    height={24}
+    xmlSpace="preserve"
+    {...props}
+  >
+    <circle
+      fill="#8B8B8B"
+      stroke="#8B8B8B"
+      strokeWidth={2}
+      strokeMiterlimit={10}
+      cx={12}
+      cy={12}
+      r={1.792}
+    />
+  </svg>
+)
+
+export const Dot4HollowIcon = (props) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={24}
+    height={24}
+    xmlSpace="preserve"
+    {...props}
+  >
+    <circle
+      fill="none"
+      stroke="#8B8B8B"
+      strokeWidth={2}
+      strokeMiterlimit={10}
+      cx={3}
+      cy={3}
+      r={1.792}
+    />
+    <circle
+      fill="none"
+      stroke="#8B8B8B"
+      strokeWidth={2}
+      strokeMiterlimit={10}
+      cx={21}
+      cy={3}
+      r={1.792}
+    />
+    <circle
+      fill="none"
+      stroke="#8B8B8B"
+      strokeWidth={2}
+      strokeMiterlimit={10}
+      cx={3}
+      cy={21}
+      r={1.792}
+    />
+    <circle
+      fill="none"
+      stroke="#8B8B8B"
+      strokeWidth={2}
+      strokeMiterlimit={10}
+      cx={21}
+      cy={21}
+      r={1.792}
+    />
+  </svg>
+)
+
+export const Dot4FilledIcon = (props) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={24}
+    height={24}
+    xmlSpace="preserve"
+    {...props}
+  >
+    <circle
+      fill="#8B8B8B"
+      stroke="#8B8B8B"
+      strokeWidth={2}
+      strokeMiterlimit={10}
+      cx={3}
+      cy={3}
+      r={1.792}
+    />
+    <circle
+      fill="#8B8B8B"
+      stroke="#8B8B8B"
+      strokeWidth={2}
+      strokeMiterlimit={10}
+      cx={21}
+      cy={3}
+      r={1.792}
+    />
+    <circle
+      fill="#8B8B8B"
+      stroke="#8B8B8B"
+      strokeWidth={2}
+      strokeMiterlimit={10}
+      cx={3}
+      cy={21}
+      r={1.792}
+    />
+    <circle
+      fill="#8B8B8B"
+      stroke="#8B8B8B"
+      strokeWidth={2}
+      strokeMiterlimit={10}
+      cx={21}
+      cy={21}
+      r={1.792}
+    />
+  </svg>
+)
+
+export const DotSquareHollowIcon = (props) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={24}
+    height={24}
+    xmlSpace="preserve"
+    {...props}
+  >
+    <path
+      fill="none"
+      stroke="#8B8B8B"
+      strokeMiterlimit={10}
+      d="M9.5 10.5h4v4h-4z"
+    />
+  </svg>
+)
+
+export const DotSquareFilledIcon = (props) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={24}
+    height={24}
+    xmlSpace="preserve"
+    {...props}
+  >
+    <path
+      fill="#8B8B8B"
+      stroke="#8B8B8B"
+      strokeMiterlimit={10}
+      d="M9.5 10.5h4v4h-4z"
+    />
+  </svg>
+)
+
+export const DotSquare4HollowIcon = (props) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={24}
+    height={24}
+    xmlSpace="preserve"
+    {...props}
+  >
+    <path
+      fill="none"
+      stroke="#8B8B8B"
+      strokeWidth={2}
+      strokeMiterlimit={10}
+      d="M1 1h4v4H1zM19 1h4v4h-4zM1 19h4v4H1zM19 19h4v4h-4z"
+    />
+  </svg>
+)
+
+export const DotSquare4FilledIcon = (props) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={24}
+    height={24}
+    xmlSpace="preserve"
+    {...props}
+  >
+    <path
+      fill="#8B8B8B"
+      stroke="#8B8B8B"
+      strokeWidth={2}
+      strokeMiterlimit={10}
+      d="M1 1h4v4H1zM19 1h4v4h-4zM1 19h4v4H1zM19 19h4v4h-4z"
+    />
+  </svg>
+)
+
+//TEXTURE ICONS
+export const RightDiagonalTextureIcon = (props) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={24}
+    height={24}
+    xmlSpace="preserve"
+    {...props}
+  >
+    <path
+      fill="none"
+      stroke="#8B8B8B"
+      strokeWidth={2}
+      strokeMiterlimit={10}
+      d="m9.583-15.917-29.041 29.042M12.584-12.917l-29.042 29.042M15.584-9.917l-29.042 29.042M18.584-6.917l-29.042 29.042M21.584-3.917-7.458 25.125M24.584-.917-4.458 28.125M27.584 2.083-1.458 31.125M30.584 5.083 1.542 34.125M33.584 8.083 4.542 37.125M36.584 11.083 7.542 40.125M39.584 14.084 10.542 43.125"
+    />
+  </svg>
+)
+
+export const LeftDiagonalTextureIcon = (props) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={24}
+    height={24}
+    xmlSpace="preserve"
+    {...props}
+  >
+    <path
+      fill="none"
+      stroke="#8B8B8B"
+      strokeWidth={2}
+      strokeMiterlimit={10}
+      d="m9.583 43.125-29.041-29.041M12.584 40.125l-29.042-29.041M15.584 37.125-13.458 8.084M18.584 34.125-10.458 5.084M21.584 31.125-7.458 2.084M24.584 28.125-4.458-.916M27.584 25.125-1.458-3.916M30.584 22.125 1.542-6.916M33.584 19.125 4.542-9.916M36.584 16.125 7.542-12.916M39.584 13.125 10.542-15.916"
+    />
+  </svg>
+)

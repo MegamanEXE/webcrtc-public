@@ -14,7 +14,7 @@ import { useEffect, useState } from "react";
 import { TEXTURE_IMAGES } from "./Textures";
 import { useCallback } from "react";
 import PopupState, { bindPopper, bindToggle } from "material-ui-popup-state";
-import { CCircleIcon, CCurveIcon, CHexagonIcon, Circle10MinIcon, Circle20MinIcon, CirclesIcon, CLineIcon, ConeIcon, CRectIcon, CrossesIcon, CrossIcon, DiamondIcon, DotsIcon, EightLineIcon, EllipseDiagonalIcon, EllipseVerticalIcon, FoldedEllipseIcon, FoldedRectIcon, FoldedTriangleIcon, HexagonsIcon, LinesIcon, ObtuseTriangleBigIcon, ObtuseTriangleSlightIcon, ObtuseTriangleSmallIcon, OrthogonalIcon, PlusIcon, QuarterCircleIcon, RectanglesIcon, RhombusIcon, RightTriangleIcon, RightTriangleThinIcon, SemicircleIcon, SemihexagonIcon, SimpleTriangleBigIcon, SimpleTriangleIcon, SimpleTriangleSmallIcon, SquashedTriangleIcon, StarIcon, StarMedIcon, StarThinIcon, TallFatRectIcon, TallRectIcon, TallThinRectIcon, TiltedLineIcon, TiltedRectIcon, TopLeftRectIcon, TrianglesIcon, VerticalLineIcon} from "./CustomIcons";
+import { CCircleIcon, CCurveIcon, CHexagonIcon, Circle10MinIcon, Circle20MinIcon, CirclesIcon, CLineIcon, ConeIcon, CRectIcon, CrossesIcon, CrossIcon, DiamondIcon, Dot4FilledIcon, Dot4HollowIcon, DotFilledIcon, DotHollowIcon, DotsIcon, DotSquare4FilledIcon, DotSquare4HollowIcon, DotSquareFilledIcon, DotSquareHollowIcon, EightLineIcon, EllipseDiagonalIcon, EllipseVerticalIcon, FoldedEllipseIcon, FoldedRectIcon, FoldedTriangleIcon, HexagonsIcon, LeftDiagonalTextureIcon, LinesIcon, ObtuseTriangleBigIcon, ObtuseTriangleSlightIcon, ObtuseTriangleSmallIcon, OrthogonalIcon, PlusIcon, QuarterCircleIcon, RectanglesIcon, RhombusIcon, RightDiagonalTextureIcon, RightTriangleIcon, RightTriangleThinIcon, SemicircleIcon, SemihexagonIcon, SimpleTriangleBigIcon, SimpleTriangleIcon, SimpleTriangleSmallIcon, SquashedTriangleIcon, StarIcon, StarMedIcon, StarThinIcon, TallFatRectIcon, TallRectIcon, TallThinRectIcon, TiltedLineIcon, TiltedRectIcon, TopLeftRectIcon, TrianglesIcon, VerticalLineIcon} from "./CustomIcons";
 
 const customIconSize = "1.5em";
 
@@ -440,14 +440,14 @@ export default function Toolbox(props) {
                 {({ TransitionProps }) => (
                   <Fade {...TransitionProps} timeout={350}>
                     <Paper>
-                      <ToggleButton size="large" value={SHAPE_TYPES.DOT_HOLLOW} shape={SHAPE_TYPES.DOT_HOLLOW} draggable onDragStart={handleDragStart} onClick={handleClick}><CircleOutlined /></ToggleButton>
-                      <ToggleButton size="large" value={SHAPE_TYPES.DOT_FILLED} shape={SHAPE_TYPES.DOT_FILLED} draggable onDragStart={handleDragStart} onClick={handleClick}><Circle /></ToggleButton>
-                      <ToggleButton size="large" value={SHAPE_TYPES.DOT4_HOLLOW} shape={SHAPE_TYPES.DOT4_HOLLOW} draggable onDragStart={handleDragStart} onClick={handleClick}><CircleOutlined />4</ToggleButton>
-                      <ToggleButton size="large" value={SHAPE_TYPES.DOT4_FILLED} shape={SHAPE_TYPES.DOT4_FILLED} draggable onDragStart={handleDragStart} onClick={handleClick}><Circle />4</ToggleButton>
-                      <ToggleButton size="large" value={SHAPE_TYPES.DOT_SQUARE_HOLLOW} shape={SHAPE_TYPES.DOT_SQUARE_HOLLOW} draggable onDragStart={handleDragStart} onClick={handleClick}><SquareOutlined /></ToggleButton>
-                      <ToggleButton size="large" value={SHAPE_TYPES.DOT_SQUARE_FILLED} shape={SHAPE_TYPES.DOT_SQUARE_FILLED} draggable onDragStart={handleDragStart} onClick={handleClick}><Square /></ToggleButton>
-                      <ToggleButton size="large" value={SHAPE_TYPES.DOT4_SQUARE_HOLLOW} shape={SHAPE_TYPES.DOT4_SQUARE_HOLLOW} draggable onDragStart={handleDragStart} onClick={handleClick}><SquareOutlined />4</ToggleButton>
-                      <ToggleButton size="large" value={SHAPE_TYPES.DOT4_SQUARE_FILLED} shape={SHAPE_TYPES.DOT4_SQUARE_FILLED} draggable onDragStart={handleDragStart} onClick={handleClick}><Square />4</ToggleButton>
+                      <ToggleButton size="large" value={SHAPE_TYPES.DOT_HOLLOW} shape={SHAPE_TYPES.DOT_HOLLOW} draggable onDragStart={handleDragStart} onClick={handleClick}><DotHollowIcon /></ToggleButton>
+                      <ToggleButton size="large" value={SHAPE_TYPES.DOT_FILLED} shape={SHAPE_TYPES.DOT_FILLED} draggable onDragStart={handleDragStart} onClick={handleClick}><DotFilledIcon /></ToggleButton>
+                      <ToggleButton size="large" value={SHAPE_TYPES.DOT4_HOLLOW} shape={SHAPE_TYPES.DOT4_HOLLOW} draggable onDragStart={handleDragStart} onClick={handleClick}><Dot4HollowIcon /></ToggleButton>
+                      <ToggleButton size="large" value={SHAPE_TYPES.DOT4_FILLED} shape={SHAPE_TYPES.DOT4_FILLED} draggable onDragStart={handleDragStart} onClick={handleClick}><Dot4FilledIcon /></ToggleButton>
+                      <ToggleButton size="large" value={SHAPE_TYPES.DOT_SQUARE_HOLLOW} shape={SHAPE_TYPES.DOT_SQUARE_HOLLOW} draggable onDragStart={handleDragStart} onClick={handleClick}><DotSquareHollowIcon /></ToggleButton>
+                      <ToggleButton size="large" value={SHAPE_TYPES.DOT_SQUARE_FILLED} shape={SHAPE_TYPES.DOT_SQUARE_FILLED} draggable onDragStart={handleDragStart} onClick={handleClick}><DotSquareFilledIcon /></ToggleButton>
+                      <ToggleButton size="large" value={SHAPE_TYPES.DOT4_SQUARE_HOLLOW} shape={SHAPE_TYPES.DOT4_SQUARE_HOLLOW} draggable onDragStart={handleDragStart} onClick={handleClick}><DotSquare4HollowIcon /></ToggleButton>
+                      <ToggleButton size="large" value={SHAPE_TYPES.DOT4_SQUARE_FILLED} shape={SHAPE_TYPES.DOT4_SQUARE_FILLED} draggable onDragStart={handleDragStart} onClick={handleClick}><DotSquare4FilledIcon /></ToggleButton>
                     </Paper>
                   </Fade>
                 )}
@@ -479,8 +479,8 @@ export default function Toolbox(props) {
                   {({ TransitionProps }) => (
                     <Fade {...TransitionProps} timeout={350}>
                       <Paper>
-                        <ToggleButton size="large" value={TEXTURES.DIAGONAL_RIGHT} onClick={handleTexture}><Texture /></ToggleButton>
-                        <ToggleButton size="large" value={TEXTURES.DIAGONAL_LEFT} onClick={handleTexture}><Texture /></ToggleButton>
+                        <ToggleButton size="large" value={TEXTURES.DIAGONAL_RIGHT} onClick={handleTexture}><RightDiagonalTextureIcon /></ToggleButton>
+                        <ToggleButton size="large" value={TEXTURES.DIAGONAL_LEFT} onClick={handleTexture}><LeftDiagonalTextureIcon /></ToggleButton>
                       </Paper>
                     </Fade>
                   )}
