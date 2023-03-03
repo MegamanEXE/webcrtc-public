@@ -475,3 +475,417 @@ export const OrthogonalIcon = (props) => (
 )
 
 //CIRCLES
+export const SemicircleIcon = (props) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={24}
+    height={24}
+    xmlSpace="preserve"
+    {...props}
+  >
+    <path
+      fill="none"
+      stroke="#8B8B8B"
+      strokeWidth={2}
+      strokeMiterlimit={10}
+      d="M22 17c0-5.522-4.477-10-10-10C6.478 7 2 11.478 2 17h20z"
+    />
+  </svg>
+)
+
+export const CCircleIcon = (props) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={24}
+    height={24}
+    xmlSpace="preserve"
+    {...props}
+  >
+    <path
+      fill="none"
+      stroke="#8B8B8B"
+      strokeWidth={2}
+      strokeMiterlimit={10}
+      d="M17 2C11.478 2 7 6.477 7 12c0 5.522 4.478 10 10 10"
+    />
+  </svg>
+)
+
+export const Circle20MinIcon = (props) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={24}
+    height={24}
+    xmlSpace="preserve"
+    {...props}
+  >
+    <path
+      fill="none"
+      stroke="#8B8B8B"
+      strokeWidth={2}
+      strokeMiterlimit={10}
+      d="M18 1.965v11.758l-8.373 8.313c-2.128-2.129-3.415-5.068-3.415-8.313C6.212 7.232 11 1.965 18 1.965z"
+    />
+  </svg>
+)
+
+export const QuarterCircleIcon = (props) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={24}
+    height={24}
+    xmlSpace="preserve"
+    {...props}
+  >
+    <path
+      fill="none"
+      stroke="#8B8B8B"
+      strokeWidth={2}
+      strokeMiterlimit={10}
+      d="M22 2v20H2C2 11 11 2 22 2z"
+    />
+  </svg>
+)
+
+export const Circle10MinIcon = (props) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={24}
+    height={24}
+    xmlSpace="preserve"
+    {...props}
+  >
+    <path
+      fill="none"
+      stroke="#8B8B8B"
+      strokeWidth={2}
+      strokeMiterlimit={10}
+      d="M18 2.733v18.533L4.898 8.164C8.253 4.809 13 2.733 18 2.733z"
+    />
+  </svg>
+)
+
+export const EllipseVerticalIcon = (props) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={24}
+    height={24}
+    xmlSpace="preserve"
+    {...props}
+  >
+    <ellipse
+      fill="none"
+      stroke="#8B8B8B"
+      strokeWidth={2}
+      strokeMiterlimit={10}
+      cx={12}
+      cy={12.297}
+      rx={3}
+      ry={10.172}
+    />
+  </svg>
+)
+
+export const EllipseDiagonalIcon = (props) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={24}
+    height={24}
+    xmlSpace="preserve"
+    {...props}
+  >
+    <ellipse
+      transform="rotate(45.001 12 12.297)"
+      fill="none"
+      stroke="#8B8B8B"
+      strokeWidth={2}
+      strokeMiterlimit={10}
+      cx={12}
+      cy={12.297}
+      rx={3}
+      ry={10.172}
+    />
+  </svg>
+)
+
+export const FoldedEllipseIcon = (props) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={24}
+    height={24}
+    xmlSpace="preserve"
+    {...props}
+  >
+    <g fill="none" stroke="#8B8B8B" strokeWidth={2} strokeMiterlimit={10}>
+      <path d="M7.359 7H6.064c-3.521 4.168-5.281 8.161-4.039 9.403s5.113-.471 9.307-3.991c.22-.183.427-.339.647-.52-.686-.623-1.398-1.366-2.097-2.065C8.963 8.909 8.122 8.042 7.359 7zM14.076 9.84a61.325 61.325 0 0 1-2.097 2.029c.22.18.427.385.647.566 4.195 3.521 8.065 5.198 9.308 3.955 1.242-1.242-.519-5.223-4.039-9.391h-1.294c-.764 1.043-1.606 1.922-2.525 2.841z" />
+      <path d="M7.359 7.191a43.956 43.956 0 0 0 2.523 2.744 59.88 59.88 0 0 0 2.097 1.981 59.88 59.88 0 0 0 2.097-1.981 44.317 44.317 0 0 0 2.525-2.744" />
+    </g>
+    <path
+      fill="none"
+      stroke="#8B8B8B"
+      strokeWidth={2}
+      strokeMiterlimit={10}
+      d="M6 7h12"
+    />
+  </svg>
+)
+
+//TRIANGLES
+export const SimpleTriangleIcon = (props) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={24}
+    height={24}
+    xmlSpace="preserve"
+    {...props}
+  >
+    <path
+      fill="none"
+      stroke="#8B8B8B"
+      strokeWidth={2}
+      strokeMiterlimit={10}
+      d="M4.226 19 12 5.535 19.773 19z"
+    />
+  </svg>
+)
+
+export const SimpleTriangleBigIcon = (props) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={24}
+    height={24}
+    xmlSpace="preserve"
+    {...props}
+  >
+    <path
+      fill="none"
+      stroke="#8B8B8B"
+      strokeWidth={2}
+      strokeMiterlimit={10}
+      d="M2.257 20 12 3.125 21.742 20z"
+    />
+  </svg>
+)
+
+export const SimpleTriangleSmallIcon = (props) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={24}
+    height={24}
+    xmlSpace="preserve"
+    {...props}
+  >
+    <path
+      fill="none"
+      stroke="#8B8B8B"
+      strokeWidth={2}
+      strokeMiterlimit={10}
+      d="M6.202 17 12 6.958 17.798 17z"
+    />
+  </svg>
+)
+
+export const SquashedTriangleIcon = (props) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={24}
+    height={24}
+    xmlSpace="preserve"
+    {...props}
+  >
+    <path
+      fill="none"
+      stroke="#8B8B8B"
+      strokeWidth={2}
+      strokeMiterlimit={10}
+      d="M4.226 15 12 8.268 19.773 15z"
+    />
+  </svg>
+)
+
+export const RightTriangleIcon = (props) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={24}
+    height={24}
+    xmlSpace="preserve"
+    {...props}
+  >
+    <path
+      fill="none"
+      stroke="#8B8B8B"
+      strokeWidth={2}
+      strokeMiterlimit={10}
+      d="M5 19V5.535L18.574 19z"
+    />
+  </svg>
+)
+
+export const RightTriangleThinIcon = (props) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={24}
+    height={24}
+    xmlSpace="preserve"
+    {...props}
+  >
+    <path
+      fill="none"
+      stroke="#8B8B8B"
+      strokeWidth={2}
+      strokeMiterlimit={10}
+      d="M15 22V6.268L8.822 22z"
+    />
+  </svg>
+)
+
+export const ObtuseTriangleBigIcon = (props) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={24}
+    height={24}
+    xmlSpace="preserve"
+    {...props}
+  >
+    <path
+      fill="none"
+      stroke="#8B8B8B"
+      strokeWidth={2}
+      strokeMiterlimit={10}
+      d="M13.188 21 20 5.492 3.876 21z"
+    />
+  </svg>
+)
+
+export const ObtuseTriangleSmallIcon = (props) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={24}
+    height={24}
+    xmlSpace="preserve"
+    {...props}
+  >
+    <path
+      fill="none"
+      stroke="#8B8B8B"
+      strokeWidth={2}
+      strokeMiterlimit={10}
+      d="m12.631 16 3.441-7.833L7.928 16z"
+    />
+  </svg>
+)
+
+export const ObtuseTriangleSlightIcon = (props) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={24}
+    height={24}
+    xmlSpace="preserve"
+    {...props}
+  >
+    <path
+      fill="none"
+      stroke="#8B8B8B"
+      strokeWidth={2}
+      strokeMiterlimit={10}
+      d="m15.626 21 2.457-15.508L5.917 21z"
+    />
+  </svg>
+)
+
+export const ConeIcon = (props) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={24}
+    height={24}
+    xmlSpace="preserve"
+    {...props}
+  >
+    <path
+      fill="none"
+      stroke="#8B8B8B"
+      strokeWidth={2}
+      strokeMiterlimit={10}
+      d="M9.385 22 12 7l2.615 15z"
+    />
+  </svg>
+)
+
+export const FoldedTriangleIcon = (props) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={24}
+    height={24}
+    xmlSpace="preserve"
+    {...props}
+  >
+    <path
+      fill="none"
+      stroke="#8B8B8B"
+      strokeMiterlimit={10}
+      d="m18.491 8.5-1.027 2.912-.046.148-1.395 3.94H4l9.453-6.797.231-.203z"
+    />
+    <path
+      fill="none"
+      stroke="#8B8B8B"
+      strokeMiterlimit={10}
+      d="m21.292 14.307-3.828-2.915L18.491 8.5h.738zM17.464 11.454l-3.78-2.871"
+    />
+  </svg>
+)
+
+//HEXAGONS
+export const SemihexagonIcon = (props) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={24}
+    height={24}
+    xmlSpace="preserve"
+    {...props}
+  >
+    <path
+      fill="none"
+      stroke="#8B8B8B"
+      strokeWidth={2}
+      strokeMiterlimit={10}
+      d="M9 16.758V7.242l5-3.94v17.395z"
+    />
+  </svg>
+)
+
+export const CHexagonIcon = (props) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={24}
+    height={24}
+    xmlSpace="preserve"
+    {...props}
+  >
+    <path
+      fill="none"
+      stroke="#8B8B8B"
+      strokeWidth={2}
+      strokeMiterlimit={10}
+      d="m14 20.697-5-3.939V7.242l5-3.94"
+    />
+  </svg>
+)
+
+export const RhombusIcon = (props) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={24}
+    height={24}
+    xmlSpace="preserve"
+    {...props}
+  >
+    <path
+      fill="none"
+      stroke="#8B8B8B"
+      strokeWidth={2}
+      strokeMiterlimit={10}
+      d="M17 12.408 6 21.44v-9.847L17 2.56z"
+    />
+  </svg>
+)
+
