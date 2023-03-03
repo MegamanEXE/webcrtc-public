@@ -1,4 +1,4 @@
-import { Box, Paper } from "@mui/material";
+import { Box, Button, Paper } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 import { Circle, Layer, Line, Rect, Stage } from "react-konva";
 import '../../App.css'
@@ -7,6 +7,7 @@ import { nanoid } from "nanoid";
 import { DEFAULTS, LIMITS, SHAPE_TYPES } from "./ShapesData";
 import GenericShape from "./GenericShape";
 import { cCircleObj, circle10MinObj, circle20MinObj, circleObj, cLineObj, coneObj, cRectObj, crossObj, diamondObj, eightLineObj, ellipseDiagonalObj, ellipseFoldedObj, ellipseVerticalObj, foldedRectObj, obtuseTriBigObj, obtuseTriFoldedObj, obtuseTriSlightObj, obtuseTriSmallObj, obtuseTriThinObj, orthogonalObj, plusObj, quarterCircleObj, rightTriObj, rightTriThinObj, semicircleObj, ShapeObject, simpleTriBigObj, simpleTriObj, simpleTriSmallObj, sLineObj, squareObj, squashedTriObj, starMediumObj, starObj, starThinObj, tallFatRectObj, tallRectObj, tallThinRectObj, tiltedLineObj, tiltedRectObj, topLeftRectObj, verticalLineObj } from "./ShapeObjects";
+import { createPortal } from "react-dom";
 
 export default function Matrix(props) {
   const [dimensions, setDimensions] = useState({ width: null, height: null });
@@ -19,6 +20,9 @@ export default function Matrix(props) {
   const divRef = useRef(null);
   const stageRef = useRef(null);
   const layerRef = useRef(null);
+
+  
+
 
   const matrix_size = 150;
   const matrixNumber = props.id.split("-")[1]
@@ -92,26 +96,36 @@ export default function Matrix(props) {
     }));
   }
 
+  //stageNode was defined in Canvas, this is so the currently selected Matrix/stage konva node is accessible in other parts 
+  //of the application
   useEffect(() => {
     stageNode.current = stageRef.current;
   },[selectedShapeID, stageNode, props.shapes]);
 
+
+
+
+  
+
+
+
+  //Handle canvas click
   const handleCanvasClick = () => {
     setSelectedMatrix(matrixNumber);
     setSelectedShapeID(null);
     stageNode.current = stageRef.current;
   }
 
-  /* Note only the first one has a ref, other matrices just use the same value calculated using this one */
   return (
     <Box id={props.id} className={props.selectedMatrix === matrixNumber ? "matrix selected" : "matrix"} ref={divRef}
       onDragOver={handleDragOver} onDrop={handleDrop}
       sx={{ width: matrix_size, height: matrix_size }}
     >
-      <Stage ref={stageRef} className="stage" width={dimensions.width} height={dimensions.height} onClick={handleCanvasClick}  >
+      <Stage ref={stageRef} className="stage" width={dimensions.width} height={dimensions.height} onClick={handleCanvasClick}>
         <Layer className="layer" ref={layerRef}>
 
           <Rect class="bg-color-rect" width={matrix_size} height={matrix_size} x={0} y={0} fill="white" />{/* background color, do not remove */}
+
           {props.shapes.map(s => <GenericShape key={s.id}
             selectedShapeID={selectedShapeID} setSelectedShapeID={setSelectedShapeID}
             matrixNumber={matrixNumber}

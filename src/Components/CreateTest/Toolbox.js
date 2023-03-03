@@ -279,7 +279,8 @@ export default function Toolbox(props) {
 
   return (
     <Box p={1.5} sx={{ height: '100%' }}>
-      <Paper sx={{ height: '100%', p: 1.5 }}>
+      <Paper sx={{ height: '100%', p: 1.5}}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap:1 }}>
 
         <CategoryButton name="Lines" icon={<LinesIcon />}>
           <ToggleButton size="large" value={SHAPE_TYPES.VERTICAL_LINE} shape={SHAPE_TYPES.VERTICAL_LINE} draggable onDragStart={handleDragStart} onClick={handleClick}><VerticalLineIcon /></ToggleButton>
@@ -354,10 +355,11 @@ export default function Toolbox(props) {
           <ToggleButton size="large" value={SHAPE_TYPES.DOT4_SQUARE_FILLED} shape={SHAPE_TYPES.DOT4_SQUARE_FILLED} draggable onDragStart={handleDragStart} onClick={handleClick}><DotSquare4FilledIcon /></ToggleButton>
         </CategoryButton>
 
-     
+     </Box>
 
         <Box>
-          <Typography mb={1}>Actions</Typography>
+          <Typography mt={1.5}>Actions</Typography>
+          <Box sx={{display:'flex', flexWrap:'wrap' , gap:1}}>
           <ToggleButton size="large" value={SHAPE_ACTIONS.STROKE_DASHED} onClick={handleLineStyle}><LineStyleIcon /></ToggleButton>
           <ToggleButton size="large" value={SHAPE_ACTIONS.STROKE_BOLD} onClick={handleLineWeight}><LineWeightIcon /></ToggleButton>
 
@@ -367,7 +369,7 @@ export default function Toolbox(props) {
           <ToggleButton size="large" value={SHAPE_ACTIONS.INCREASE_SIZE} onClick={handleIncreaseSize}><TbArrowsMaximize size={customIconSize} /></ToggleButton>
           <ToggleButton size="large" value={SHAPE_ACTIONS.DECREASE_SIZE} onClick={handleDecreaseSize}><TbArrowsMinimize size={customIconSize} /></ToggleButton>
           <ToggleButton size="large" value={SHAPE_ACTIONS.COPY} onClick={handleCopy}><CopyAll /></ToggleButton>
-
+          </Box>
           
 
           <PopupState variant="popper" popupId="demo-popup-popper">

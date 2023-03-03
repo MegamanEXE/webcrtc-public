@@ -1,9 +1,9 @@
-import { padding } from "@mui/system";
 import produce from "immer";
-import Konva from "konva";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Arc, Circle, Ellipse, Group, Line, Rect, RegularPolygon, Shape, Star, Transformer } from "react-konva";
 import { DEFAULTS, LIMITS, SHAPE_TYPES } from "./ShapesData";
+import { Html } from "react-konva-utils"
+import { Button } from "@mui/material";
 
 //Utility clamp function
 const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
@@ -45,6 +45,56 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
   const shapeRef = useRef(); //local to this file, used for coupling transformers to shapes
 
   const shapeNode = props.shapeNode; //This is to share the actual Konva node. Basically so Toolbox has access to the full shape node, not just the shapes array
+
+
+  /********************************** 
+     Context Menu
+     Currently not working. So right click deletes a shape
+    ***********************************/
+  const ctxMenuRef = useRef(null);
+  const [ctxMenuActive, setCtxMenuActive] = useState(false);
+
+  //Delete shape using context menu
+  const deleteShape = () => {
+    console.log("Deleting Shape ", props.id)
+    const shapeIdx = shapes.findIndex(s => s.id === props.id);
+
+    setShapes(prevState => produce(prevState, (draft) => {
+      if (shapeIdx !== -1) draft[matrixNumber].splice(shapeIdx, 1)
+    }));
+  }
+
+  //Context menu
+  const ContextMenu = () => {
+    return (<div id="shapeContextMenu" ref={ctxMenuRef}>
+      <Button onClick={deleteShape}>Delete</Button>
+    </div>)
+  }
+
+  //Handle right clicking on stage
+  const handleContextMenu = (e) => {
+    e.evt.preventDefault();
+    setCtxMenuActive(true);
+    
+    //Until a better way
+    deleteShape();
+
+  }
+
+  //Useless atm
+  const renderContextMenu = () => {
+    console.log(ctxMenuRef.current)
+    if (ctxMenuRef.current) {
+      ctxMenuRef.current.style.display = 'initial';
+      ctxMenuRef.current.style.top = 25;
+      ctxMenuRef.current.style.left = 25;
+    }
+
+
+  }
+
+  ///////////////////////////////////
+
 
   //Handle moving shapes, which also updates it in API
   const moveShape = (id, e) => {
@@ -182,34 +232,48 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
 
   }
 
+  const defaultProps = {
+    draggable: true,
+    isSelected: isSelected,
+    onClick :handleSelect,
+    onTap: handleSelect, 
+    onDragStart: handleSelect,
+    onDragEnd: handleDrag,
+    onTransformEnd: handleTransform,
+    onContextMenu: handleContextMenu,
+  }
   
   //MAIN return
+
+  
+
   switch (props.type) {
 
 
     case SHAPE_TYPES.SQUARE:
       return <>
-        <Rect ref={shapeRef} {...props} draggable isSelected={isSelected} onClick={handleSelect} onTap={handleSelect} onDragStart={handleSelect} onDragEnd={handleDrag} onTransformEnd={handleTransform} />
+        <Rect ref={shapeRef} {...props} {...defaultProps} />
         {isSelected && (<Transformer anchorSize={5} rotateAnchorOffset={20} borderDash={[6, 2]} ref={transformerRef} rotationSnaps={snaps} boundBoxFunc={boundBoxCallbackForRectangle} />)}
+        
       </>
     case SHAPE_TYPES.RECT:
       return <>
-        <Rect ref={shapeRef} {...props} draggable isSelected={isSelected} onClick={handleSelect} onTap={handleSelect} onDragStart={handleSelect} onDragEnd={handleDrag} onTransformEnd={handleTransform} />
+        <Rect ref={shapeRef} {...props} {...defaultProps} />
         {isSelected && (<Transformer anchorSize={5} rotateAnchorOffset={20} borderDash={[6, 2]} ref={transformerRef} rotationSnaps={snaps} boundBoxFunc={boundBoxCallbackForRectangle} />)}
       </>
     case SHAPE_TYPES.VERTICAL_LINE:
       return <>
-        <Line ref={shapeRef} {...props} draggable isSelected={isSelected} onClick={handleSelect} onTap={handleSelect} onDragStart={handleSelect} onDragEnd={handleDrag} onTransformEnd={handleTransform} />
+        <Line ref={shapeRef} {...props} {...defaultProps} />
         {isSelected && (<Transformer padding={10} rotateAnchorOffset={20} anchorSize={8} borderDash={[6, 2]} ref={transformerRef} rotationSnaps={snaps} enabledAnchors={['top-center', 'bottom-center']}  boundBoxFunc={boundBoxCallbackForLine} />) }
       </>
     case SHAPE_TYPES.TILTED_LINE:
       return <>
-        <Line ref={shapeRef} {...props} draggable isSelected={isSelected} onClick={handleSelect} onTap={handleSelect} onDragStart={handleSelect} onDragEnd={handleDrag} onTransformEnd={handleTransform} />
+        <Line ref={shapeRef} {...props} {...defaultProps} />
         {isSelected && (<Transformer padding={10} rotateAnchorOffset={20} anchorSize={8} borderDash={[6, 2]} ref={transformerRef} rotationSnaps={snaps} enabledAnchors={['top-center', 'bottom-center']} boundBoxFunc={boundBoxCallbackForLine} />)}
       </>
     case SHAPE_TYPES.C_LINE:
       return <>
-        <Shape ref={shapeRef} {...props} draggable isSelected={isSelected} onClick={handleSelect} onTap={handleSelect} onDragStart={handleSelect} onDragEnd={handleDrag} onTransformEnd={handleTransform} 
+        <Shape ref={shapeRef} {...props} {...defaultProps} 
           sceneFunc={(c,s)=>{
             const w = props.width;
             const h = props.height;
@@ -228,7 +292,7 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
       </>
     case SHAPE_TYPES.S_LINE:
       return <>
-        <Shape ref={shapeRef} {...props} draggable isSelected={isSelected} onClick={handleSelect} onTap={handleSelect} onDragStart={handleSelect} onDragEnd={handleDrag} onTransformEnd={handleTransform}
+        <Shape ref={shapeRef} {...props} {...defaultProps}
           sceneFunc={(c, s) => {
             const w = props.width;
             const h = props.height;
@@ -249,7 +313,7 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
       </>
     case SHAPE_TYPES.EIGHT_LINE:
       return <>
-        <Shape ref={shapeRef} {...props} draggable isSelected={isSelected} onClick={handleSelect} onTap={handleSelect} onDragStart={handleSelect} onDragEnd={handleDrag} onTransformEnd={handleTransform}
+        <Shape ref={shapeRef} {...props} {...defaultProps}
           sceneFunc={(c, s) => {
             const w = props.width;
             const h = props.height;
@@ -283,13 +347,13 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
     case SHAPE_TYPES.TILTED_RECT:
     case SHAPE_TYPES.DIAMOND:
       return <>
-        <Rect ref={shapeRef} {...props} draggable isSelected={isSelected} onClick={handleSelect} onTap={handleSelect} onDragStart={handleSelect} onDragEnd={handleDrag} onTransformEnd={handleTransform} />
+        <Rect ref={shapeRef} {...props} {...defaultProps} />
         {isSelected && (<Transformer anchorSize={5} rotateAnchorOffset={20} borderDash={[6, 2]} ref={transformerRef} rotationSnaps={snaps} boundBoxFunc={boundBoxCallbackForRectangle} />)}
       </>
 
     case SHAPE_TYPES.FOLDED_RECT:
       return <>
-        <Shape ref={shapeRef} {...props} draggable isSelected={isSelected} onClick={handleSelect} onTap={handleSelect} onDragStart={handleSelect} onDragEnd={handleDrag} onTransformEnd={handleTransform}
+        <Shape ref={shapeRef} {...props} {...defaultProps}
           sceneFunc={(c, s) => {
             const w = props.width;
             const h = props.height;
@@ -317,7 +381,7 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
 
     case SHAPE_TYPES.C_RECT:
       return <>
-        <Shape ref={shapeRef} {...props} draggable isSelected={isSelected} onClick={handleSelect} onTap={handleSelect} onDragStart={handleSelect} onDragEnd={handleDrag} onTransformEnd={handleTransform}
+        <Shape ref={shapeRef} {...props} {...defaultProps}
           sceneFunc={(c, s) => {
             const w = props.width;
             const h = props.height;
@@ -337,7 +401,7 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
 
     case SHAPE_TYPES.TOP_LEFT_RECT:
       return <>
-        <Shape ref={shapeRef} {...props} draggable isSelected={isSelected} onClick={handleSelect} onTap={handleSelect} onDragStart={handleSelect} onDragEnd={handleDrag} onTransformEnd={handleTransform}
+        <Shape ref={shapeRef} {...props} {...defaultProps}
           sceneFunc={(c, s) => {
             const w = props.width;
             const h = props.height;
@@ -358,7 +422,7 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
     case SHAPE_TYPES.STAR_MEDIUM:
     case SHAPE_TYPES.STAR_THIN:
       return <>
-        <Shape ref={shapeRef} {...props} draggable isSelected={isSelected} onClick={handleSelect} onTap={handleSelect} onDragStart={handleSelect} onDragEnd={handleDrag} onTransformEnd={handleTransform}
+        <Shape ref={shapeRef} {...props} {...defaultProps}
           sceneFunc={(c, s) => {
             const w = props.width;
             const h = props.height;
@@ -381,7 +445,7 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
     case SHAPE_TYPES.PLUS:
     case SHAPE_TYPES.CROSS:
       return <>
-        <Shape ref={shapeRef} {...props} draggable isSelected={isSelected} onClick={handleSelect} onTap={handleSelect} onDragStart={handleSelect} onDragEnd={handleDrag} onTransformEnd={handleTransform}
+        <Shape ref={shapeRef} {...props} {...defaultProps}
           sceneFunc={(c, s) => {
             const w = props.width;
             const h = props.height;
@@ -400,7 +464,7 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
       </>
     case SHAPE_TYPES.ORTHOGONAL:
       return <>
-        <Shape ref={shapeRef} {...props} draggable isSelected={isSelected} onClick={handleSelect} onTap={handleSelect} onDragStart={handleSelect} onDragEnd={handleDrag} onTransformEnd={handleTransform}
+        <Shape ref={shapeRef} {...props} {...defaultProps}
           sceneFunc={(c, s) => {
             const w = props.width;
             const h = props.height;
@@ -419,7 +483,7 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
       </>
     case SHAPE_TYPES.CIRCLE:
       return <>
-        <Circle ref={shapeRef} {...props} draggable isSelected={isSelected} onClick={handleSelect} onTap={handleSelect} onDragStart={handleSelect} onDragEnd={handleDrag} onTransformEnd={handleTransform} />
+        <Circle ref={shapeRef} {...props} {...defaultProps} />
         {isSelected && (<Transformer anchorSize={5} rotateAnchorOffset={20} borderDash={[6, 2]} ref={transformerRef} rotateEnabled={false} enabledAnchors={["top-left", "top-right", "bottom-right", "bottom-left"]} boundBoxFunc={boundBoxCallbackForCircle} />)}
       </>
     case SHAPE_TYPES.SEMICIRCLE:
@@ -428,19 +492,19 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
     case SHAPE_TYPES.QUARTER_CIRCLE:
     case SHAPE_TYPES.CIRCLE_10MIN:
       return <>
-        <Arc ref={shapeRef} {...props} draggable isSelected={isSelected} onClick={handleSelect} onTap={handleSelect} onDragStart={handleSelect} onDragEnd={handleDrag} onTransformEnd={handleTransform} />
+        <Arc ref={shapeRef} {...props} {...defaultProps} />
         {isSelected && (<Transformer anchorSize={5} rotateAnchorOffset={20} borderDash={[6, 2]} ref={transformerRef} rotationSnaps={snaps} enabledAnchors={["top-left", "top-right", "bottom-right", "bottom-left"]} boundBoxFunc={boundBoxCallbackForCircle} />)}
       </>
 
     case SHAPE_TYPES.ELLIPSE_VERTICAL:
     case SHAPE_TYPES.ELLIPSE_DIAGONAL:
       return <>
-        <Ellipse ref={shapeRef} {...props} draggable isSelected={isSelected} onClick={handleSelect} onTap={handleSelect} onDragStart={handleSelect} onDragEnd={handleDrag} onTransformEnd={handleTransform} />
+        <Ellipse ref={shapeRef} {...props} {...defaultProps} />
         {isSelected && (<Transformer anchorSize={5} rotateAnchorOffset={20} borderDash={[6, 2]} ref={transformerRef} rotationSnaps={snaps} boundBoxFunc={boundBoxCallbackForRectangle} />)}
       </>
     case SHAPE_TYPES.ELLIPSE_FOLDED:
       return <>
-        <Shape ref={shapeRef} {...props} offsetX={30} draggable isSelected={isSelected} onClick={handleSelect} onTap={handleSelect} onDragStart={handleSelect} onDragEnd={handleDrag} onTransformEnd={handleTransform}
+        <Shape ref={shapeRef} {...props} offsetX={30} {...defaultProps}
           sceneFunc={(c, s) => {
             const w = props.width;
             const h = props.height;
@@ -475,7 +539,7 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
     case SHAPE_TYPES.SQUASHED_TRI: 
     case SHAPE_TYPES.CONE:
           return <>
-            <Shape ref={shapeRef} {...props} draggable isSelected={isSelected} onClick={handleSelect} onTap={handleSelect} onDragStart={handleSelect} onDragEnd={handleDrag} onTransformEnd={handleTransform}
+            <Shape ref={shapeRef} {...props} {...defaultProps}
               sceneFunc={(c, s) => {
                 const w = props.width;
                 const h = props.height;
@@ -494,7 +558,7 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
           </>
     case SHAPE_TYPES.RIGHT_TRI:
       return <>
-        <Shape ref={shapeRef} {...props} draggable isSelected={isSelected} onClick={handleSelect} onTap={handleSelect} onDragStart={handleSelect} onDragEnd={handleDrag} onTransformEnd={handleTransform}
+        <Shape ref={shapeRef} {...props} {...defaultProps}
           sceneFunc={(c, s) => {
             const w = props.width;
             const h = props.height;
@@ -513,7 +577,7 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
       </>
     case SHAPE_TYPES.RIGHT_TRI_THIN:
       return <>
-        <Shape ref={shapeRef} {...props} draggable isSelected={isSelected} onClick={handleSelect} onTap={handleSelect} onDragStart={handleSelect} onDragEnd={handleDrag} onTransformEnd={handleTransform}
+        <Shape ref={shapeRef} {...props} {...defaultProps}
           sceneFunc={(c, s) => {
             const w = props.width;
             const h = props.height;
@@ -534,7 +598,7 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
     case SHAPE_TYPES.OBTUSE_TRI_BIG:
     case SHAPE_TYPES.OBTUSE_TRI_SLIGHT:
       return <>
-        <Shape ref={shapeRef} {...props} draggable isSelected={isSelected} onClick={handleSelect} onTap={handleSelect} onDragStart={handleSelect} onDragEnd={handleDrag} onTransformEnd={handleTransform}
+        <Shape ref={shapeRef} {...props} {...defaultProps}
           sceneFunc={(c, s) => {
             const w = props.width;
             const h = props.height;
@@ -553,7 +617,7 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
       </>
     case SHAPE_TYPES.OBTUSE_TRI_FOLDED:
       return <>
-        <Shape ref={shapeRef} {...props} draggable isSelected={isSelected} onClick={handleSelect} onTap={handleSelect} onDragStart={handleSelect} onDragEnd={handleDrag} onTransformEnd={handleTransform}
+        <Shape ref={shapeRef} {...props} {...defaultProps}
           sceneFunc={(c, s) => {
             const w = props.width;
             const h = props.height;
@@ -580,13 +644,13 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
 
     case SHAPE_TYPES.HEXAGON:
       return <>
-        <RegularPolygon sides={6} ref={shapeRef} {...props} draggable isSelected={isSelected} onClick={handleSelect} onTap={handleSelect} onDragStart={handleSelect} onDragEnd={handleDrag} onTransformEnd={handleTransform} />
+        <RegularPolygon sides={6} ref={shapeRef} {...props} {...defaultProps} />
         {isSelected && (<Transformer anchorSize={5} rotateAnchorOffset={20} borderDash={[6, 2]} ref={transformerRef} rotationSnaps={snaps} boundBoxFunc={boundBoxCallbackForRectangle} />)}
       </>
     case SHAPE_TYPES.SEMIHEXAGON:
     case SHAPE_TYPES.C_HEXAGON:
       return <>
-        <Shape ref={shapeRef} {...props} draggable isSelected={isSelected} onClick={handleSelect} onTap={handleSelect} onDragStart={handleSelect} onDragEnd={handleDrag} onTransformEnd={handleTransform}
+        <Shape ref={shapeRef} {...props} {...defaultProps}
           sceneFunc={(c, s) => {
             const w = props.width;
             const h = props.height;
@@ -610,7 +674,7 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
     case SHAPE_TYPES.RHOMBUS:
       //Technically it's not even supposed to be a rhombus
       return <>
-        <Shape ref={shapeRef} {...props} draggable isSelected={isSelected} onClick={handleSelect} onTap={handleSelect} onDragStart={handleSelect} onDragEnd={handleDrag} onTransformEnd={handleTransform}
+        <Shape ref={shapeRef} {...props} {...defaultProps}
           sceneFunc={(c, s) => {
             const w = props.width;
             const h = props.height;
@@ -633,13 +697,13 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
     case SHAPE_TYPES.DOT_HOLLOW:
     case SHAPE_TYPES.DOT_FILLED:
       return <>
-        <Circle ref={shapeRef} {...props} draggable isSelected={isSelected} onClick={handleSelect} onTap={handleSelect} onDragStart={handleSelect} onDragEnd={handleDrag} onTransformEnd={handleTransform} />
+        <Circle ref={shapeRef} {...props} {...defaultProps} />
         {isSelected && (<Transformer anchorSize={5} rotateAnchorOffset={20} borderDash={[6, 2]} ref={transformerRef} rotateEnabled={false} enabledAnchors={["top-left", "top-right", "bottom-right", "bottom-left"]} boundBoxFunc={boundBoxCallbackForCircle} />)}
       </>
     case SHAPE_TYPES.DOT4_HOLLOW:
     case SHAPE_TYPES.DOT4_FILLED:
       return <>
-        <Shape ref={shapeRef} {...props} draggable isSelected={isSelected} onClick={handleSelect} onTap={handleSelect} onDragStart={handleSelect} onDragEnd={handleDrag} onTransformEnd={handleTransform}
+        <Shape ref={shapeRef} {...props} {...defaultProps}
           sceneFunc={(c, s) => {
             const w = props.width;
             const h = props.height;
@@ -673,13 +737,13 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
     case SHAPE_TYPES.DOT_SQUARE_HOLLOW:
     case SHAPE_TYPES.DOT_SQUARE_FILLED:
       return <>
-        <Rect ref={shapeRef} {...props} draggable isSelected={isSelected} onClick={handleSelect} onTap={handleSelect} onDragStart={handleSelect} onDragEnd={handleDrag} onTransformEnd={handleTransform} />
+        <Rect ref={shapeRef} {...props} {...defaultProps} />
         {isSelected && (<Transformer anchorSize={5} rotateAnchorOffset={20} borderDash={[6, 2]} ref={transformerRef} rotationSnaps={snaps} boundBoxFunc={boundBoxCallbackForRectangle} />)}
       </>
     case SHAPE_TYPES.DOT4_SQUARE_HOLLOW:
     case SHAPE_TYPES.DOT4_SQUARE_FILLED:
       return <>
-        <Shape ref={shapeRef} {...props} draggable isSelected={isSelected} onClick={handleSelect} onTap={handleSelect} onDragStart={handleSelect} onDragEnd={handleDrag} onTransformEnd={handleTransform}
+        <Shape ref={shapeRef} {...props} {...defaultProps}
           sceneFunc={(c, s) => {
             const w = props.width;
             const h = props.height;

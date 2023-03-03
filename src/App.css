@@ -460,3 +460,12 @@ a:active {
   width: fit-content;
   border: 4px solid gray;
 }
+
+ #shapeContextMenu {
+   display: none;
+   position: absolute;
+   width: 60px;
+   background-color: white;
+   box-shadow: 0 0 5px grey;
+   border-radius: 3px;
+ }
