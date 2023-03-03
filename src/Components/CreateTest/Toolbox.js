@@ -15,6 +15,7 @@ import { TEXTURE_IMAGES } from "./Textures";
 import { useCallback } from "react";
 import PopupState, { bindPopper, bindToggle } from "material-ui-popup-state";
 import { CCircleIcon, CCurveIcon, CHexagonIcon, Circle10MinIcon, Circle20MinIcon, CirclesIcon, CLineIcon, ConeIcon, CRectIcon, CrossesIcon, CrossIcon, DiamondIcon, Dot4FilledIcon, Dot4HollowIcon, DotFilledIcon, DotHollowIcon, DotsIcon, DotSquare4FilledIcon, DotSquare4HollowIcon, DotSquareFilledIcon, DotSquareHollowIcon, EightLineIcon, EllipseDiagonalIcon, EllipseVerticalIcon, FoldedEllipseIcon, FoldedRectIcon, FoldedTriangleIcon, HexagonsIcon, LeftDiagonalTextureIcon, LinesIcon, ObtuseTriangleBigIcon, ObtuseTriangleSlightIcon, ObtuseTriangleSmallIcon, OrthogonalIcon, PlusIcon, QuarterCircleIcon, RectanglesIcon, RhombusIcon, RightDiagonalTextureIcon, RightTriangleIcon, RightTriangleThinIcon, SemicircleIcon, SemihexagonIcon, SimpleTriangleBigIcon, SimpleTriangleIcon, SimpleTriangleSmallIcon, SquashedTriangleIcon, StarIcon, StarMedIcon, StarThinIcon, TallFatRectIcon, TallRectIcon, TallThinRectIcon, TiltedLineIcon, TiltedRectIcon, TopLeftRectIcon, TrianglesIcon, VerticalLineIcon} from "./CustomIcons";
+import { CategoryButton } from "./CategoryButton";
 
 const customIconSize = "1.5em";
 
@@ -273,188 +274,86 @@ export default function Toolbox(props) {
     }
   }
 
+  
+
 
   return (
     <Box p={1.5} sx={{ height: '100%' }}>
       <Paper sx={{ height: '100%', p: 1.5 }}>
-      
-        <PopupState variant="popper" popupId="demo-popup-popper">
-          {(popupState) => (
-            <div>
-              <ToggleButton {...bindToggle(popupState)} size="large" value={"lines"} shape={"lines"}> <LinesIcon /></ToggleButton>
-              <Popper {...bindPopper(popupState)} transition placement="right">
-                {({ TransitionProps }) => (
-                  <Fade {...TransitionProps} timeout={350}>
-                    <Paper sx={{p:1, width:'fit-content'}}>
-                      <Grid container columns={10} gap={1} sx={{justifyContent:'center'}}>
-                        <Grid item xs={4}>
-                          <ToggleButton size="large" value={SHAPE_TYPES.VERTICAL_LINE} shape={SHAPE_TYPES.VERTICAL_LINE} draggable onDragStart={handleDragStart} onClick={handleClick}><VerticalLineIcon /></ToggleButton>
-                        </Grid>
-                        <Grid item xs={4}>
-                          <ToggleButton size="large" value={SHAPE_TYPES.TILTED_LINE} shape={SHAPE_TYPES.TILTED_LINE} draggable onDragStart={handleDragStart} onClick={handleClick}><TiltedLineIcon /></ToggleButton>
-                        </Grid>
-                        <Grid item xs={4}>
-                          <ToggleButton size="large" value={SHAPE_TYPES.C_LINE} shape={SHAPE_TYPES.C_LINE} draggable onDragStart={handleDragStart} onClick={handleClick}> <CLineIcon /> </ToggleButton>
-                        </Grid>
-                        <Grid item xs={4}>
-                          <ToggleButton size="large" value={SHAPE_TYPES.EIGHT_LINE} shape={SHAPE_TYPES.EIGHT_LINE} draggable onDragStart={handleDragStart} onClick={handleClick}><EightLineIcon /></ToggleButton>
-                        </Grid>
 
+        <CategoryButton name="Lines" icon={<LinesIcon />}>
+          <ToggleButton size="large" value={SHAPE_TYPES.VERTICAL_LINE} shape={SHAPE_TYPES.VERTICAL_LINE} draggable onDragStart={handleDragStart} onClick={handleClick}><VerticalLineIcon /></ToggleButton>
+          <ToggleButton size="large" value={SHAPE_TYPES.TILTED_LINE} shape={SHAPE_TYPES.TILTED_LINE} draggable onDragStart={handleDragStart} onClick={handleClick}><TiltedLineIcon /></ToggleButton>
+          <ToggleButton size="large" value={SHAPE_TYPES.C_LINE} shape={SHAPE_TYPES.C_LINE} draggable onDragStart={handleDragStart} onClick={handleClick}> <CLineIcon /> </ToggleButton>
+          <ToggleButton size="large" value={SHAPE_TYPES.EIGHT_LINE} shape={SHAPE_TYPES.EIGHT_LINE} draggable onDragStart={handleDragStart} onClick={handleClick}><EightLineIcon /></ToggleButton>
+        </CategoryButton>
 
-                      </Grid>
-                      
-                    </Paper>
-                  </Fade>
-                )}
-              </Popper>
-            </div>
-          )}
-        </PopupState>
+        <CategoryButton name="Rectangles" icon={<RectanglesIcon />}>
+          <ToggleButton size="large" value={SHAPE_TYPES.SQUARE} shape={SHAPE_TYPES.SQUARE} draggable onDragStart={handleDragStart} onClick={handleClick}><SquareOutlined /></ToggleButton>
+          <ToggleButton size="large" value={SHAPE_TYPES.DIAMOND} shape={SHAPE_TYPES.DIAMOND} draggable onDragStart={handleDragStart} onClick={handleClick}><DiamondIcon /></ToggleButton>
+          <ToggleButton size="large" value={SHAPE_TYPES.TALL_THIN_RECT} shape={SHAPE_TYPES.TALL_THIN_RECT} draggable onDragStart={handleDragStart} onClick={handleClick}><TallThinRectIcon /></ToggleButton>
+          <ToggleButton size="large" value={SHAPE_TYPES.TALL_FAT_RECT} shape={SHAPE_TYPES.TALL_FAT_RECT} draggable onDragStart={handleDragStart} onClick={handleClick}><TallFatRectIcon /></ToggleButton>
+          <ToggleButton size="large" value={SHAPE_TYPES.TALL_RECT} shape={SHAPE_TYPES.TALL_RECT} draggable onDragStart={handleDragStart} onClick={handleClick}><TallRectIcon /></ToggleButton>
+          <ToggleButton size="large" value={SHAPE_TYPES.TILTED_RECT} shape={SHAPE_TYPES.TILTED_RECT} draggable onDragStart={handleDragStart} onClick={handleClick}><TiltedRectIcon /></ToggleButton>
+          <ToggleButton size="large" value={SHAPE_TYPES.FOLDED_RECT} shape={SHAPE_TYPES.FOLDED_RECT} draggable onDragStart={handleDragStart} onClick={handleClick}><FoldedRectIcon /></ToggleButton>
+          <ToggleButton size="large" value={SHAPE_TYPES.C_RECT} shape={SHAPE_TYPES.C_RECT} draggable onDragStart={handleDragStart} onClick={handleClick}><CRectIcon /></ToggleButton>
+          <ToggleButton size="large" value={SHAPE_TYPES.TOP_LEFT_RECT} shape={SHAPE_TYPES.TOP_LEFT_RECT} draggable onDragStart={handleDragStart} onClick={handleClick}><TopLeftRectIcon /></ToggleButton>
+          <ToggleButton size="large" value={SHAPE_TYPES.STAR} shape={SHAPE_TYPES.STAR} draggable onDragStart={handleDragStart} onClick={handleClick}><StarIcon /></ToggleButton>
+          <ToggleButton size="large" value={SHAPE_TYPES.STAR_MEDIUM} shape={SHAPE_TYPES.STAR_MEDIUM} draggable onDragStart={handleDragStart} onClick={handleClick}><StarMedIcon /></ToggleButton>
+          <ToggleButton size="large" value={SHAPE_TYPES.STAR_THIN} shape={SHAPE_TYPES.STAR_THIN} draggable onDragStart={handleDragStart} onClick={handleClick}><StarThinIcon /></ToggleButton>
+        </CategoryButton>
 
-        <PopupState variant="popper" popupId="demo-popup-popper">
-          {(popupState) => (
-            <div>
-              
-              <ToggleButton {...bindToggle(popupState)} size="large" value={"rectangles"} shape={"rectangles"}> <RectanglesIcon /> </ToggleButton>
+        <CategoryButton name="Crosses" icon={<CrossesIcon />}>
+          <ToggleButton size="large" value={SHAPE_TYPES.PLUS} shape={SHAPE_TYPES.PLUS} draggable onDragStart={handleDragStart} onClick={handleClick}><PlusIcon /></ToggleButton>
+          <ToggleButton size="large" value={SHAPE_TYPES.CROSS} shape={SHAPE_TYPES.CROSS} draggable onDragStart={handleDragStart} onClick={handleClick}><CrossIcon /></ToggleButton>
+          <ToggleButton size="large" value={SHAPE_TYPES.ORTHOGONAL} shape={SHAPE_TYPES.ORTHOGONAL} draggable onDragStart={handleDragStart} onClick={handleClick}><OrthogonalIcon /></ToggleButton>
+        </CategoryButton>
 
-              <Popper {...bindPopper(popupState)} transition placement="right">
-                {({ TransitionProps }) => (
-                  <Fade {...TransitionProps} timeout={350}>
-                    <Paper>
-                      <ToggleButton size="large" value={SHAPE_TYPES.SQUARE} shape={SHAPE_TYPES.SQUARE} draggable onDragStart={handleDragStart} onClick={handleClick}><SquareOutlined /></ToggleButton>
-                      <ToggleButton size="large" value={SHAPE_TYPES.DIAMOND} shape={SHAPE_TYPES.DIAMOND} draggable onDragStart={handleDragStart} onClick={handleClick}><DiamondIcon /></ToggleButton>
-                      <ToggleButton size="large" value={SHAPE_TYPES.TALL_THIN_RECT} shape={SHAPE_TYPES.TALL_THIN_RECT} draggable onDragStart={handleDragStart} onClick={handleClick}><TallThinRectIcon /></ToggleButton>
-                      <ToggleButton size="large" value={SHAPE_TYPES.TALL_FAT_RECT} shape={SHAPE_TYPES.TALL_FAT_RECT} draggable onDragStart={handleDragStart} onClick={handleClick}><TallFatRectIcon /></ToggleButton>
-                      <ToggleButton size="large" value={SHAPE_TYPES.TALL_RECT} shape={SHAPE_TYPES.TALL_RECT} draggable onDragStart={handleDragStart} onClick={handleClick}><TallRectIcon /></ToggleButton>
-                      <ToggleButton size="large" value={SHAPE_TYPES.TILTED_RECT} shape={SHAPE_TYPES.TILTED_RECT} draggable onDragStart={handleDragStart} onClick={handleClick}><TiltedRectIcon /></ToggleButton>
-                      <ToggleButton size="large" value={SHAPE_TYPES.FOLDED_RECT} shape={SHAPE_TYPES.FOLDED_RECT} draggable onDragStart={handleDragStart} onClick={handleClick}><FoldedRectIcon /></ToggleButton>
-                      <ToggleButton size="large" value={SHAPE_TYPES.C_RECT} shape={SHAPE_TYPES.C_RECT} draggable onDragStart={handleDragStart} onClick={handleClick}><CRectIcon /></ToggleButton>
-                      <ToggleButton size="large" value={SHAPE_TYPES.TOP_LEFT_RECT} shape={SHAPE_TYPES.TOP_LEFT_RECT} draggable onDragStart={handleDragStart} onClick={handleClick}><TopLeftRectIcon /></ToggleButton>
-                      <ToggleButton size="large" value={SHAPE_TYPES.STAR} shape={SHAPE_TYPES.STAR} draggable onDragStart={handleDragStart} onClick={handleClick}><StarIcon /></ToggleButton>
-                      <ToggleButton size="large" value={SHAPE_TYPES.STAR_MEDIUM} shape={SHAPE_TYPES.STAR_MEDIUM} draggable onDragStart={handleDragStart} onClick={handleClick}><StarMedIcon /></ToggleButton>
-                      <ToggleButton size="large" value={SHAPE_TYPES.STAR_THIN} shape={SHAPE_TYPES.STAR_THIN} draggable onDragStart={handleDragStart} onClick={handleClick}><StarThinIcon /></ToggleButton>
-                    </Paper>
-                  </Fade>
-                )}
-              </Popper>
-            </div>
-          )}
-        </PopupState>
+        <CategoryButton name="Circles" icon={<CirclesIcon />}>
+          <ToggleButton size="large" value={SHAPE_TYPES.CIRCLE} shape={SHAPE_TYPES.CIRCLE} draggable onDragStart={handleDragStart} onClick={handleClick}><CircleOutlined /></ToggleButton>
+          <ToggleButton size="large" value={SHAPE_TYPES.SEMICIRCLE} shape={SHAPE_TYPES.SEMICIRCLE} draggable onDragStart={handleDragStart} onClick={handleClick}><SemicircleIcon /></ToggleButton>
+          <ToggleButton size="large" value={SHAPE_TYPES.C_CIRCLE} shape={SHAPE_TYPES.C_CIRCLE} draggable onDragStart={handleDragStart} onClick={handleClick}><CCircleIcon /></ToggleButton>
+          <ToggleButton size="large" value={SHAPE_TYPES.CIRCLE_20MIN} shape={SHAPE_TYPES.CIRCLE_20MIN} draggable onDragStart={handleDragStart} onClick={handleClick}><Circle20MinIcon /></ToggleButton>
+          <ToggleButton size="large" value={SHAPE_TYPES.QUARTER_CIRCLE} shape={SHAPE_TYPES.QUARTER_CIRCLE} draggable onDragStart={handleDragStart} onClick={handleClick}><QuarterCircleIcon /></ToggleButton>
+          <ToggleButton size="large" value={SHAPE_TYPES.CIRCLE_10MIN} shape={SHAPE_TYPES.CIRCLE_10MIN} draggable onDragStart={handleDragStart} onClick={handleClick}><Circle10MinIcon /></ToggleButton>
+          <ToggleButton size="large" value={SHAPE_TYPES.ELLIPSE_VERTICAL} shape={SHAPE_TYPES.ELLIPSE_VERTICAL} draggable onDragStart={handleDragStart} onClick={handleClick}><EllipseVerticalIcon /></ToggleButton>
+          <ToggleButton size="large" value={SHAPE_TYPES.ELLIPSE_DIAGONAL} shape={SHAPE_TYPES.ELLIPSE_DIAGONAL} draggable onDragStart={handleDragStart} onClick={handleClick}><EllipseDiagonalIcon /></ToggleButton>
+          <ToggleButton size="large" value={SHAPE_TYPES.ELLIPSE_FOLDED} shape={SHAPE_TYPES.ELLIPSE_FOLDED} draggable onDragStart={handleDragStart} onClick={handleClick}><FoldedEllipseIcon /></ToggleButton>
+        </CategoryButton>
 
-        <PopupState variant="popper" popupId="demo-popup-popper">
-          {(popupState) => (
-            <div>
-              <ToggleButton {...bindToggle(popupState)} size="large" value={"crosses"} shape={"crosses"}><CrossesIcon /></ToggleButton>
-              <Popper {...bindPopper(popupState)} transition placement="right">
-                {({ TransitionProps }) => (
-                  <Fade {...TransitionProps} timeout={350}>
-                    <Paper>
-                      <ToggleButton size="large" value={SHAPE_TYPES.PLUS} shape={SHAPE_TYPES.PLUS} draggable onDragStart={handleDragStart} onClick={handleClick}><PlusIcon /></ToggleButton>
-                      <ToggleButton size="large" value={SHAPE_TYPES.CROSS} shape={SHAPE_TYPES.CROSS} draggable onDragStart={handleDragStart} onClick={handleClick}><CrossIcon /></ToggleButton>
-                      <ToggleButton size="large" value={SHAPE_TYPES.ORTHOGONAL} shape={SHAPE_TYPES.ORTHOGONAL} draggable onDragStart={handleDragStart} onClick={handleClick}><OrthogonalIcon /></ToggleButton>
-                    </Paper>
-                  </Fade>
-                )}
-              </Popper>
-            </div>
-          )}
-        </PopupState>
+        <CategoryButton name="Triangles" icon={<TrianglesIcon />}>
+          <ToggleButton size="large" value={SHAPE_TYPES.SIMPLE_TRI} shape={SHAPE_TYPES.SIMPLE_TRI} draggable onDragStart={handleDragStart} onClick={handleClick}><SimpleTriangleIcon /></ToggleButton>
+          <ToggleButton size="large" value={SHAPE_TYPES.SIMPLE_TRI_SMALL} shape={SHAPE_TYPES.SIMPLE_TRI_SMALL} draggable onDragStart={handleDragStart} onClick={handleClick}><SimpleTriangleSmallIcon /></ToggleButton>
+          <ToggleButton size="large" value={SHAPE_TYPES.SIMPLE_TRI_BIG} shape={SHAPE_TYPES.SIMPLE_TRI_BIG} draggable onDragStart={handleDragStart} onClick={handleClick}><SimpleTriangleBigIcon /></ToggleButton>
+          <ToggleButton size="large" value={SHAPE_TYPES.SQUASHED_TRI} shape={SHAPE_TYPES.SQUASHED_TRI} draggable onDragStart={handleDragStart} onClick={handleClick}><SquashedTriangleIcon /></ToggleButton>
+          <ToggleButton size="large" value={SHAPE_TYPES.RIGHT_TRI} shape={SHAPE_TYPES.RIGHT_TRI} draggable onDragStart={handleDragStart} onClick={handleClick}><RightTriangleIcon /></ToggleButton>
+          <ToggleButton size="large" value={SHAPE_TYPES.RIGHT_TRI_THIN} shape={SHAPE_TYPES.RIGHT_TRI_THIN} draggable onDragStart={handleDragStart} onClick={handleClick}><RightTriangleThinIcon /></ToggleButton>
+          <ToggleButton size="large" value={SHAPE_TYPES.OBTUSE_TRI_SMALL} shape={SHAPE_TYPES.OBTUSE_TRI_SMALL} draggable onDragStart={handleDragStart} onClick={handleClick}><ObtuseTriangleSmallIcon /></ToggleButton>
+          <ToggleButton size="large" value={SHAPE_TYPES.OBTUSE_TRI_BIG} shape={SHAPE_TYPES.OBTUSE_TRI_BIG} draggable onDragStart={handleDragStart} onClick={handleClick}><ObtuseTriangleBigIcon /></ToggleButton>
+          <ToggleButton size="large" value={SHAPE_TYPES.OBTUSE_TRI_FOLDED} shape={SHAPE_TYPES.OBTUSE_TRI_FOLDED} draggable onDragStart={handleDragStart} onClick={handleClick}><FoldedTriangleIcon /></ToggleButton>
+          <ToggleButton size="large" value={SHAPE_TYPES.OBTUSE_TRI_SLIGHT} shape={SHAPE_TYPES.OBTUSE_TRI_SLIGHT} draggable onDragStart={handleDragStart} onClick={handleClick}><ObtuseTriangleSlightIcon /></ToggleButton>
+          <ToggleButton size="large" value={SHAPE_TYPES.CONE} shape={SHAPE_TYPES.CONE} draggable onDragStart={handleDragStart} onClick={handleClick}><ConeIcon /></ToggleButton>
 
-        <PopupState variant="popper" popupId="demo-popup-popper">
-          {(popupState) => (
-            <div>
-              <ToggleButton {...bindToggle(popupState)} size="large" value={"circles"} shape={"circles"}> <CirclesIcon /> </ToggleButton>
-              <Popper {...bindPopper(popupState)} transition placement="right">
-                {({ TransitionProps }) => (
-                  <Fade {...TransitionProps} timeout={350}>
-                    <Paper>
-                      <ToggleButton size="large" value={SHAPE_TYPES.CIRCLE} shape={SHAPE_TYPES.CIRCLE} draggable onDragStart={handleDragStart} onClick={handleClick}><CircleOutlined /></ToggleButton>
-                      <ToggleButton size="large" value={SHAPE_TYPES.SEMICIRCLE} shape={SHAPE_TYPES.SEMICIRCLE} draggable onDragStart={handleDragStart} onClick={handleClick}><SemicircleIcon /></ToggleButton>
-                      <ToggleButton size="large" value={SHAPE_TYPES.C_CIRCLE} shape={SHAPE_TYPES.C_CIRCLE} draggable onDragStart={handleDragStart} onClick={handleClick}><CCircleIcon /></ToggleButton>
-                      <ToggleButton size="large" value={SHAPE_TYPES.CIRCLE_20MIN} shape={SHAPE_TYPES.CIRCLE_20MIN} draggable onDragStart={handleDragStart} onClick={handleClick}><Circle20MinIcon /></ToggleButton>
-                      <ToggleButton size="large" value={SHAPE_TYPES.QUARTER_CIRCLE} shape={SHAPE_TYPES.QUARTER_CIRCLE} draggable onDragStart={handleDragStart} onClick={handleClick}><QuarterCircleIcon /></ToggleButton>
-                      <ToggleButton size="large" value={SHAPE_TYPES.CIRCLE_10MIN} shape={SHAPE_TYPES.CIRCLE_10MIN} draggable onDragStart={handleDragStart} onClick={handleClick}><Circle10MinIcon /></ToggleButton>
-                      <ToggleButton size="large" value={SHAPE_TYPES.ELLIPSE_VERTICAL} shape={SHAPE_TYPES.ELLIPSE_VERTICAL} draggable onDragStart={handleDragStart} onClick={handleClick}><EllipseVerticalIcon /></ToggleButton>
-                      <ToggleButton size="large" value={SHAPE_TYPES.ELLIPSE_DIAGONAL} shape={SHAPE_TYPES.ELLIPSE_DIAGONAL} draggable onDragStart={handleDragStart} onClick={handleClick}><EllipseDiagonalIcon /></ToggleButton>
-                      <ToggleButton size="large" value={SHAPE_TYPES.ELLIPSE_FOLDED} shape={SHAPE_TYPES.ELLIPSE_FOLDED} draggable onDragStart={handleDragStart} onClick={handleClick}><FoldedEllipseIcon /></ToggleButton>
-                    </Paper>
-                  </Fade>
-                )}
-              </Popper>
-            </div>
-          )}
-        </PopupState>
+        </CategoryButton>
 
-        <PopupState variant="popper" popupId="demo-popup-popper">
-          {(popupState) => (
-            <div>
-              <ToggleButton {...bindToggle(popupState)} size="large" value={"triangles"} shape={"triangles"}> <TrianglesIcon /> </ToggleButton>
-              <Popper {...bindPopper(popupState)} transition placement="right">
-                {({ TransitionProps }) => (
-                  <Fade {...TransitionProps} timeout={350}>
-                    <Paper>
-                      <ToggleButton size="large" value={SHAPE_TYPES.SIMPLE_TRI} shape={SHAPE_TYPES.SIMPLE_TRI} draggable onDragStart={handleDragStart} onClick={handleClick}><SimpleTriangleIcon /></ToggleButton>
-                      <ToggleButton size="large" value={SHAPE_TYPES.SIMPLE_TRI_SMALL} shape={SHAPE_TYPES.SIMPLE_TRI_SMALL} draggable onDragStart={handleDragStart} onClick={handleClick}><SimpleTriangleSmallIcon  /></ToggleButton>
-                      <ToggleButton size="large" value={SHAPE_TYPES.SIMPLE_TRI_BIG} shape={SHAPE_TYPES.SIMPLE_TRI_BIG} draggable onDragStart={handleDragStart} onClick={handleClick}><SimpleTriangleBigIcon /></ToggleButton>
-                      <ToggleButton size="large" value={SHAPE_TYPES.SQUASHED_TRI} shape={SHAPE_TYPES.SQUASHED_TRI} draggable onDragStart={handleDragStart} onClick={handleClick}><SquashedTriangleIcon /></ToggleButton>
-                      <ToggleButton size="large" value={SHAPE_TYPES.RIGHT_TRI} shape={SHAPE_TYPES.RIGHT_TRI} draggable onDragStart={handleDragStart} onClick={handleClick}><RightTriangleIcon /></ToggleButton>
-                      <ToggleButton size="large" value={SHAPE_TYPES.RIGHT_TRI_THIN} shape={SHAPE_TYPES.RIGHT_TRI_THIN} draggable onDragStart={handleDragStart} onClick={handleClick}><RightTriangleThinIcon /></ToggleButton>
-                      <ToggleButton size="large" value={SHAPE_TYPES.OBTUSE_TRI_SMALL} shape={SHAPE_TYPES.OBTUSE_TRI_SMALL} draggable onDragStart={handleDragStart} onClick={handleClick}><ObtuseTriangleSmallIcon /></ToggleButton>
-                      <ToggleButton size="large" value={SHAPE_TYPES.OBTUSE_TRI_BIG} shape={SHAPE_TYPES.OBTUSE_TRI_BIG} draggable onDragStart={handleDragStart} onClick={handleClick}><ObtuseTriangleBigIcon /></ToggleButton>
-                      <ToggleButton size="large" value={SHAPE_TYPES.OBTUSE_TRI_FOLDED} shape={SHAPE_TYPES.OBTUSE_TRI_FOLDED} draggable onDragStart={handleDragStart} onClick={handleClick}><FoldedTriangleIcon /></ToggleButton>
-                      <ToggleButton size="large" value={SHAPE_TYPES.OBTUSE_TRI_SLIGHT} shape={SHAPE_TYPES.OBTUSE_TRI_SLIGHT} draggable onDragStart={handleDragStart} onClick={handleClick}><ObtuseTriangleSlightIcon /></ToggleButton>
-                      <ToggleButton size="large" value={SHAPE_TYPES.CONE} shape={SHAPE_TYPES.CONE} draggable onDragStart={handleDragStart} onClick={handleClick}><ConeIcon /></ToggleButton>
-                    </Paper>
-                  </Fade>
-                )}
-              </Popper>
-            </div>
-          )}
-        </PopupState>
+        <CategoryButton name="Hexagons" icon={<TrianglesIcon />}>
+          <ToggleButton size="large" value={SHAPE_TYPES.HEXAGON} shape={SHAPE_TYPES.HEXAGON} draggable onDragStart={handleDragStart} onClick={handleClick}><HexagonOutlined /></ToggleButton>
+          <ToggleButton size="large" value={SHAPE_TYPES.SEMIHEXAGON} shape={SHAPE_TYPES.SEMIHEXAGON} draggable onDragStart={handleDragStart} onClick={handleClick}><SemihexagonIcon /></ToggleButton>
+          <ToggleButton size="large" value={SHAPE_TYPES.C_HEXAGON} shape={SHAPE_TYPES.C_HEXAGON} draggable onDragStart={handleDragStart} onClick={handleClick}><CHexagonIcon /></ToggleButton>
+          <ToggleButton size="large" value={SHAPE_TYPES.RHOMBUS} shape={SHAPE_TYPES.RHOMBUS} draggable onDragStart={handleDragStart} onClick={handleClick}><RhombusIcon /></ToggleButton>
+        </CategoryButton>
 
-        <PopupState variant="popper" popupId="demo-popup-popper">
-          {(popupState) => (
-            <div>
-              <ToggleButton {...bindToggle(popupState)} size="large" value={"hexagons"} shape={"hexagons"}> <HexagonsIcon /> </ToggleButton>
-              <Popper {...bindPopper(popupState)} transition placement="right">
-                {({ TransitionProps }) => (
-                  <Fade {...TransitionProps} timeout={350}>
-                    <Paper>
-                      <ToggleButton size="large" value={SHAPE_TYPES.HEXAGON} shape={SHAPE_TYPES.HEXAGON} draggable onDragStart={handleDragStart} onClick={handleClick}><HexagonOutlined /></ToggleButton>
-                      <ToggleButton size="large" value={SHAPE_TYPES.SEMIHEXAGON} shape={SHAPE_TYPES.SEMIHEXAGON} draggable onDragStart={handleDragStart} onClick={handleClick}><SemihexagonIcon /></ToggleButton>
-                      <ToggleButton size="large" value={SHAPE_TYPES.C_HEXAGON} shape={SHAPE_TYPES.C_HEXAGON} draggable onDragStart={handleDragStart} onClick={handleClick}><CHexagonIcon /></ToggleButton>
-                      <ToggleButton size="large" value={SHAPE_TYPES.RHOMBUS} shape={SHAPE_TYPES.RHOMBUS} draggable onDragStart={handleDragStart} onClick={handleClick}><RhombusIcon /></ToggleButton>
-                    </Paper>
-                  </Fade>
-                )}
-              </Popper>
-            </div>
-          )}
-        </PopupState>
+        <CategoryButton name="Dots" icon={<DotsIcon />}>
+          <ToggleButton size="large" value={SHAPE_TYPES.DOT_HOLLOW} shape={SHAPE_TYPES.DOT_HOLLOW} draggable onDragStart={handleDragStart} onClick={handleClick}><DotHollowIcon /></ToggleButton>
+          <ToggleButton size="large" value={SHAPE_TYPES.DOT_FILLED} shape={SHAPE_TYPES.DOT_FILLED} draggable onDragStart={handleDragStart} onClick={handleClick}><DotFilledIcon /></ToggleButton>
+          <ToggleButton size="large" value={SHAPE_TYPES.DOT4_HOLLOW} shape={SHAPE_TYPES.DOT4_HOLLOW} draggable onDragStart={handleDragStart} onClick={handleClick}><Dot4HollowIcon /></ToggleButton>
+          <ToggleButton size="large" value={SHAPE_TYPES.DOT4_FILLED} shape={SHAPE_TYPES.DOT4_FILLED} draggable onDragStart={handleDragStart} onClick={handleClick}><Dot4FilledIcon /></ToggleButton>
+          <ToggleButton size="large" value={SHAPE_TYPES.DOT_SQUARE_HOLLOW} shape={SHAPE_TYPES.DOT_SQUARE_HOLLOW} draggable onDragStart={handleDragStart} onClick={handleClick}><DotSquareHollowIcon /></ToggleButton>
+          <ToggleButton size="large" value={SHAPE_TYPES.DOT_SQUARE_FILLED} shape={SHAPE_TYPES.DOT_SQUARE_FILLED} draggable onDragStart={handleDragStart} onClick={handleClick}><DotSquareFilledIcon /></ToggleButton>
+          <ToggleButton size="large" value={SHAPE_TYPES.DOT4_SQUARE_HOLLOW} shape={SHAPE_TYPES.DOT4_SQUARE_HOLLOW} draggable onDragStart={handleDragStart} onClick={handleClick}><DotSquare4HollowIcon /></ToggleButton>
+          <ToggleButton size="large" value={SHAPE_TYPES.DOT4_SQUARE_FILLED} shape={SHAPE_TYPES.DOT4_SQUARE_FILLED} draggable onDragStart={handleDragStart} onClick={handleClick}><DotSquare4FilledIcon /></ToggleButton>
+        </CategoryButton>
 
-        <PopupState variant="popper" popupId="demo-popup-popper">
-          {(popupState) => (
-            <div>
-              <ToggleButton {...bindToggle(popupState)} size="large" value={"dots"} shape={"dots"}> <DotsIcon /> </ToggleButton>
-              <Popper {...bindPopper(popupState)} transition placement="right">
-                {({ TransitionProps }) => (
-                  <Fade {...TransitionProps} timeout={350}>
-                    <Paper>
-                      <ToggleButton size="large" value={SHAPE_TYPES.DOT_HOLLOW} shape={SHAPE_TYPES.DOT_HOLLOW} draggable onDragStart={handleDragStart} onClick={handleClick}><DotHollowIcon /></ToggleButton>
-                      <ToggleButton size="large" value={SHAPE_TYPES.DOT_FILLED} shape={SHAPE_TYPES.DOT_FILLED} draggable onDragStart={handleDragStart} onClick={handleClick}><DotFilledIcon /></ToggleButton>
-                      <ToggleButton size="large" value={SHAPE_TYPES.DOT4_HOLLOW} shape={SHAPE_TYPES.DOT4_HOLLOW} draggable onDragStart={handleDragStart} onClick={handleClick}><Dot4HollowIcon /></ToggleButton>
-                      <ToggleButton size="large" value={SHAPE_TYPES.DOT4_FILLED} shape={SHAPE_TYPES.DOT4_FILLED} draggable onDragStart={handleDragStart} onClick={handleClick}><Dot4FilledIcon /></ToggleButton>
-                      <ToggleButton size="large" value={SHAPE_TYPES.DOT_SQUARE_HOLLOW} shape={SHAPE_TYPES.DOT_SQUARE_HOLLOW} draggable onDragStart={handleDragStart} onClick={handleClick}><DotSquareHollowIcon /></ToggleButton>
-                      <ToggleButton size="large" value={SHAPE_TYPES.DOT_SQUARE_FILLED} shape={SHAPE_TYPES.DOT_SQUARE_FILLED} draggable onDragStart={handleDragStart} onClick={handleClick}><DotSquareFilledIcon /></ToggleButton>
-                      <ToggleButton size="large" value={SHAPE_TYPES.DOT4_SQUARE_HOLLOW} shape={SHAPE_TYPES.DOT4_SQUARE_HOLLOW} draggable onDragStart={handleDragStart} onClick={handleClick}><DotSquare4HollowIcon /></ToggleButton>
-                      <ToggleButton size="large" value={SHAPE_TYPES.DOT4_SQUARE_FILLED} shape={SHAPE_TYPES.DOT4_SQUARE_FILLED} draggable onDragStart={handleDragStart} onClick={handleClick}><DotSquare4FilledIcon /></ToggleButton>
-                    </Paper>
-                  </Fade>
-                )}
-              </Popper>
-            </div>
-          )}
-        </PopupState>
      
 
         <Box>
