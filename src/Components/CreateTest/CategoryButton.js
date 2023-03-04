@@ -16,7 +16,7 @@ export function CategoryButton(props) {
           <Popper {...bindPopper(popupState)} transition placement="right-start">
             {({ TransitionProps }) => (
               <Fade {...TransitionProps} timeout={350}>
-                <Paper sx={{ p: 1, width: '15vh' }}>
+                <Paper sx={{ p: 1, width: '15vh' }} elevation={3}>
                   <Grid container columns={12} gap={1} sx={{ justifyContent: 'center' }}>
 
                     {props.children.map((c,i) => <Grid key={`${value}-${i}`} item xs={5} sx={{ textAlign: 'center' }}>

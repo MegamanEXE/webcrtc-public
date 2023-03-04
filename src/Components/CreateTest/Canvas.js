@@ -118,7 +118,7 @@ export default function Canvas() {
         </Box>
 
         <Box id="canvasSubmit">
-          <Button variant="contained" color="success" onClick={handleSubmit}>Submit</Button>
+          <Button variant="contained" color="success" size="large" onClick={handleSubmit}>Submit</Button>
         </Box>
 
       </Box>
