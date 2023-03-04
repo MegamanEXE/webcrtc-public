@@ -11,12 +11,15 @@ import { createPortal } from "react-dom";
 
 export default function Matrix(props) {
   const [dimensions, setDimensions] = useState({ width: null, height: null });
+  const [freehandLines, setFreehandLines] = useState([]);
+
   const selectedShapeID = props.selectedShapeID;
   const setSelectedShapeID = props.setSelectedShapeID;
   const setSelectedMatrix = props.setSelectedMatrix;
   const clipboard = props.clipboard;
   const setClipboard = props.setClipboard;
   const stageNode = props.stageNode;
+  const isDrawing = useRef(false);
   const divRef = useRef(null);
   const stageRef = useRef(null);
   const layerRef = useRef(null);
@@ -111,8 +114,6 @@ export default function Matrix(props) {
   },[stageRef.current]);
 
 
-  
-
   //Handle canvas click
   const handleCanvasClick = () => {
     setSelectedMatrix(matrixNumber);
@@ -120,12 +121,54 @@ export default function Matrix(props) {
     stageNode.current = stageRef.current;
   }
 
+  //////////////////////////////////////
+  //Freehand drawing
+  /////////////////////////////////////
+  const handleMouseDown = (e) => {
+    if(props.tool.current === null) return;
+
+    isDrawing.current = true;
+    const pos = stageRef.current.getPointerPosition();
+    setFreehandLines([...freehandLines, {points: [pos.x, pos.y] }]);
+  };
+
+  const handleMouseMove = (e) => {
+    if (!isDrawing.current || props.tool.current===null) {
+      return;
+    }
+    const stage = stageRef.current;
+    const point = stage.getPointerPosition();
+    let lastLine = freehandLines[freehandLines.length - 1];
+    // add point
+    // console.log(lastLine)
+    lastLine.points = lastLine.points.concat([point.x, point.y]);
+
+    // replace last
+    freehandLines.splice(freehandLines.length - 1, 1, lastLine);
+    setFreehandLines(freehandLines.concat());
+  };
+
+  const handleMouseUp = () => {
+    if (props.tool.current === null) return;
+
+    isDrawing.current = false;
+
+    //put into main shapes array
+    props.setShapes(ps => produce(ps,d=>{
+      d[matrixNumber].push({id:nanoid(), type:SHAPE_TYPES.FREEHAND_STROKE, points:freehandLines[0].points})
+    }))
+    setFreehandLines([]);
+  };
+  /////////////////////////////////////
+
   return (
     <Box id={props.id} className={props.selectedMatrix === matrixNumber ? "matrix selected" : "matrix"} ref={divRef}
       onDragOver={handleDragOver} onDrop={handleDrop}
       sx={{ width: matrix_size, height: matrix_size }}
     >
-      <Stage ref={stageRef} className="stage" width={dimensions.width} height={dimensions.height} onClick={handleCanvasClick}>
+      <Stage ref={stageRef} className="stage" 
+        width={dimensions.width} height={dimensions.height} 
+        onClick={handleCanvasClick} onMouseDown={handleMouseDown} onMousemove={handleMouseMove} onMouseup={handleMouseUp}>
         <Layer className="layer" ref={layerRef}>
 
           <Rect class="bg-color-rect" width={matrix_size} height={matrix_size} x={0} y={0} fill="white" />{/* background color, do not remove */}
@@ -138,6 +181,19 @@ export default function Matrix(props) {
             layerRef={layerRef}
             shapeNode={props.shapeNode}
             {...s} />)}
+
+          {freehandLines.map((line, i) => (
+            <Line
+              key={i}
+              points={line.points}
+              stroke="#000000"
+              strokeWidth={5}
+              tension={0.5}
+              lineCap="round"
+              lineJoin="round"
+              bezier="true"
+            />
+          ))}
 
         </Layer>
       </Stage>

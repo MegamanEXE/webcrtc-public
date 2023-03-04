@@ -1,8 +1,8 @@
-import { Circle, CircleOutlined, ContentPaste, CopyAll, DiamondOutlined, Hexagon, HexagonOutlined, Icecream, LineStyle, Padding, RotateRight, Square, SquareOutlined, Texture } from "@mui/icons-material";
+import { Brush, Circle, CircleOutlined, ContentPaste, CopyAll, DiamondOutlined, Hexagon, HexagonOutlined, Icecream, LineStyle, Padding, RotateRight, Square, SquareOutlined, Texture } from "@mui/icons-material";
 import { Button, Fade, Grid, IconButton, Menu, MenuItem, Paper, Popover, Popper, ToggleButton, Tooltip, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import produce from "immer";
-import { SHAPE_ACTIONS, SHAPE_TYPES, TEXTURES } from "./ShapesData";
+import { SHAPE_ACTIONS, SHAPE_TYPES, TEXTURES, TOOLS } from "./ShapesData";
 import LineWeightIcon from '@mui/icons-material/LineWeight';
 import LineStyleIcon from '@mui/icons-material/LineStyle';
 import { TbArrowsMaximize, TbArrowsMinimize, TbFlipHorizontal, TbFlipVertical, TbMaximize, TbMinusVertical, TbTriangle } from "react-icons/tb"
@@ -53,6 +53,9 @@ const handleDragStart = (event) => {
 
 
 export default function Toolbox(props) {
+  const [brushToggle, setBrushToggle] = useState(false);
+
+
   const selectedShapeID = props.selectedShapeID;
   const setSelectedShapeID = props.setSelectedShapeID; //Only to remove the transformer before a screenshot is taken for clipboard, used nowhere else
   const shapes = props.shapes;
@@ -270,11 +273,14 @@ export default function Toolbox(props) {
       setShapes(prevState => produce(prevState, (draft) => {
         draft[selectedMatrix].push({ id: nanoid(), ...randomPosition, ...ShapeObject[type] });
       }));
-
-    }
+    } 
   }
 
-  
+
+  const handleBrush = (e) => {
+    props.tool.current = (props.tool.current === null ? TOOLS.MAGIC_BRUSH : null);
+    setBrushToggle(!brushToggle);
+  }
 
 
   return (
@@ -354,6 +360,8 @@ export default function Toolbox(props) {
           <ToggleButton size="large" value={SHAPE_TYPES.DOT4_SQUARE_HOLLOW} shape={SHAPE_TYPES.DOT4_SQUARE_HOLLOW} draggable onDragStart={handleDragStart} onClick={handleClick}><DotSquare4HollowIcon /></ToggleButton>
           <ToggleButton size="large" value={SHAPE_TYPES.DOT4_SQUARE_FILLED} shape={SHAPE_TYPES.DOT4_SQUARE_FILLED} draggable onDragStart={handleDragStart} onClick={handleClick}><DotSquare4FilledIcon /></ToggleButton>
         </CategoryButton>
+
+          <ToggleButton size="large" value={TOOLS.MAGIC_BRUSH} shape={TOOLS.MAGIC_BRUSH} selected={brushToggle} onClick={handleBrush}><Brush /></ToggleButton>
 
      </Box>
 

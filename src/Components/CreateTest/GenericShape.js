@@ -244,11 +244,13 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
   }
   
   //MAIN return
-
-  
-
   switch (props.type) {
-
+    
+    //Note: freehand_stroke does not have {...defaultProps} or a transformer, that is intentional
+    case SHAPE_TYPES.FREEHAND_STROKE:
+      return <>
+        <Line ref={shapeRef} {...props} stroke="#000000" strokeWidth={5} tension={0.5} lineCap="round" lineJoin="round" />
+      </>
 
     case SHAPE_TYPES.SQUARE:
       return <>

@@ -64,6 +64,9 @@ export default function Canvas() {
   //Submission
   const [modalOpen, setModalOpen] = useState(false);
 
+  
+  const tool = useRef(null); //can only be null or TOOLS.NORMAL_BRUSH/TOOLS.MAGIC_BRUSH
+
 
   const passProps = {
     selectedShapeID: selectedShapeID, setSelectedShapeID: setSelectedShapeID,
@@ -71,18 +74,18 @@ export default function Canvas() {
     selectedMatrix: selectedMatrix,
     shapeNode: shapeNode, stageNode: stageNode,
     clipboard: clipboard, setClipboard: setClipboard,
+    tool: tool,
   }
 
   //Take screenshots and open modal
   const handleSubmit = useCallback(() => {
     for (const node in globalStageNodes.current) {
-      setScreenshots(ps => produce(ps,d=>{
+      setScreenshots(ps => produce(ps, d => {
         d[node] = globalStageNodes.current[node].toDataURL();
       }))
     }
     setModalOpen(true);
-    },
-    [screenshots],
+  },[],
   )
   
 
@@ -96,6 +99,7 @@ export default function Canvas() {
           shapeNode={shapeNode} stageNode={stageNode}
           clipboard={clipboard} setClipboard={setClipboard}
           globalStageNodes={globalStageNodes}
+          tool={tool}
         />
       </Grid>);
     }

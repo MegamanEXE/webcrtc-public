@@ -70,9 +70,7 @@ export const SHAPE_TYPES = {
   DOT4_SQUARE_HOLLOW: "dot_square_4x4_hollow",
   DOT4_SQUARE_FILLED: "dot_square_4x4_filled",
 
-
-
-
+  FREEHAND_STROKE: "freehand_stroke"
 
 };
 
@@ -589,6 +587,11 @@ export const SHAPE_ACTIONS = {
   FILL_TEXTURE: "fill_texture",
   COPY: "copy",
   PASTE: "paste",
+}
+
+export const TOOLS = {
+  MAGIC_BRUSH: "magic_brush",
+  NORMAL_BRUSH: "normal_brush"
 }
 
 export const TEXTURES = {
