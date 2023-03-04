@@ -21,12 +21,22 @@ const style = {
 
 export function SubmitModal(props){
   const [modalState, setModalState] = useState("submit"); //only "submit" or "thanks"
+  const screenshots = props.screenshots;
 
   const submissionimages = () => {
+    if(screenshots['1']===null) return;
+
     let si = [];
-    for(let i=0; i<9; i++){
+    for(let i=1; i<=9; i++){
       si.push(<Grid item className="gridMatrix" key={`submission-${i}`}  xs={3} >
-        <Image  src="data:," bgColor={"lightgray"} width="150px" height="150px" style={{ border: '2px solid gray' }} alt={`subImage-${i}`} />
+        <Image src={screenshots[`${i}`]} bgColor={"lightgray"} 
+        width="150px" height="150px" 
+        style={{ border: '2px solid gray' }} 
+        alt={`subImage-${i}`} 
+        showLoading
+        shift="left"
+        duration={225}
+        />
       </Grid>);
     }
     return si;

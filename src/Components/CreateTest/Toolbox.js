@@ -243,7 +243,7 @@ export default function Toolbox(props) {
   //HANDLE COPY
   //Copies the currently selected MATRIX (not shape) and puts it into clipboard
   const handleCopy = () => {
-    setSelectedShapeID(null); //otherwise the bounding box shows up in the thumbnail lol
+    setSelectedShapeID(null); //attempt to get rid of transformers that show up in screenshot. Fails atm
     const thumbnail = stageNode.current.toDataURL();
     const entry = { thumbnail: thumbnail, data: shapes[selectedMatrix] }
 

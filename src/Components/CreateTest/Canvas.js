@@ -9,6 +9,7 @@ import { nanoid } from "nanoid";
 import { DEFAULTS, SHAPE_TYPES } from "./ShapesData";
 import Matrix from "./Matrix";
 import { SubmitModal } from "./SubmitModal";
+import { useCallback } from "react";
 
 export default function Canvas() {
 
@@ -16,8 +17,7 @@ export default function Canvas() {
   const shapeNode = useRef(null); //Avoid using unnecesarrily, update state instead of calling Konva node methods to set anything
   const stageNode = useRef(null); //stageRef alreadys exists in Matrix.js so I don't want to mess with it because of past experience, this is like a global stageRef
 
-  //Lift these up to CreateTestContainer later for submit button
-  //Nothing wrong with being explicit. This way is easier to debug
+  //Nothing wrong with being explicit like this. This just looked cleaner when I began.
   const [shapes, setShapes] = useState({
     '1': [],
     '2': [],
@@ -28,6 +28,19 @@ export default function Canvas() {
     '7': [],
     '8': [],
     '9': [],
+  });
+
+  //exclusively to make screenshots
+  const globalStageNodes = useRef({
+    '1': null,
+    '2': null,
+    '3': null,
+    '4': null,
+    '5': null,
+    '6': null,
+    '7': null,
+    '8': null,
+    '9': null,
   });
 
   const [screenshots, setScreenshots] = useState({
@@ -59,11 +72,16 @@ export default function Canvas() {
     clipboard: clipboard, setClipboard: setClipboard,
   }
 
-  const handleSubmit = () => {
-    setModalOpen(true);
-
-    //Make screenshots of shapes
-  }
+  //Take screenshots and open modal
+  const handleSubmit = useCallback(() => {
+      for (const node in globalStageNodes.current) {
+        screenshots[node] = globalStageNodes.current[node].toDataURL();
+      }
+      setModalOpen(true);
+    },
+    [screenshots],
+  )
+  
 
   const generateGridItems = () => {
     let gridItems = []
@@ -74,6 +92,7 @@ export default function Canvas() {
           selectedMatrix={selectedMatrix} setSelectedMatrix={setSelectedMatrix}
           shapeNode={shapeNode} stageNode={stageNode}
           clipboard={clipboard} setClipboard={setClipboard}
+          globalStageNodes={globalStageNodes}
         />
       </Grid>);
     }
@@ -109,7 +128,7 @@ export default function Canvas() {
         <RightBar {...passProps} />
       </Box>
 
-    {modalOpen && <SubmitModal modalOpen={modalOpen} setModalOpen={setModalOpen}  />}
+    {modalOpen && <SubmitModal modalOpen={modalOpen} setModalOpen={setModalOpen} screenshots={screenshots} />}
     </Box>
     
     );

@@ -17,14 +17,11 @@ export default function ClipboardItem(props){
 
   const [hovered, setHovered] = useState(false);
   const handleClick = (e) => {
-
-    console.log(e)
     if (e.target.id === "hoverDiv") {
       //Because you can't have duplicate id/key
       let newShapes = data.map(s => {
         return { ...s, id: nanoid() }
       })
-
 
       setShapes(prevState => produce(prevState, (draft) => {
         draft[selectedMatrix].push(...newShapes);

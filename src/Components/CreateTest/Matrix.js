@@ -105,9 +105,13 @@ export default function Matrix(props) {
 
 
 
+  //Update the relevant stageRef in globalStageNodes (again, used exclusively to make screenshots)
+  useEffect(() => {
+    props.globalStageNodes.current[matrixNumber] = stageRef.current;  
+  },[stageRef.current]);
+
+
   
-
-
 
   //Handle canvas click
   const handleCanvasClick = () => {
