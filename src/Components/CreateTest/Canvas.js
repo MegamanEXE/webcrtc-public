@@ -1,4 +1,4 @@
-import { Box, Grid, Paper } from "@mui/material";
+import { Box, Button, Grid, Paper } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 import { Circle, Layer, Rect, Stage } from "react-konva";
 import '../../App.css'
@@ -8,6 +8,7 @@ import produce from "immer";
 import { nanoid } from "nanoid";
 import { DEFAULTS, SHAPE_TYPES } from "./ShapesData";
 import Matrix from "./Matrix";
+import { SubmitModal } from "./SubmitModal";
 
 export default function Canvas() {
 
@@ -29,10 +30,25 @@ export default function Canvas() {
     '9': [],
   });
 
+  const [screenshots, setScreenshots] = useState({
+    '1': null,
+    '2': null,
+    '3': null,
+    '4': null,
+    '5': null,
+    '6': null,
+    '7': null,
+    '8': null,
+    '9': null,
+  });
+
   //Set this in events to properly update what matrix is being used. Is helpful in general
   //to implement matrix features. Remember, a proper value for this is a string, not an int
   const [selectedMatrix, setSelectedMatrix] = useState("1");
   const [clipboard, setClipboard] = useState([]);
+
+  //Submission
+  const [modalOpen, setModalOpen] = useState(false);
 
 
   const passProps = {
@@ -41,6 +57,12 @@ export default function Canvas() {
     selectedMatrix: selectedMatrix,
     shapeNode: shapeNode, stageNode: stageNode,
     clipboard: clipboard, setClipboard: setClipboard,
+  }
+
+  const handleSubmit = () => {
+    setModalOpen(true);
+
+    //Make screenshots of shapes
   }
 
   const generateGridItems = () => {
@@ -60,8 +82,6 @@ export default function Canvas() {
   }
 
 
-
-
   return (
     <Box id="canvasContainer">
 
@@ -70,11 +90,17 @@ export default function Canvas() {
       </Box>
 
 
-      <Box id="canvasWorkspace" my={1.5} p={1.5} >
-        <Grid container spacing={2} columns={12}>
-          {generateGridItems()}
-        </Grid>
 
+      <Box id="canvasMiddleCol">
+        <Box id="canvasWorkspace" my={1.5} p={1.5} >
+          <Grid container spacing={2} columns={12}>
+            {generateGridItems()}
+          </Grid>
+        </Box>
+
+        <Box id="canvasSubmit">
+          <Button variant="contained" color="success" onClick={handleSubmit}>Submit</Button>
+        </Box>
 
       </Box>
 
@@ -83,8 +109,10 @@ export default function Canvas() {
         <RightBar {...passProps} />
       </Box>
 
-
-    </Box>);
+    {modalOpen && <SubmitModal modalOpen={modalOpen} setModalOpen={setModalOpen}  />}
+    </Box>
+    
+    );
 
 }
 

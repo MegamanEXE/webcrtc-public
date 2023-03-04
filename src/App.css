@@ -411,10 +411,22 @@ a:active {
 
 #toolbox{
   width: 15%;
+  max-height: 95vh;
+}
+
+#canvasMiddleCol {
+  width: 65%;
+  display: flex;
+  flex-direction: column;
+}
+
+#canvasSubmit{
+  align-self: center;
+  
 }
 
 #canvasWorkspace{
-  width: 65%;
+  width: 100%;
   height: 85vh;
 
   border-radius: 4px;
@@ -469,3 +481,22 @@ a:active {
    box-shadow: 0 0 5px grey;
    border-radius: 3px;
  }
+
+#previewMatrix{
+  width: 60%;
+  height: 100%;
+  background-color: #f5f5f5;
+
+  margin: 0 auto;
+  padding: 4em;
+
+  display: flex;
+}
+
+#yesNo{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  column-gap: 0.5em; 
+  row-gap: 0.5em; 
+}

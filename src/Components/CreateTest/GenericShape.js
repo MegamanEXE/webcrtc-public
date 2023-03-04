@@ -56,7 +56,7 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
 
   //Delete shape using context menu
   const deleteShape = () => {
-    console.log("Deleting Shape ", props.id)
+    // console.log("Deleting Shape", props.id)
     const shapeIdx = shapes.findIndex(s => s.id === props.id);
 
     setShapes(prevState => produce(prevState, (draft) => {

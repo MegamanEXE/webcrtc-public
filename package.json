@@ -17,6 +17,7 @@
     "immer": "^9.0.18",
     "konva": "^8.4.2",
     "material-ui-popup-state": "^5.0.4",
+    "mui-image": "^1.0.7",
     "nanoid": "^4.0.1",
     "npm-check-updates": "^16.6.2",
     "react": "^18.2.0",
