@@ -6,8 +6,11 @@ import produce from "immer";
 import { nanoid } from "nanoid";
 import { DEFAULTS, LIMITS, SHAPE_TYPES } from "./ShapesData";
 import GenericShape from "./GenericShape";
-import { cCircleObj, circle10MinObj, circle20MinObj, circleObj, cLineObj, coneObj, cRectObj, crossObj, diamondObj, eightLineObj, ellipseDiagonalObj, ellipseFoldedObj, ellipseVerticalObj, foldedRectObj, obtuseTriBigObj, obtuseTriFoldedObj, obtuseTriSlightObj, obtuseTriSmallObj, obtuseTriThinObj, orthogonalObj, plusObj, quarterCircleObj, rightTriObj, rightTriThinObj, semicircleObj, ShapeObject, simpleTriBigObj, simpleTriObj, simpleTriSmallObj, sLineObj, squareObj, squashedTriObj, starMediumObj, starObj, starThinObj, tallFatRectObj, tallRectObj, tallThinRectObj, tiltedLineObj, tiltedRectObj, topLeftRectObj, verticalLineObj } from "./ShapeObjects";
-import { createPortal } from "react-dom";
+import { ShapeObject } from "./ShapeObjects";
+import GestureRecognizer from '@2players/dollar1-unistroke-recognizer'
+import { ShapeGestures } from "./ShapeGestures";
+
+
 
 export default function Matrix(props) {
   const [dimensions, setDimensions] = useState({ width: null, height: null });
@@ -24,7 +27,14 @@ export default function Matrix(props) {
   const stageRef = useRef(null);
   const layerRef = useRef(null);
 
+  const gr = new GestureRecognizer({ defaultStrokes: false});
   
+  //Add shapes to recognizer
+  useEffect(() => {
+      for(let s in ShapeGestures){
+        gr.add(s,ShapeGestures[s]);
+      }
+  },[gr])
 
 
   const matrix_size = 150;
@@ -152,12 +162,31 @@ export default function Matrix(props) {
     if (props.tool.current === null) return;
 
     isDrawing.current = false;
+    
+
+    //Recognize shape
+    //convert [x1,y1,x2,y2,..] to [{x:x1, y:y1},{x:x2, y:2},...]
+    const oldPoints = freehandLines[0].points;
+    const newPoints = [];
+    for (var i = 0; i < oldPoints.length / 2; i++) {
+      const point = {
+        x: Math.round(oldPoints[i * 2]),
+        y: Math.round(oldPoints[i * 2 + 1]),
+      }
+      newPoints.push(point);
+    }
+    console.log(JSON.stringify(newPoints))
+
+    const t = gr.recognize(newPoints,true);
+    console.log(t)
+
+
 
     //put into main shapes array
     props.setShapes(ps => produce(ps,d=>{
       d[matrixNumber].push({id:nanoid(), type:SHAPE_TYPES.FREEHAND_STROKE, points:freehandLines[0].points})
     }))
-    setFreehandLines([]);
+    setFreehandLines([]); //unistrokes
   };
   /////////////////////////////////////
 

@@ -10,6 +10,7 @@ import { DEFAULTS, SHAPE_TYPES } from "./ShapesData";
 import Matrix from "./Matrix";
 import { SubmitModal } from "./SubmitModal";
 import { useCallback } from "react";
+import { TOOLS } from "./ShapesData";
 
 export default function Canvas() {
 
@@ -65,7 +66,7 @@ export default function Canvas() {
   const [modalOpen, setModalOpen] = useState(false);
 
   
-  const tool = useRef(null); //can only be null or TOOLS.NORMAL_BRUSH/TOOLS.MAGIC_BRUSH
+  const tool = useRef(TOOLS.MAGIC_BRUSH); //can only be null or TOOLS.NORMAL_BRUSH/TOOLS.MAGIC_BRUSH
 
 
   const passProps = {
