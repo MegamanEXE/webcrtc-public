@@ -100,7 +100,6 @@ export function SubmitModal(props){
 
               <Box py={3}>
                 <Typography variant="h6" textAlign="center">You may now safely close this window.</Typography>
-
               </Box>
 
               </Box>
