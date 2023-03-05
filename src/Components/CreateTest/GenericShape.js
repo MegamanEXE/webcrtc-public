@@ -98,6 +98,11 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
 
   //Handle moving shapes, which also updates it in API
   const moveShape = (id, e) => {
+    const prevTool = props.tool.current;
+    props.tool.current = null;
+    props.isDrawing.current = false;
+    
+    
     const shapeIdx = shapes.findIndex(s => s.id === id)
     if (shapeIdx !== -1) {
       setShapes(prevState => produce(prevState, (draft) => { //important distinction for future. Note the lack of { before produce(). If you put {, you'll most probably have to write prevState => {return produce(...)}
@@ -105,10 +110,17 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
         draft[matrixNumber][shapeIdx].y = e.target.y();
       }));
     }
+
+
+    // props.tool.current = prevTool;
   }
 
   //Update shapes in API according to new transformation
   const transformShape = (node, id, e) => {
+    const prevTool = props.tool.current;
+    props.tool.current = null;
+    props.isDrawing.current = false;
+
     const scaleX = node.scaleX();
     const scaleY = node.scaleY();
 
@@ -160,6 +172,9 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
         }
       }));
     }
+
+    // props.tool.current = prevTool;
+
   }
 
   //Mark active
@@ -173,6 +188,10 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
     setSelectedShapeID(props.id);
     setSelectedMatrix(matrixNumber);
     setIsSelected(selectedShapeID === props.id)
+
+    const prevTool = props.tool.current;
+    props.tool.current = null;
+    props.isDrawing.current = false;
   }, [selectedShapeID]
   );
 
@@ -192,11 +211,17 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
 
   //Event handler for moving shapes
   const handleDrag = useCallback((event) => {
+    const prevTool = props.tool.current;
+    props.tool.current = null;
+    props.isDrawing.current = false;
     moveShape(props.id, event);
   }, [props.id]);
 
   //Event handler for transforming shapes
   const handleTransform = useCallback((event) => {
+    const prevTool = props.tool.current;
+    props.tool.current = null;
+    props.isDrawing.current = false;
     transformShape(shapeRef.current, props.id, event);
   }, [props.id]);
 
@@ -249,7 +274,7 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
     //Note: freehand_stroke does not have {...defaultProps} or a transformer, that is intentional
     case SHAPE_TYPES.FREEHAND_STROKE:
       return <>
-        <Line ref={shapeRef} {...props} stroke="#000000" strokeWidth={5} tension={0.5} lineCap="round" lineJoin="round" />
+        <Line ref={shapeRef} {...props} stroke="#000000" strokeWidth={4} tension={0.5} lineCap="round" lineJoin="round" bezier="true" />
       </>
 
     case SHAPE_TYPES.SQUARE:

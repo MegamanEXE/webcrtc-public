@@ -16,7 +16,7 @@ export default function Canvas() {
 
   const [selectedShapeID, setSelectedShapeID] = useState(null);
   const shapeNode = useRef(null); //Avoid using unnecesarrily, update state instead of calling Konva node methods to set anything
-  const stageNode = useRef(null); //stageRef alreadys exists in Matrix.js so I don't want to mess with it because of past experience, this is like a global stageRef
+  const stageNode = useRef(null); //Selected matrix's Konva stage node. 
   //Well, this should have been obsolete after making globalStageNodes and using globalStageNode[selectedMatrix], but I'll just leave it as it is.
 
   //Nothing wrong with being explicit like this. This just looked cleaner when I began.

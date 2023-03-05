@@ -1,15 +1,15 @@
-import { Box, Button, Paper } from "@mui/material";
+import { Box } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
-import { Circle, Layer, Line, Rect, Shape, Stage } from "react-konva";
+import { Layer, Line, Rect, Stage } from "react-konva";
 import '../../App.css'
 import produce from "immer";
 import { nanoid } from "nanoid";
-import { DEFAULTS, LIMITS, SHAPE_TYPES } from "./ShapesData";
+import { DEFAULTS, LIMITS, SHAPE_TYPES, TOOLS } from "./ShapesData";
 import GenericShape from "./GenericShape";
-import { ShapeObject } from "./ShapeObjects";
 // import GestureRecognizer from '@2players/dollar1-unistroke-recognizer'
 import { ShapeGestures } from "./ShapeGestures";
 import { PDollarRecognizer } from "./PDollar";
+import { ShapeObject } from "./ShapeObjects";
 
 
 
@@ -28,12 +28,9 @@ export default function Matrix(props) {
   const stageRef = useRef(null);
   const layerRef = useRef(null);
 
-  //$1 unistroke recognizer
-  // const gr = new GestureRecognizer({ defaultStrokes: false});
-  // for (let s in ShapeGestures) {
-  //   gr.add(s, ShapeGestures[s]);
-  // }
- 
+  const matrix_size = 150;
+  const matrixNumber = props.id.split("-")[1]
+
 
   //$P recognizer
   const pr = new PDollarRecognizer();
@@ -46,11 +43,9 @@ export default function Matrix(props) {
     // console.log(formattedPoints)
     pr.AddGesture(s,formattedPoints);
   }
+
+
   
-
-
-  const matrix_size = 150;
-  const matrixNumber = props.id.split("-")[1]
 
   //Utility debounce function
   function debounce(fn, ms) {
@@ -140,6 +135,7 @@ export default function Matrix(props) {
   const handleCanvasClick = () => {
     setSelectedMatrix(matrixNumber);
     setSelectedShapeID(null);
+    isDrawing.current = false;
     stageNode.current = stageRef.current;
   }
 
@@ -149,57 +145,88 @@ export default function Matrix(props) {
   const handleMouseDown = (e) => {
     if(props.tool.current === null) return;
 
+    setSelectedMatrix(matrixNumber);
+    stageNode.current = stageRef.current;
+
     isDrawing.current = true;
     const pos = stageRef.current.getPointerPosition();
-    setFreehandLines([...freehandLines, {points: [pos.x, pos.y] }]);
+    setFreehandLines([...freehandLines, {points: [pos.x, pos.y] }]); //starting point
   };
 
   const handleMouseMove = (e) => {
     if (!isDrawing.current || props.tool.current===null) {
       return;
     }
+
+    //Utility function
+    const dist = (p1, p2) => {
+      return ((p1.x - p2.x) ** 2 + (p1.y - p2.y) ** 2) ** 0.5;
+    };
+
+
     const stage = stageRef.current;
     const point = stage.getPointerPosition();
     let lastLine = freehandLines[freehandLines.length - 1];
-    // add point
-    // console.log(lastLine)
+   
     lastLine.points = lastLine.points.concat([point.x, point.y]);
 
+    // Smoothing
+    let lastPoint = {
+      x: lastLine.points[lastLine.points.length - 2],
+      y: lastLine.points[lastLine.points.length - 1]
+    };
+    if (dist(lastPoint, point) > 3) {
+      lastLine.points = lastLine.points.concat([point.x, point.y]);
+      
+    }
     // replace last
     freehandLines.splice(freehandLines.length - 1, 1, lastLine);
     setFreehandLines(freehandLines.concat());
+
   };
 
   const handleMouseUp = () => {
     if (props.tool.current === null) return;
 
     isDrawing.current = false;
-  
-    //P-dollar code begins here
-    const oldPoints = freehandLines[0].points;
-    const newPoints = [];
-    for (var i = 0; i < oldPoints.length / 2; i++) {
-      const point = {
-        X: Math.round(oldPoints[i * 2]),
-        Y: Math.round(oldPoints[i * 2 + 1]),
-        ID: 1,
+
+    if (props.tool.current === TOOLS.MAGIC_BRUSH) {
+      //P-dollar code begins here
+      //Format code to [{X:x1, Y:y1, ID:1},...] format
+      const oldPoints = freehandLines[0].points;
+      const newPoints = [];
+      for (var i = 0; i < oldPoints.length / 2; i++) {
+        const point = {
+          X: Math.round(oldPoints[i * 2]),
+          Y: Math.round(oldPoints[i * 2 + 1]),
+          ID: 1,
+        }
+        newPoints.push(point);
       }
-      newPoints.push(point);
-    }
-    console.log(newPoints)
-    if(newPoints.length>1){
-      const r = pr.Recognize(newPoints)
-      console.log(r)
+
+      //Recognize
+      let result = null;
+      if (newPoints.length > 1) {
+        result = pr.Recognize(newPoints)
+        // console.log(result.Name)
+      }
+
+      //If magic brush, get the recognized shape, otherwise add the stroke as is to main state 
+      if(result) createShape({ x: 75, y: 75, shapeType: result.Name });
+
+    } else if (props.tool.current === TOOLS.NORMAL_BRUSH) {
+      props.setShapes(ps => produce(ps, d => {
+        d[matrixNumber].push({ id: nanoid(), type: SHAPE_TYPES.FREEHAND_STROKE, points: freehandLines[0].points })
+      }))
     }
 
-
-    //put into main shapes array
-    props.setShapes(ps => produce(ps,d=>{
-      d[matrixNumber].push({id:nanoid(), type:SHAPE_TYPES.FREEHAND_STROKE, points:freehandLines[0].points})
-    }))
     setFreehandLines([]); //unistrokes
   };
   /////////////////////////////////////
+
+  const handleContextMenu = (e) => {
+    e.evt.preventDefault();
+  }
 
   return (
     <Box id={props.id} className={props.selectedMatrix === matrixNumber ? "matrix selected" : "matrix"} ref={divRef}
@@ -208,7 +235,7 @@ export default function Matrix(props) {
     >
       <Stage ref={stageRef} className="stage" 
         width={dimensions.width} height={dimensions.height} 
-        onClick={handleCanvasClick} onMouseDown={handleMouseDown} onMousemove={handleMouseMove} onMouseup={handleMouseUp}>
+        onClick={handleCanvasClick} onMouseDown={handleMouseDown} onMousemove={handleMouseMove} onMouseup={handleMouseUp} onContextMenu={handleContextMenu}>
         <Layer className="layer" ref={layerRef}>
 
           <Rect class="bg-color-rect" width={matrix_size} height={matrix_size} x={0} y={0} fill="white" />{/* background color, do not remove */}
@@ -220,6 +247,7 @@ export default function Matrix(props) {
             shapes={props.shapes} setShapes={props.setShapes}
             layerRef={layerRef}
             shapeNode={props.shapeNode}
+            isDrawing={isDrawing} tool={props.tool}
             {...s} />)}
 
           {freehandLines.map((line, i) => (
@@ -227,7 +255,7 @@ export default function Matrix(props) {
               key={i}
               points={line.points}
               stroke="#000000"
-              strokeWidth={5}
+              strokeWidth={4}
               tension={0.5}
               lineCap="round"
               lineJoin="round"
