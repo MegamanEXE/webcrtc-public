@@ -143,7 +143,7 @@ export default function Matrix(props) {
   //Freehand drawing
   /////////////////////////////////////
   const handleMouseDown = (e) => {
-    if(props.tool.current === null) return;
+    if(props.tool === null) return;
 
     setSelectedMatrix(matrixNumber);
     stageNode.current = stageRef.current;
@@ -186,11 +186,11 @@ export default function Matrix(props) {
   };
 
   const handleMouseUp = () => {
-    if (props.tool.current === null) return;
+    if (props.tool === null) return;
 
     isDrawing.current = false;
 
-    if (props.tool.current === TOOLS.MAGIC_BRUSH) {
+    if (props.tool === TOOLS.MAGIC_BRUSH) {
       //P-dollar code begins here
       //Format code to [{X:x1, Y:y1, ID:1},...] format
       const oldPoints = freehandLines[0].points;
@@ -214,7 +214,7 @@ export default function Matrix(props) {
       //If magic brush, get the recognized shape, otherwise add the stroke as is to main state 
       if(result) createShape({ x: 75, y: 75, shapeType: result.Name });
 
-    } else if (props.tool.current === TOOLS.NORMAL_BRUSH) {
+    } else if (props.tool === TOOLS.NORMAL_BRUSH) {
       props.setShapes(ps => produce(ps, d => {
         d[matrixNumber].push({ id: nanoid(), type: SHAPE_TYPES.FREEHAND_STROKE, points: freehandLines[0].points })
       }))

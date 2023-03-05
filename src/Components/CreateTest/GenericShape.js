@@ -98,9 +98,7 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
 
   //Handle moving shapes, which also updates it in API
   const moveShape = (id, e) => {
-    const prevTool = props.tool.current;
-    props.tool.current = null;
-    props.isDrawing.current = false;
+    
     
     
     const shapeIdx = shapes.findIndex(s => s.id === id)
@@ -111,16 +109,10 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
       }));
     }
 
-
-    // props.tool.current = prevTool;
   }
 
   //Update shapes in API according to new transformation
   const transformShape = (node, id, e) => {
-    const prevTool = props.tool.current;
-    props.tool.current = null;
-    props.isDrawing.current = false;
-
     const scaleX = node.scaleX();
     const scaleY = node.scaleY();
 
@@ -173,8 +165,6 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
       }));
     }
 
-    // props.tool.current = prevTool;
-
   }
 
   //Mark active
@@ -189,9 +179,6 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
     setSelectedMatrix(matrixNumber);
     setIsSelected(selectedShapeID === props.id)
 
-    const prevTool = props.tool.current;
-    props.tool.current = null;
-    props.isDrawing.current = false;
   }, [selectedShapeID]
   );
 
@@ -211,17 +198,11 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
 
   //Event handler for moving shapes
   const handleDrag = useCallback((event) => {
-    const prevTool = props.tool.current;
-    props.tool.current = null;
-    props.isDrawing.current = false;
     moveShape(props.id, event);
   }, [props.id]);
 
   //Event handler for transforming shapes
   const handleTransform = useCallback((event) => {
-    const prevTool = props.tool.current;
-    props.tool.current = null;
-    props.isDrawing.current = false;
     transformShape(shapeRef.current, props.id, event);
   }, [props.id]);
 

@@ -53,9 +53,6 @@ const handleDragStart = (event) => {
 
 
 export default function Toolbox(props) {
-  const [brushToggle, setBrushToggle] = useState(false);
-
-
   const selectedShapeID = props.selectedShapeID;
   const setSelectedShapeID = props.setSelectedShapeID; //Only to remove the transformer before a screenshot is taken for clipboard, used nowhere else
   const shapes = props.shapes;
@@ -278,8 +275,8 @@ export default function Toolbox(props) {
 
 
   const handleBrush = (e) => {
-    props.tool.current = (props.tool.current === null ? TOOLS.MAGIC_BRUSH : null);
-    setBrushToggle(!brushToggle);
+    props.setTool(props.tool === null ? TOOLS.MAGIC_BRUSH : null);
+    
   }
 
 
@@ -361,7 +358,7 @@ export default function Toolbox(props) {
           <ToggleButton size="large" value={SHAPE_TYPES.DOT4_SQUARE_FILLED} shape={SHAPE_TYPES.DOT4_SQUARE_FILLED} draggable onDragStart={handleDragStart} onClick={handleClick}><DotSquare4FilledIcon /></ToggleButton>
         </CategoryButton>
 
-          <ToggleButton size="large" value={TOOLS.MAGIC_BRUSH} shape={TOOLS.MAGIC_BRUSH} selected={brushToggle} onClick={handleBrush}><Brush /></ToggleButton>
+          <ToggleButton size="large" value={TOOLS.MAGIC_BRUSH} shape={TOOLS.MAGIC_BRUSH} selected={props.tool === TOOLS.MAGIC_BRUSH} onClick={handleBrush}><Brush /></ToggleButton>
 
      </Box>
 

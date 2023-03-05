@@ -66,7 +66,8 @@ export default function Canvas() {
   const [modalOpen, setModalOpen] = useState(false);
 
   
-  const tool = useRef(TOOLS.MAGIC_BRUSH); //can only be null or TOOLS.NORMAL_BRUSH/TOOLS.MAGIC_BRUSH
+  // const tool = useRef(TOOLS.MAGIC_BRUSH); //can only be null or TOOLS.NORMAL_BRUSH/TOOLS.MAGIC_BRUSH
+  const [tool, setTool] = useState(null); //can only be null or TOOLS.NORMAL_BRUSH/TOOLS.MAGIC_BRUSH
 
 
   const passProps = {
@@ -75,7 +76,7 @@ export default function Canvas() {
     selectedMatrix: selectedMatrix,
     shapeNode: shapeNode, stageNode: stageNode,
     clipboard: clipboard, setClipboard: setClipboard,
-    tool: tool,
+    tool: tool, setTool:setTool,
   }
 
   //Take screenshots and open modal
@@ -100,7 +101,7 @@ export default function Canvas() {
           shapeNode={shapeNode} stageNode={stageNode}
           clipboard={clipboard} setClipboard={setClipboard}
           globalStageNodes={globalStageNodes}
-          tool={tool}
+          tool={tool} setTool={setTool}
         />
       </Grid>);
     }
