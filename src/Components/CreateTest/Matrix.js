@@ -1,14 +1,15 @@
 import { Box, Button, Paper } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
-import { Circle, Layer, Line, Rect, Stage } from "react-konva";
+import { Circle, Layer, Line, Rect, Shape, Stage } from "react-konva";
 import '../../App.css'
 import produce from "immer";
 import { nanoid } from "nanoid";
 import { DEFAULTS, LIMITS, SHAPE_TYPES } from "./ShapesData";
 import GenericShape from "./GenericShape";
 import { ShapeObject } from "./ShapeObjects";
-import GestureRecognizer from '@2players/dollar1-unistroke-recognizer'
+// import GestureRecognizer from '@2players/dollar1-unistroke-recognizer'
 import { ShapeGestures } from "./ShapeGestures";
+import { PDollarRecognizer } from "./PDollar";
 
 
 
@@ -27,14 +28,25 @@ export default function Matrix(props) {
   const stageRef = useRef(null);
   const layerRef = useRef(null);
 
-  const gr = new GestureRecognizer({ defaultStrokes: false});
+  //$1 unistroke recognizer
+  // const gr = new GestureRecognizer({ defaultStrokes: false});
+  // for (let s in ShapeGestures) {
+  //   gr.add(s, ShapeGestures[s]);
+  // }
+ 
+
+  //$P recognizer
+  const pr = new PDollarRecognizer();
+  for (let s in ShapeGestures) {
+    let formattedPoints = [];
+    for(let point in ShapeGestures[s]){
+      let pt = ShapeGestures[s][point];
+      formattedPoints.push({X:pt.x, Y:pt.y, ID:1})
+    }
+    // console.log(formattedPoints)
+    pr.AddGesture(s,formattedPoints);
+  }
   
-  //Add shapes to recognizer
-  useEffect(() => {
-      for(let s in ShapeGestures){
-        gr.add(s,ShapeGestures[s]);
-      }
-  },[gr])
 
 
   const matrix_size = 150;
@@ -162,24 +174,23 @@ export default function Matrix(props) {
     if (props.tool.current === null) return;
 
     isDrawing.current = false;
-    
-
-    //Recognize shape
-    //convert [x1,y1,x2,y2,..] to [{x:x1, y:y1},{x:x2, y:2},...]
+  
+    //P-dollar code begins here
     const oldPoints = freehandLines[0].points;
     const newPoints = [];
     for (var i = 0; i < oldPoints.length / 2; i++) {
       const point = {
-        x: Math.round(oldPoints[i * 2]),
-        y: Math.round(oldPoints[i * 2 + 1]),
+        X: Math.round(oldPoints[i * 2]),
+        Y: Math.round(oldPoints[i * 2 + 1]),
+        ID: 1,
       }
       newPoints.push(point);
     }
-    console.log(JSON.stringify(newPoints))
-
-    const t = gr.recognize(newPoints,true);
-    console.log(t)
-
+    console.log(newPoints)
+    if(newPoints.length>1){
+      const r = pr.Recognize(newPoints)
+      console.log(r)
+    }
 
 
     //put into main shapes array
