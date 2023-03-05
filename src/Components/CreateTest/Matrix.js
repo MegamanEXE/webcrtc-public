@@ -218,7 +218,7 @@ export default function Matrix(props) {
           //Format points to [{X:x1, Y:y1, ID:1},...] 
           const oldPoints = freehandLines[0].points;
           const newPoints = [];
-          for (var i = 0; i < oldPoints.length / 2; i++) {
+          for (let i = 0; i < oldPoints.length / 2; i++) {
             const point = {
               X: Math.round(oldPoints[i * 2]),
               Y: Math.round(oldPoints[i * 2 + 1]),
@@ -226,6 +226,18 @@ export default function Matrix(props) {
             }
             newPoints.push(point);
           }
+
+          // //Format points to [{x:x1, y:y1},...]. Use to get values for ShapeGestures.js 
+          // const oldPointsT = freehandLines[0].points;
+          // const newPointsT = [];
+          // for (let i = 0; i < oldPointsT.length / 2; i++) {
+          //   const point = {
+          //     x: Math.round(oldPointsT[i * 2]),
+          //     y: Math.round(oldPointsT[i * 2 + 1])
+          //   }
+          //   newPointsT.push(point);
+          // }
+          // console.log(JSON.stringify(newPointsT))
 
           //Recognize
           let result = null;
