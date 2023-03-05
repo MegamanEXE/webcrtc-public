@@ -1,7 +1,7 @@
 import produce from "immer";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Arc, Circle, Ellipse, Group, Line, Rect, RegularPolygon, Shape, Star, Transformer } from "react-konva";
-import { DEFAULTS, LIMITS, SHAPE_TYPES } from "./ShapesData";
+import { DEFAULTS, LIMITS, SHAPE_TYPES, TOOLS } from "./ShapesData";
 import { Html } from "react-konva-utils"
 import { Button } from "@mui/material";
 
@@ -37,14 +37,14 @@ const boundBoxCallbackForLine = (oldBox, newBox) => {
 const snaps = [0, 45, 90, 135, 180, 225, 270, 315];
 
 
-export default function GenericShape({ selectedShapeID, setSelectedShapeID, matrixNumber, setSelectedMatrix, shapes, setShapes, layerRef, ...props }) {
+export default function GenericShape({ selectedShapeID, setSelectedShapeID, matrixNumber, setSelectedMatrix, shapes, setShapes, layerRef, shapeNode, isDrawing, tool, ...props }) {
   const [isSelected, setIsSelected] = useState(false);
 
   
   const transformerRef = useRef();
   const shapeRef = useRef(); //local to this file, used for coupling transformers to shapes
 
-  const shapeNode = props.shapeNode; //This is to share the actual Konva node. Basically so Toolbox has access to the full shape node, not just the shapes array
+  // const shapeNode = props.shapeNode; //This is to share the actual Konva node. Basically so Toolbox has access to the full shape node, not just the shapes array
 
 
   /********************************** 
@@ -57,6 +57,7 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
   //Delete shape using context menu
   const deleteShape = () => {
     // console.log("Deleting Shape", props.id)
+    setIsSelected(false)
     const shapeIdx = shapes.findIndex(s => s.id === props.id);
 
     setShapes(prevState => produce(prevState, (draft) => {
@@ -98,9 +99,6 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
 
   //Handle moving shapes, which also updates it in API
   const moveShape = (id, e) => {
-    
-    
-    
     const shapeIdx = shapes.findIndex(s => s.id === id)
     if (shapeIdx !== -1) {
       setShapes(prevState => produce(prevState, (draft) => { //important distinction for future. Note the lack of { before produce(). If you put {, you'll most probably have to write prevState => {return produce(...)}
@@ -138,7 +136,7 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
 
           const oldPoints = node.points();
           const newPoints = [];
-          for (var i = 0; i < oldPoints.length / 2; i++) {
+          for (let i = 0; i < oldPoints.length / 2; i++) {
             const point = {
               x: oldPoints[i * 2] * scaleX,
               y: oldPoints[i * 2 + 1] * scaleY,
@@ -153,6 +151,25 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
           d.rotation = node.rotation();
           d.width = node.width()*scaleX;
           d.height = node.height()*scaleY;
+
+        } else if (d.type === SHAPE_TYPES.FREEHAND_STROKE) {
+          d.rotation = node.rotation();
+
+          const oldPoints = node.points();
+          const newPoints = [];
+          for (let i = 0; i < oldPoints.length / 2; i++) {
+            const point = {
+              x: oldPoints[i * 2] * scaleX,
+              y: oldPoints[i * 2 + 1] * scaleY,
+            }
+            newPoints.push(point.x, point.y);
+          }
+
+          d.points = newPoints;
+          d.width = node.width() * scaleX;
+          d.height = node.height() * scaleY;
+          d.offsetX = d.width/2;
+          d.offsetY = d.height/2;
 
         } else {
 
@@ -175,9 +192,15 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
   // Important pattern that somehow resolves the first click issue.
   const handleSelect = useCallback((event) => {
     event.cancelBubble = true;
-    setSelectedShapeID(props.id);
-    setSelectedMatrix(matrixNumber);
-    setIsSelected(selectedShapeID === props.id)
+    
+    if (tool === TOOLS.DELETE) {
+      deleteShape();
+    } else {
+      setSelectedMatrix(matrixNumber);
+      setSelectedShapeID(props.id);
+      setIsSelected(selectedShapeID === props.id)
+    }
+  
 
   }, [selectedShapeID]
   );
@@ -198,6 +221,10 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
 
   //Event handler for moving shapes
   const handleDrag = useCallback((event) => {
+    if (tool === TOOLS.DELETE) {
+      deleteShape();
+      return;
+    }
     moveShape(props.id, event);
   }, [props.id]);
 
@@ -255,7 +282,9 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
     //Note: freehand_stroke does not have {...defaultProps} or a transformer, that is intentional
     case SHAPE_TYPES.FREEHAND_STROKE:
       return <>
-        <Line ref={shapeRef} {...props} stroke="#000000" strokeWidth={4} tension={0.5} lineCap="round" lineJoin="round" bezier="true" />
+        <Line ref={shapeRef} {...props} {...defaultProps} />
+        {isSelected && (<Transformer anchorSize={5} rotateAnchorOffset={20} borderDash={[6, 2]} ref={transformerRef} rotationSnaps={snaps} boundBoxFunc={boundBoxCallbackForRectangle} />)}
+
       </>
 
     case SHAPE_TYPES.SQUARE:

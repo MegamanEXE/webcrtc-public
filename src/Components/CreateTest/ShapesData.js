@@ -590,6 +590,8 @@ export const SHAPE_ACTIONS = {
 }
 
 export const TOOLS = {
+  SELECT: "select",
+  DELETE: "delete",
   MAGIC_BRUSH: "magic_brush",
   NORMAL_BRUSH: "normal_brush"
 }

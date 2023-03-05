@@ -10,6 +10,7 @@ import GenericShape from "./GenericShape";
 import { ShapeGestures } from "./ShapeGestures";
 import { PDollarRecognizer } from "./PDollar";
 import { ShapeObject } from "./ShapeObjects";
+import Konva from "konva";
 
 
 
@@ -143,45 +144,63 @@ export default function Matrix(props) {
   //Freehand drawing
   /////////////////////////////////////
   const handleMouseDown = (e) => {
-    if(props.tool === null) return;
-
     setSelectedMatrix(matrixNumber);
     stageNode.current = stageRef.current;
+    
+    if(props.tool === null) return;
 
-    isDrawing.current = true;
-    const pos = stageRef.current.getPointerPosition();
-    setFreehandLines([...freehandLines, {points: [pos.x, pos.y] }]); //starting point
+    //Brushes
+    if([TOOLS.NORMAL_BRUSH, TOOLS.MAGIC_BRUSH].includes(props.tool)){
+      isDrawing.current = true;
+      const pos = stageRef.current.getPointerPosition();
+      setFreehandLines([...freehandLines, { points: [pos.x, pos.y] }]); //starting point
+    }
+
+    //Deletion tool
+    if(props.tool === TOOLS.DELETE){
+      console.log("About to delete", selectedShapeID)
+      //Deletion handled in GenericShape's handleSelect()
+
+      
+    }
+
+    
   };
 
   const handleMouseMove = (e) => {
-    if (!isDrawing.current || props.tool.current===null) {
+    if (!isDrawing.current) {
       return;
     }
 
-    //Utility function
-    const dist = (p1, p2) => {
-      return ((p1.x - p2.x) ** 2 + (p1.y - p2.y) ** 2) ** 0.5;
-    };
+    
+    //If a brush is selected
+    if ([TOOLS.NORMAL_BRUSH, TOOLS.MAGIC_BRUSH].includes(props.tool)) {
+      //Utility function
+      const dist = (p1, p2) => {
+        return ((p1.x - p2.x) ** 2 + (p1.y - p2.y) ** 2) ** 0.5;
+      };
 
+      const stage = stageRef.current;
+      const point = stage.getPointerPosition();
+      let lastLine = freehandLines[freehandLines.length - 1];
 
-    const stage = stageRef.current;
-    const point = stage.getPointerPosition();
-    let lastLine = freehandLines[freehandLines.length - 1];
-   
-    lastLine.points = lastLine.points.concat([point.x, point.y]);
-
-    // Smoothing
-    let lastPoint = {
-      x: lastLine.points[lastLine.points.length - 2],
-      y: lastLine.points[lastLine.points.length - 1]
-    };
-    if (dist(lastPoint, point) > 3) {
       lastLine.points = lastLine.points.concat([point.x, point.y]);
-      
+
+      // Smoothing
+      let lastPoint = {
+        x: lastLine.points[lastLine.points.length - 2],
+        y: lastLine.points[lastLine.points.length - 1]
+      };
+
+      if (dist(lastPoint, point) > 3) {
+        lastLine.points = lastLine.points.concat([point.x, point.y]);
+      }
+      // replace last
+      freehandLines.splice(freehandLines.length - 1, 1, lastLine);
+      setFreehandLines(freehandLines.concat());
     }
-    // replace last
-    freehandLines.splice(freehandLines.length - 1, 1, lastLine);
-    setFreehandLines(freehandLines.concat());
+
+
 
   };
 
@@ -190,38 +209,49 @@ export default function Matrix(props) {
 
     isDrawing.current = false;
 
-    if (props.tool === TOOLS.MAGIC_BRUSH) {
-      //P-dollar code begins here
-      //Format code to [{X:x1, Y:y1, ID:1},...] format
-      const oldPoints = freehandLines[0].points;
-      const newPoints = [];
-      for (var i = 0; i < oldPoints.length / 2; i++) {
-        const point = {
-          X: Math.round(oldPoints[i * 2]),
-          Y: Math.round(oldPoints[i * 2 + 1]),
-          ID: 1,
+    //Brushes
+    if ([TOOLS.NORMAL_BRUSH, TOOLS.MAGIC_BRUSH].includes(props.tool)) 
+    {
+        if (props.tool === TOOLS.MAGIC_BRUSH) {
+          //P-dollar code begins here
+
+          //Format points to [{X:x1, Y:y1, ID:1},...] 
+          const oldPoints = freehandLines[0].points;
+          const newPoints = [];
+          for (var i = 0; i < oldPoints.length / 2; i++) {
+            const point = {
+              X: Math.round(oldPoints[i * 2]),
+              Y: Math.round(oldPoints[i * 2 + 1]),
+              ID: 1,
+            }
+            newPoints.push(point);
+          }
+
+          //Recognize
+          let result = null;
+          if (newPoints.length > 1) {
+            result = pr.Recognize(newPoints)
+            // console.log(result.Name)
+          }
+
+          //Calculate location where new shape will be spawned
+          const tempLine = new Konva.Line({points:oldPoints}); //only to use getClientRect() method
+          const strokeBoundingBox = tempLine.getClientRect();
+          const drawLocation = {x: strokeBoundingBox.x + strokeBoundingBox.width/2, y: strokeBoundingBox.y + strokeBoundingBox.height/2 }
+
+          //If magic brush, get the recognized shape, otherwise add the stroke as is to main state 
+          if (result) createShape({ ...drawLocation, shapeType: result.Name });
+
+        } else if (props.tool === TOOLS.NORMAL_BRUSH && freehandLines[0].points.length>0) {
+          props.setShapes(ps => produce(ps, d => {
+            d[matrixNumber].push({ id: nanoid(), type: SHAPE_TYPES.FREEHAND_STROKE, points: freehandLines[0].points, stroke:"#000000", strokeWidth: 4, tension:0.5, lineCap:"round", lineJoin:"round", bezier:"true" })
+          }))
         }
-        newPoints.push(point);
       }
 
-      //Recognize
-      let result = null;
-      if (newPoints.length > 1) {
-        result = pr.Recognize(newPoints)
-        // console.log(result.Name)
-      }
-
-      //If magic brush, get the recognized shape, otherwise add the stroke as is to main state 
-      if(result) createShape({ x: 75, y: 75, shapeType: result.Name });
-
-    } else if (props.tool === TOOLS.NORMAL_BRUSH) {
-      props.setShapes(ps => produce(ps, d => {
-        d[matrixNumber].push({ id: nanoid(), type: SHAPE_TYPES.FREEHAND_STROKE, points: freehandLines[0].points })
-      }))
-    }
-
-    setFreehandLines([]); //unistrokes
+    setFreehandLines([]); //Only care about 1 stroke at a time
   };
+  
   /////////////////////////////////////
 
   const handleContextMenu = (e) => {

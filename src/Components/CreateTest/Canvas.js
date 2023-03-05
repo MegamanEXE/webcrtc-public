@@ -67,7 +67,7 @@ export default function Canvas() {
 
   
   // const tool = useRef(TOOLS.MAGIC_BRUSH); //can only be null or TOOLS.NORMAL_BRUSH/TOOLS.MAGIC_BRUSH
-  const [tool, setTool] = useState(null); //can only be null or TOOLS.NORMAL_BRUSH/TOOLS.MAGIC_BRUSH
+  const [tool, setTool] = useState(TOOLS.SELECT); //can only be values from TOOLS.
 
 
   const passProps = {
