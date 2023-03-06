@@ -16,11 +16,20 @@ const theme = crtcTheme();
 export default function FirstTestContainer() {
   // eslint-disable-next-line no-lone-blocks
   const quizStates = ['instructions', 'quiz', 'result']; {/* For Reference; these aren't used as enums */ }
-  const [quizScreen, setQuizScreen] = useState('instructions');
+  const [quizScreen, setQuizScreen] = useState(quizStates[0]); //'instructions'
+  const [timerStart, setTimerStart] = useState(false);
+  
+  const defaultTime = 480;
 
-  function renderBasedOnState(){
+  //Send this as a callback to timer
+  const onTimeUp = () => {
+    console.log("Time up");
+    setQuizScreen(quizStates[2]);
+  }
+
+  function renderContent(){
     if (quizScreen === 'instructions')
-      return <FirstTestInstructions setQuizScreen={setQuizScreen} />
+      return <FirstTestInstructions setQuizScreen={setQuizScreen} setTimerStart={setTimerStart} />
     else if (quizScreen === 'quiz')
       return <FirstTest setQuizScreen={setQuizScreen}/>
     else if (quizScreen === 'result')
@@ -34,8 +43,8 @@ export default function FirstTestContainer() {
         <Box display="flex" sx={{minHeight: '100vh', width: '100%' }}> {/* Body start */}
 
           <Grid container display='flex' direction='column'>
-            <Grid item sx={{ order: 1 }}><FirstTestHeader timer={480} /></Grid>
-            {renderBasedOnState()}
+            <Grid item sx={{ order: 1 }}><FirstTestHeader timer={defaultTime} timerStart={timerStart} onTimeUp={onTimeUp} /></Grid>
+            {renderContent()}
           </Grid>
         </Box> 
       </ThemeProvider>

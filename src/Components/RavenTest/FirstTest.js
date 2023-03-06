@@ -50,7 +50,7 @@ export default function FirstTest({setQuizScreen}) {
     let as = [];
     const ai = currentTestData["questions"][questionNumber - 1]["answerImages"];
     for (let k in ai) {
-      as.push(<AnswerOption src={ai[k]} id={`a${k + 1}`} selectedAnswer={selectedAnswer} setSelectedAnswer={setSelectedAnswer} />);
+      as.push(<AnswerOption key={`a${k + 1}`} src={ai[k]} id={`a${k + 1}`} selectedAnswer={selectedAnswer} setSelectedAnswer={setSelectedAnswer} />);
     }
 
     return as;
@@ -90,7 +90,7 @@ export default function FirstTest({setQuizScreen}) {
           </Grid>
 
           <Grid item xs={3}>
-            <Button variant="contained" color="success" onClick={()=>handleContinue()}>Continue</Button>
+            <Button variant="contained" color="success" onClick={handleContinue}>Continue</Button>
           </Grid>
 
         </Grid>

@@ -4,8 +4,9 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 
 export default function FirstTestInstructions(props) {
-  function handleClick(setQuizScreen){
-    setQuizScreen('quiz');
+  function handleClick(){
+    props.setTimerStart(true);
+    props.setQuizScreen('quiz');
   }
 
   return (
@@ -24,7 +25,7 @@ export default function FirstTestInstructions(props) {
         <Box className='instructionsPhoto'><img src={'assets/InstructionDiagram.png'} alt="Instructions" /></Box>
 
         <Box className='beginTestBtn'>
-          <Button sx={{ flexGrow: '1' }} variant="contained" color="success" onClick={() => handleClick(props.setQuizScreen)}>BEGIN TEST</Button>
+          <Button sx={{ flexGrow: '1' }} variant="contained" color="success" onClick={handleClick}>BEGIN TEST</Button>
         </Box>
       </Box>
     </Grid>
