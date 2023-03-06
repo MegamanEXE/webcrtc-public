@@ -57,9 +57,9 @@ export default function FirstTest(props) {
       }
       // console.log(`Answer given for Q${i+1}: ${userAnswers.current[`${i+1}`]}. Correct: ${q.correct_answer}`);
 
-      //If in the future, we need to send more data for results, it can be done easily since it's a ref
     });
     
+    //If in the future, we need to send more data for results, it can be done easily since it's a ref
     results.current = {score: score, totalQuestions: totalQuestions.current};
     
   }
