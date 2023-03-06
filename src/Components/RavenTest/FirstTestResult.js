@@ -2,10 +2,13 @@ import '../../App.css'
 import { Grid, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import { useNavigate } from 'react-router-dom';
 
 export default function FirstTestResult(props) {
+  const navigate = useNavigate();
   function handleClick(){
-    console.log("Go to 2nd test now")
+    navigate('/CreateTest',{replace:true});
+
   }
 
   return (

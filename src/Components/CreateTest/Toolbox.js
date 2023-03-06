@@ -1,8 +1,8 @@
-import { Brush, Circle, CircleOutlined, ContentPaste, CopyAll, Delete, DiamondOutlined, Hexagon, HexagonOutlined, HighlightAlt, Icecream, LineStyle, Padding, RotateRight, SelectAll, Square, SquareOutlined, Texture } from "@mui/icons-material";
+import { Brush, Circle, CircleOutlined, ContentPaste, CopyAll, Delete, DiamondOutlined, DoNotDisturbAlt, Hexagon, HexagonOutlined, HighlightAlt, Icecream, LineStyle, Padding, RotateRight, SelectAll, Square, SquareOutlined, Texture } from "@mui/icons-material";
 import { Button, Fade, Grid, IconButton, Menu, MenuItem, Paper, Popover, Popper, ToggleButton, Tooltip, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import produce from "immer";
-import { SHAPE_ACTIONS, SHAPE_TYPES, TEXTURES, TOOLS } from "./ShapesData";
+import { DEFAULTS, SHAPE_ACTIONS, SHAPE_TYPES, TEXTURES, TOOLS } from "./ShapesData";
 import LineWeightIcon from '@mui/icons-material/LineWeight';
 import LineStyleIcon from '@mui/icons-material/LineStyle';
 import { TbArrowsMaximize, TbArrowsMinimize, TbFlipHorizontal, TbFlipVertical, TbMaximize, TbMinusVertical, TbTriangle } from "react-icons/tb"
@@ -230,12 +230,17 @@ export default function Toolbox(props) {
       const node = props.shapeNode.current; //DOM Konva node
 
       const textureName = e.currentTarget.value;
-      const patternImg = new Image();
+
+      if(textureName === TEXTURES.NO_TEXTURE){
+        updateAttribute("fillPatternImage", null)
+        updateAttribute("fill", DEFAULTS[shape.type].FILL);
+
+      } else {const patternImg = new Image();
       patternImg.src = TEXTURE_IMAGES[textureName];
       patternImg.onload = () => {
-        updateAttribute("fill", null)
+        updateAttribute("fill", null);
         updateAttribute("fillPatternImage", patternImg);
-      }
+      }}
       
       
 
@@ -397,6 +402,7 @@ export default function Toolbox(props) {
                     {({ TransitionProps }) => (
                       <Fade {...TransitionProps} timeout={350}>
                         <Paper>
+                          <ToggleButton size="large" value={TEXTURES.NO_TEXTURE} onClick={handleTexture}><DoNotDisturbAlt /></ToggleButton>
                           <ToggleButton size="large" value={TEXTURES.DIAGONAL_RIGHT} onClick={handleTexture}><RightDiagonalTextureIcon /></ToggleButton>
                           <ToggleButton size="large" value={TEXTURES.DIAGONAL_LEFT} onClick={handleTexture}><LeftDiagonalTextureIcon /></ToggleButton>
                         </Paper>

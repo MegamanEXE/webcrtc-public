@@ -5,10 +5,12 @@ import { useState } from "react";
 import crtcTheme from "../../crtcTheme";
 import FirstTestHeader from "../RavenTest/FirstTestHeader"
 import Canvas from "./Canvas"
+import CreateTestInstructions from "./CreateTestInstructions";
 
 const theme = crtcTheme();
 
 export default function CreateTestContainer() {
+  const [screen, setScreen] = useState("canvas"); //instructions,canvas. Should be "instructions" in final
   
 
 
@@ -23,7 +25,7 @@ export default function CreateTestContainer() {
           </Box>
 
           <Box sx={{display:'flex', flexGrow:1, order:2}}>
-            <Canvas />
+            {screen === "instructions" ? <CreateTestInstructions setScreen={setScreen} /> : <Canvas />}
           </Box>
 
         </Box>

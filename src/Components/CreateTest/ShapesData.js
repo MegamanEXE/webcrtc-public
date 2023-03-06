@@ -597,6 +597,7 @@ export const TOOLS = {
 }
 
 export const TEXTURES = {
+  NO_TEXTURE: "no_texture",
   DIAGONAL_RIGHT: "diagonal_right",
   DIAGONAL_LEFT: "diagonal_left"
 }

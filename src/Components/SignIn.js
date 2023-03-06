@@ -11,17 +11,26 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import crtcTheme from '../crtcTheme';
+import { useNavigate } from 'react-router-dom';
 
 const theme = crtcTheme();
 
-export default function SignIn() {
+export default function SignIn(props) {
+  const navigate = useNavigate();
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
+    const formInput = {
       email: data.get('email'),
       password: data.get('password'),
-    });
+    };
+    // console.log(formInput)
+    if(formInput.email === "admin" && formInput.password === "admin"){
+      navigate('/Admin',{replace:true} );
+    } else {
+      navigate('/FirstTest',{replace:true});
+    }
   };
 
   return (

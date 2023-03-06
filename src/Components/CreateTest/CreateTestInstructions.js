@@ -3,10 +3,8 @@ import { Grid, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 
-export default function FirstTestInstructions(props) {
-  function handleClick(setQuizScreen){
-    setQuizScreen('quiz');
-  }
+export default function CreateTestInstructions(props) {
+  
 
   return (
     <Grid item flexGrow={1} sx={{ order: 2 }}>
@@ -14,16 +12,18 @@ export default function FirstTestInstructions(props) {
         <Typography sx={{ fontWeight: '700', size: '24px' }}>Instructions</Typography>
 
         <Box padding={'2% 0 2% 0'}>
-          Write them instructions
+          Now that you have solved some matrices, you now get to create one problem yourself similar to the ones you’ve just solved.
 
           <br /><br />
 
-          You will be provided 8 possible solutions. Pick one that you think fits the pattern the best.
+          You only need to create the 3x3 question matrix, not the 8 solutions. You have 10 minutes.
+          <br />
+          Note: You can right-click a shape to delete it.
         </Box>
 
 
         <Box className='beginTestBtn'>
-          <Button sx={{ flexGrow: '1' }} variant="contained" color="success" onClick={() => handleClick(props.setQuizScreen)}>BEGIN TEST</Button>
+          <Button sx={{ flexGrow: '1' }} variant="contained" color="success" onClick={() => {props.setScreen("canvas")}}>BEGIN TEST</Button>
         </Box>
       </Box>
     </Grid>
