@@ -59,6 +59,7 @@ export default function FirstTest(props) {
   //Calculate results
   const calculateResults = () => {
     let score = 0;
+    let details = [];
 
     //userAnswers begin from index 1, not 0
     currentTestData["questions"].forEach((q,i)=>{
@@ -66,11 +67,11 @@ export default function FirstTest(props) {
         score++;
       }
       // console.log(`Answer given for Q${i+1}: ${userAnswers.current[`${i+1}`]}. Correct: ${q.correct_answer}`);
-
+      details.push({questionNumber: i+1, given:userAnswers.current[i+1], correct:q["correct_answer"], qImages:q["questionImages"], aImages:q["answerImages"] });
     });
     
     //If in the future, we need to send more data for results, it can be done easily since it's a ref
-    results.current = {score: score, totalQuestions: totalQuestions.current};
+    results.current = {score: score, totalQuestions: totalQuestions.current, details: details};
     
   }
 
