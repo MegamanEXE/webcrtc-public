@@ -367,7 +367,7 @@ export default function Toolbox(props) {
             <Tooltip title="Select" placement={tooltipPlace} arrow><ToggleButton size="large" value={TOOLS.SELECT} shape={TOOLS.SELECT} selected={props.tool === TOOLS.SELECT} onClick={handleBrush}><HighlightAlt /></ToggleButton></Tooltip>
             <Tooltip title="Brush" placement={tooltipPlace} arrow><ToggleButton size="large" value={TOOLS.NORMAL_BRUSH} shape={TOOLS.NORMAL_BRUSH} selected={props.tool === TOOLS.NORMAL_BRUSH} onClick={handleBrush}><Brush /></ToggleButton></Tooltip>
             <Tooltip title="Magic Brush" placement={tooltipPlace} arrow><ToggleButton size="large" value={TOOLS.MAGIC_BRUSH} shape={TOOLS.MAGIC_BRUSH} selected={props.tool === TOOLS.MAGIC_BRUSH} onClick={handleBrush}><RxMagicWand size={customIconSize} /></ToggleButton></Tooltip>
-            <Tooltip title="Delete" placement={tooltipPlace} arrow><ToggleButton size="large" value={TOOLS.DELETE} shape={TOOLS.DELETE} selected={props.tool === TOOLS.DELETE} onClick={handleBrush}><Delete /></ToggleButton></Tooltip>
+            <Tooltip title="Delete" placement={tooltipPlace} arrow><ToggleButton disabled size="large" value={TOOLS.DELETE} shape={TOOLS.DELETE} selected={props.tool === TOOLS.DELETE} onClick={handleBrush}><Delete /></ToggleButton></Tooltip>
 
           </Box>
 

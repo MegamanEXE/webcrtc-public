@@ -68,6 +68,7 @@ export default function Canvas() {
   
   // const tool = useRef(TOOLS.MAGIC_BRUSH); //can only be null or TOOLS.NORMAL_BRUSH/TOOLS.MAGIC_BRUSH
   const [tool, setTool] = useState(TOOLS.SELECT); //can only be values from TOOLS.
+  const prevTool = useRef(null);
 
 
   const passProps = {
@@ -114,7 +115,9 @@ export default function Canvas() {
     <Box id="canvasContainer">
 
       <Box id="toolbox" >
-        <Toolbox {...passProps} />
+        <Box>
+          <Toolbox {...passProps} />
+        </Box>
       </Box>
 
 

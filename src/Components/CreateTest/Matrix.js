@@ -31,6 +31,7 @@ export default function Matrix(props) {
 
   const matrix_size = 150;
   const matrixNumber = props.id.split("-")[1]
+  const MAGIC_BRUSH_SCALING_ENABLED = false;
 
 
   //$P recognizer
@@ -114,6 +115,12 @@ export default function Matrix(props) {
   function createShape({ x, y, shapeType }) {
     props.setShapes(prevState => produce(prevState, (draft) => {
       draft[matrixNumber].push({ id: nanoid(), x, y, ...ShapeObject[shapeType] })
+    }));
+  }
+
+  function createShapeExtraAttr({ x, y, shapeType, ...other }) {
+    props.setShapes(prevState => produce(prevState, (draft) => {
+      draft[matrixNumber].push({ id: nanoid(), x, y, ...ShapeObject[shapeType], ...other })
     }));
   }
 
@@ -210,56 +217,66 @@ export default function Matrix(props) {
     isDrawing.current = false;
 
     //Brushes
-    if ([TOOLS.NORMAL_BRUSH, TOOLS.MAGIC_BRUSH].includes(props.tool)) 
-    {
-        if (props.tool === TOOLS.MAGIC_BRUSH) {
-          //P-dollar code begins here
+    if ([TOOLS.NORMAL_BRUSH, TOOLS.MAGIC_BRUSH].includes(props.tool)) {
+      if (props.tool === TOOLS.MAGIC_BRUSH) {
+        //P-dollar code begins here
 
-          //Format points to [{X:x1, Y:y1, ID:1},...] 
-          const oldPoints = freehandLines[0].points;
-          const newPoints = [];
-          for (let i = 0; i < oldPoints.length / 2; i++) {
-            const point = {
-              X: Math.round(oldPoints[i * 2]),
-              Y: Math.round(oldPoints[i * 2 + 1]),
-              ID: 1,
-            }
-            newPoints.push(point);
+        //Format points to [{X:x1, Y:y1, ID:1},...] 
+        const oldPoints = freehandLines[0].points;
+        const newPoints = [];
+        for (let i = 0; i < oldPoints.length / 2; i++) {
+          const point = {
+            X: Math.round(oldPoints[i * 2]),
+            Y: Math.round(oldPoints[i * 2 + 1]),
+            ID: 1,
           }
-
-          // //Format points to [{x:x1, y:y1},...]. Use to get values for ShapeGestures.js 
-          // const oldPointsT = freehandLines[0].points;
-          // const newPointsT = [];
-          // for (let i = 0; i < oldPointsT.length / 2; i++) {
-          //   const point = {
-          //     x: Math.round(oldPointsT[i * 2]),
-          //     y: Math.round(oldPointsT[i * 2 + 1])
-          //   }
-          //   newPointsT.push(point);
-          // }
-          // console.log(JSON.stringify(newPointsT))
-
-          //Recognize
-          let result = null;
-          if (newPoints.length > 1) {
-            result = pr.Recognize(newPoints)
-            // console.log(result.Name)
-          }
-
-          //Calculate location where new shape will be spawned
-          const tempLine = new Konva.Line({points:oldPoints}); //only to use getClientRect() method
-          const strokeBoundingBox = tempLine.getClientRect();
-          const drawLocation = {x: strokeBoundingBox.x + strokeBoundingBox.width/2, y: strokeBoundingBox.y + strokeBoundingBox.height/2 }
-
-          //If magic brush, get the recognized shape, otherwise add the stroke as is to main state 
-          if (result) createShape({ ...drawLocation, shapeType: result.Name });
-
-        } else if (props.tool === TOOLS.NORMAL_BRUSH && freehandLines[0].points.length>0) {
-          props.setShapes(ps => produce(ps, d => {
-            d[matrixNumber].push({ id: nanoid(), type: SHAPE_TYPES.FREEHAND_STROKE, points: freehandLines[0].points, stroke:"#000000", strokeWidth: 4, tension:0.5, lineCap:"round", lineJoin:"round", bezier:"true" })
-          }))
+          newPoints.push(point);
         }
+
+        // //Format points to [{x:x1, y:y1},...]. Use to get values for ShapeGestures.js 
+        // const oldPointsT = freehandLines[0].points;
+        // const newPointsT = [];
+        // for (let i = 0; i < oldPointsT.length / 2; i++) {
+        //   const point = {
+        //     x: Math.round(oldPointsT[i * 2]),
+        //     y: Math.round(oldPointsT[i * 2 + 1])
+        //   }
+        //   newPointsT.push(point);
+        // }
+        // console.log(JSON.stringify(newPointsT))
+
+        //Recognize
+        let result = null;
+        if (newPoints.length > 1) {
+          result = pr.Recognize(newPoints).Name;
+          // console.log(result.Name)
+        }
+
+        //Calculate location where new shape will be spawned
+        const tempLine = new Konva.Line({ points: oldPoints }); //only to use getClientRect() method
+        const strokeBoundingBox = tempLine.getClientRect();
+        const drawLocation = { x: strokeBoundingBox.x + strokeBoundingBox.width / 2, y: strokeBoundingBox.y + strokeBoundingBox.height / 2 }
+
+        if (!MAGIC_BRUSH_SCALING_ENABLED) {
+          if (result) createShape({ ...drawLocation, shapeType: result });
+        } else {
+          if (result) {
+            const multiplier = strokeBoundingBox.width / ShapeObject[result].width;
+            createShapeExtraAttr({
+              ...drawLocation, shapeType: result,
+              width: ShapeObject[result].width + (ShapeObject[result].width * multiplier),
+              height: ShapeObject[result].height + (ShapeObject[result].height * multiplier)
+            });
+
+          }
+        }
+
+      } else if (props.tool === TOOLS.NORMAL_BRUSH && freehandLines[0].points.length > 0) {
+        props.setShapes(ps => produce(ps, d => {
+          d[matrixNumber].push({ id: nanoid(), type: SHAPE_TYPES.FREEHAND_STROKE, points: freehandLines[0].points, stroke: "#000000", strokeWidth: 4, tension: 0.5, lineCap: "round", lineJoin: "round", bezier: "true" })
+        }))
       }
+    }
 
     setFreehandLines([]); //Only care about 1 stroke at a time
   };
@@ -289,7 +306,7 @@ export default function Matrix(props) {
             shapes={props.shapes} setShapes={props.setShapes}
             layerRef={layerRef}
             shapeNode={props.shapeNode}
-            isDrawing={isDrawing} tool={props.tool}
+            isDrawing={isDrawing} tool={props.tool} setTool={props.setTool}
             {...s} />)}
 
           {freehandLines.map((line, i) => (

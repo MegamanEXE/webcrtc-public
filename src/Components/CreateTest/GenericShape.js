@@ -36,8 +36,8 @@ const boundBoxCallbackForLine = (oldBox, newBox) => {
 
 const snaps = [0, 45, 90, 135, 180, 225, 270, 315];
 
-
-export default function GenericShape({ selectedShapeID, setSelectedShapeID, matrixNumber, setSelectedMatrix, shapes, setShapes, layerRef, shapeNode, isDrawing, tool, ...props }) {
+//XD. In hindsight, should not have done it like this
+export default function GenericShape({ selectedShapeID, setSelectedShapeID, matrixNumber, setSelectedMatrix, shapes, setShapes, layerRef, shapeNode, isDrawing, tool, setTool, ...props }) {
   const [isSelected, setIsSelected] = useState(false);
 
   
@@ -187,11 +187,12 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
   //Mark active
   useEffect(() => {
     setIsSelected(selectedShapeID === props.id)
-  }, [selectedShapeID])
+  }, [selectedShapeID, tool])
 
   // Important pattern that somehow resolves the first click issue.
   const handleSelect = useCallback((event) => {
     event.cancelBubble = true;
+    setTool(TOOLS.SELECT);
     
     if (tool === TOOLS.DELETE) {
       deleteShape();
@@ -221,6 +222,7 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
 
   //Event handler for moving shapes
   const handleDrag = useCallback((event) => {
+    setTool(TOOLS.SELECT);
     if (tool === TOOLS.DELETE) {
       deleteShape();
       return;
