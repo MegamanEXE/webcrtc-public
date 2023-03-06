@@ -1,7 +1,7 @@
 import '../../App.css'
 import crtcTheme from '../../crtcTheme';
 import AppBar from '@mui/material/AppBar';
-import { CssBaseline, Grid, Typography } from '@mui/material';
+import { CssBaseline, Grid, LinearProgress, Typography } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import StyledEngineProvider from "@mui/material/StyledEngineProvider";
@@ -23,6 +23,9 @@ export default function FirstTest(props) {
   
   const [questionNumber, setQuestionNumber] = useState(1);
   const [selectedAnswer, setSelectedAnswer] = useState(-1);
+
+  const [progress, setProgress] = useState(0); //Progress bar
+
   
   const totalQuestions = useRef(-1);
   const userAnswers = props.userAnswers; //ref
@@ -44,6 +47,13 @@ export default function FirstTest(props) {
 
       totalQuestions.current = currentTestData['questions'].length;
   },[currentTestData]);
+
+  //Update progress bar
+  useEffect(() => {
+    if (totalQuestions===-1) return;
+
+    setProgress(((questionNumber-1)/totalQuestions.current)*100);
+  }, [questionNumber,totalQuestions]);
 
 
   //Calculate results
@@ -100,8 +110,14 @@ export default function FirstTest(props) {
   return (
     <>
       <Grid item flexGrow={1} sx={{ width: '80%', alignSelf: 'center', order: 2 }}>
+
         <Box className='questionsContainer'>
           <Box className="questionSizeWrapper">
+
+            <Box sx={{ width: '100%' }}>
+              <LinearProgress variant="determinate" value={progress} />
+            </Box>
+
             <Typography sx={{ fontWeight: '700', size: '24px' }}>Question {questionNumber}</Typography>
             <Box className='actualQuestion'>
               <ImageList sx={{ overflow: 'hidden', }} cols={3} gap={20}>
