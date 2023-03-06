@@ -18,7 +18,10 @@ export function Timer({ expiryTimestamp, timerStart, onTimeUp }) {
 
   //Start timer
   useEffect(() => {
-    if(timerStart) start();
+    if(timerStart) 
+      start();
+    else 
+      pause();
   },[timerStart]);
 
   return (

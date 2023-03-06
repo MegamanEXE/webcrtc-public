@@ -10,6 +10,7 @@ import FirstTestHeader from './FirstTestHeader';
 import FirstTestInstructions from './FirstTestInstructions';
 import FirstTest from './FirstTest';
 import FirstTestResult from './FirstTestResult';
+import { useRef } from 'react';
 
 const theme = crtcTheme();
 
@@ -17,8 +18,11 @@ export default function FirstTestContainer() {
   // eslint-disable-next-line no-lone-blocks
   const quizStates = ['instructions', 'quiz', 'result']; {/* For Reference; these aren't used as enums */ }
   const [quizScreen, setQuizScreen] = useState(quizStates[0]); //'instructions'
-  const [timerStart, setTimerStart] = useState(false);
-  
+  const [timerStart, setTimerStart] = useState(false); //flag which starts the timers when true
+
+  const userAnswers = useRef({}); // "1":5 i.e. questionNumber:answer format, Needed in FirstTest.js and Results.js
+  const results = useRef(null); // {score:_, totalQuestions:_} Include more data if needed
+
   const defaultTime = 480;
 
   //Send this as a callback to timer
@@ -31,9 +35,9 @@ export default function FirstTestContainer() {
     if (quizScreen === 'instructions')
       return <FirstTestInstructions setQuizScreen={setQuizScreen} setTimerStart={setTimerStart} />
     else if (quizScreen === 'quiz')
-      return <FirstTest setQuizScreen={setQuizScreen}/>
+      return <FirstTest setQuizScreen={setQuizScreen} userAnswers={userAnswers} results={results} />
     else if (quizScreen === 'result')
-      return <FirstTestResult />
+      return <FirstTestResult results={results} setTimerStart={setTimerStart} />
   }
 
   return (

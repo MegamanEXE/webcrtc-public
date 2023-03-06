@@ -4,7 +4,7 @@ import ImageListItem from '@mui/material/ImageListItem';
 export default function AnswerOption({src,id,setSelectedAnswer,selectedAnswer}) {
     function handleClick(name){
         console.log(`${name[1]} selected.`)
-        setSelectedAnswer(name[1])
+        setSelectedAnswer(parseInt(name[1]))
     }
 
     return (

@@ -3,13 +3,21 @@ import { Grid, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
 export default function FirstTestResult(props) {
   const navigate = useNavigate();
+  const results = props.results; //ref
+
   function handleClick(){
     navigate('/CreateTest',{replace:true});
-
   }
+
+  //Stop timer
+  useEffect(() => {
+    props.setTimerStart(false)
+  }, []);
+  
 
   return (
     <Grid item flexGrow={1} sx={{ order: 2 }}>
@@ -18,7 +26,7 @@ export default function FirstTestResult(props) {
 
         <Typography variant='h2' sx={{fontWeight: 800}}>RESULTS</Typography>
 
-        <Typography variant='h5' sx={{flexGrow:1}}>You got <strong>0/2</strong> questions correct</Typography>
+        <Typography variant='h5' sx={{flexGrow:1}}>You got <strong>{results.current.score}/{results.current.totalQuestions}</strong> questions correct</Typography>
         {/* TODO: Get score from container later. Put in place of 4/8 */}
 
         <Box className='finishRavenTestBtn'>
