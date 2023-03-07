@@ -12,7 +12,7 @@ import { SubmitModal } from "./SubmitModal";
 import { useCallback } from "react";
 import { TOOLS } from "./ShapesData";
 
-export default function Canvas() {
+export default function Canvas(props) {
 
   const [selectedShapeID, setSelectedShapeID] = useState(null);
   const shapeNode = useRef(null); //Avoid using unnecesarrily, update state instead of calling Konva node methods to set anything
@@ -140,7 +140,7 @@ export default function Canvas() {
         <RightBar {...passProps} />
       </Box>
 
-    {modalOpen && <SubmitModal modalOpen={modalOpen} setModalOpen={setModalOpen} screenshots={screenshots} />}
+    {modalOpen && <SubmitModal modalOpen={modalOpen} setModalOpen={setModalOpen} screenshots={screenshots} setTimerStart={props.setTimerStart} />}
     </Box>
     
     );

@@ -10,7 +10,7 @@ import CreateTestInstructions from "./CreateTestInstructions";
 const theme = crtcTheme();
 
 export default function CreateTestContainer() {
-  const [screen, setScreen] = useState("canvas"); //instructions,canvas. Should be "instructions" in final
+  const [screen, setScreen] = useState("instructions"); //instructions,canvas. Should be "instructions" in final
   const [timerStart, setTimerStart] = useState(false); //flag which starts the timers when true
 
   //Handle time up
@@ -18,13 +18,14 @@ export default function CreateTestContainer() {
       console.log("Time's up")
   }
 
+  //Timer active only during creation time
   useEffect(() => {
     if(screen==="canvas"){
       setTimerStart(true)
     } else if (screen === "instructions") {
       setTimerStart(false)
     }
-  },[timerStart]);
+  },[screen]);
 
   return <>
     <StyledEngineProvider injectFirst>
@@ -37,7 +38,7 @@ export default function CreateTestContainer() {
           </Box>
 
           <Box sx={{display:'flex', flexGrow:1, order:2}}>
-            {screen === "instructions" ? <CreateTestInstructions setScreen={setScreen} /> : <Canvas />}
+            {screen === "instructions" ? <CreateTestInstructions setScreen={setScreen} /> : <Canvas setTimerStart={setTimerStart} />}
           </Box>
 
         </Box>

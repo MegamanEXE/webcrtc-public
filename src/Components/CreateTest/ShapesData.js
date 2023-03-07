@@ -2,7 +2,7 @@
 //Do not attempt to use these variable outside this file (hence the lack of export)
 const defaultStrokeWidth = 3;
 const defaultStroke = "#000000";
-const defaultFill = "#ffff";
+export const defaultFill = "#ffff";
 const defaultDash = [0,0];
 const defaultHeight = 50;
 const defaultWidth = 50;
@@ -598,6 +598,7 @@ export const TOOLS = {
 
 export const TEXTURES = {
   NO_TEXTURE: "no_texture",
+  SOLID_FILL: "solid_fill",
   DIAGONAL_RIGHT: "diagonal_right",
   DIAGONAL_LEFT: "diagonal_left"
 }

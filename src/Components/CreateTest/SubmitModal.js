@@ -86,6 +86,7 @@ export function SubmitModal(props){
 
   //SCREEN 2
   const ThanksScreen = () => {
+      props.setTimerStart(false);
       return(
         <>
           <Box id="modalHeader" >

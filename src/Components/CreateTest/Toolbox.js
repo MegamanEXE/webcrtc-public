@@ -2,7 +2,7 @@ import { Brush, Circle, CircleOutlined, ContentPaste, CopyAll, Delete, DiamondOu
 import { Button, Fade, Grid, IconButton, Menu, MenuItem, Paper, Popover, Popper, ToggleButton, Tooltip, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import produce from "immer";
-import { DEFAULTS, SHAPE_ACTIONS, SHAPE_TYPES, TEXTURES, TOOLS } from "./ShapesData";
+import { defaultFill, DEFAULTS, SHAPE_ACTIONS, SHAPE_TYPES, TEXTURES, TOOLS } from "./ShapesData";
 import LineWeightIcon from '@mui/icons-material/LineWeight';
 import LineStyleIcon from '@mui/icons-material/LineStyle';
 import { TbArrowsMaximize, TbArrowsMinimize, TbFlipHorizontal, TbFlipVertical, TbMaximize, TbMinusVertical, TbTriangle } from "react-icons/tb"
@@ -13,7 +13,7 @@ import useImage from "use-image";
 import { useEffect, useState } from "react";
 import { TEXTURE_IMAGES } from "./Textures";
 import { useCallback } from "react";
-import PopupState, { bindPopper, bindToggle } from "material-ui-popup-state";
+import PopupState, { bindHover, bindPopper, bindToggle } from "material-ui-popup-state";
 import { CCircleIcon, CCurveIcon, CHexagonIcon, Circle10MinIcon, Circle20MinIcon, CirclesIcon, CLineIcon, ConeIcon, CRectIcon, CrossesIcon, CrossIcon, DiamondIcon, Dot4FilledIcon, Dot4HollowIcon, DotFilledIcon, DotHollowIcon, DotsIcon, DotSquare4FilledIcon, DotSquare4HollowIcon, DotSquareFilledIcon, DotSquareHollowIcon, EightLineIcon, EllipseDiagonalIcon, EllipseVerticalIcon, FoldedEllipseIcon, FoldedRectIcon, FoldedTriangleIcon, HexagonsIcon, LeftDiagonalTextureIcon, LinesIcon, ObtuseTriangleBigIcon, ObtuseTriangleSlightIcon, ObtuseTriangleSmallIcon, OrthogonalIcon, PlusIcon, QuarterCircleIcon, RectanglesIcon, RhombusIcon, RightDiagonalTextureIcon, RightTriangleIcon, RightTriangleThinIcon, SemicircleIcon, SemihexagonIcon, SimpleTriangleBigIcon, SimpleTriangleIcon, SimpleTriangleSmallIcon, SquashedTriangleIcon, StarIcon, StarMedIcon, StarThinIcon, TallFatRectIcon, TallRectIcon, TallThinRectIcon, TiltedLineIcon, TiltedRectIcon, TopLeftRectIcon, TrianglesIcon, VerticalLineIcon} from "./CustomIcons";
 import { CategoryButton } from "./CategoryButton";
 
@@ -233,8 +233,10 @@ export default function Toolbox(props) {
 
       if(textureName === TEXTURES.NO_TEXTURE){
         updateAttribute("fillPatternImage", null)
-        updateAttribute("fill", DEFAULTS[shape.type].FILL);
-
+        updateAttribute("fill", defaultFill);
+      } else if (textureName === TEXTURES.SOLID_FILL){
+        updateAttribute("fillPatternImage", null)
+        updateAttribute("fill", "black");
       } else {const patternImg = new Image();
       patternImg.src = TEXTURE_IMAGES[textureName];
       patternImg.onload = () => {
@@ -397,12 +399,13 @@ export default function Toolbox(props) {
             <PopupState variant="popper" popupId="demo-popup-popper">
               {(popupState) => (
                 <div>
-                  <ToggleButton {...bindToggle(popupState)} size="large" value={"rectangles"} shape={"rectangles"}> <Texture /> </ToggleButton>
+                  <ToggleButton {...bindHover(popupState)} size="large" value={"rectangles"} shape={"rectangles"}> <Texture /> </ToggleButton>
                   <Popper {...bindPopper(popupState)} transition placement="right">
                     {({ TransitionProps }) => (
                       <Fade {...TransitionProps} timeout={350}>
                         <Paper>
                           <ToggleButton size="large" value={TEXTURES.NO_TEXTURE} onClick={handleTexture}><DoNotDisturbAlt /></ToggleButton>
+                          <ToggleButton size="large" value={TEXTURES.SOLID_FILL} onClick={handleTexture}><Square /></ToggleButton>
                           <ToggleButton size="large" value={TEXTURES.DIAGONAL_RIGHT} onClick={handleTexture}><RightDiagonalTextureIcon /></ToggleButton>
                           <ToggleButton size="large" value={TEXTURES.DIAGONAL_LEFT} onClick={handleTexture}><LeftDiagonalTextureIcon /></ToggleButton>
                         </Paper>
