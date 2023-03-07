@@ -22,18 +22,29 @@ export default function FirstTestResult(props) {
   }, []);
 
   const detailTable = () => {
-    const d = results.current.details; //questionNumber, given, correct, qImages, aImages
+  const d = results.current.details; //questionNumber, given, correct, qImages, aImages
 
+    const QuestionWithIcon = (row) => {
+      return row.correct === row.given ?
+        <Stack direction="row" alignItems="center" gap={1}>
+          <CheckCircle color='success' fontSize='small' />
+          Q{row.questionNumber}
+        </Stack>
+        :
+        <Stack direction="row" alignItems="center" gap={1}>
+          <Cancel color='error' fontSize='small' />
+          Q{row.questionNumber}
+        </Stack>
+    }
     
 
     return (
       <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} size="small" aria-label="Details Table">
+        <Table sx={{ minWidth: 310 }} size="small" aria-label="Details Table">
           <TableHead>
             <TableRow>
               <TableCell>Question</TableCell>
-              <TableCell align="center">Correct Answer</TableCell>
-              <TableCell align="center">Submitted Answer</TableCell>
+              <TableCell align="center"></TableCell>
             </TableRow>
           </TableHead>
 
@@ -43,9 +54,8 @@ export default function FirstTestResult(props) {
                 key={row.questionNumber}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
               >
-                <TableCell><QuestionPopper row={row} qImages={row.qImages} aImages={row.aImages} /></TableCell>
-                <TableCell align="center">{row.correct}</TableCell>
-                <TableCell align="center">{row.given}</TableCell>
+                <TableCell>{QuestionWithIcon(row)}</TableCell>
+                <TableCell align="center"><QuestionPopper row={row} qImages={row.qImages} aImages={row.aImages} /></TableCell>
               </TableRow>
             ))}
 

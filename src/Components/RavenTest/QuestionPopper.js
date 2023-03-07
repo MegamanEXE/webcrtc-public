@@ -1,7 +1,6 @@
 import { Cancel, CheckCircle } from "@mui/icons-material";
-import { Button, Fade, Grid, ImageList, ImageListItem, Paper, Popper, Stack, ToggleButton, Typography } from "@mui/material";
+import { Button, Fade, Grid, ImageList, ImageListItem, Paper, Popper, Stack, Typography } from "@mui/material";
 import PopupState, { bindHover, bindPopper, bindToggle } from "material-ui-popup-state";
-import Image from "mui-image";
 import { nanoid } from "nanoid";
 import { useState } from "react";
 
@@ -23,38 +22,60 @@ export function QuestionPopper(props) {
         <Cancel color='error' fontSize='small' />
         Q{row.questionNumber}
       </Stack>
-
   }
 
+  //QUESTION IMAGES
   const renderQuestionImages = () => {
     let qi = [];
     for(let i in qImages){
-      qi.push(<ImageListItem key={nanoid()}><img src={qImages[i]} alt="questionImage" style={{width:50}} /></ImageListItem>);
+      qi.push(<ImageListItem key={`q-${i}`}><img src={qImages[i]} alt="questionImage" style={{width:50}} /></ImageListItem>);
     }
+
+    //add the correct answer
+    qi.push(<ImageListItem key="correctAnswer"><img src={aImages[row.correct]} alt="correctSolution" style={{ width: 50 }} /></ImageListItem>)
 
     return <ImageList cols={3} >
       {qi}
     </ImageList>
   }
 
-  //change bindToggle back to bindHover after fixing layout
+  //ANSWER IMAGES
+  const renderAnswerImages = () => {
+    let qi = [];
+    for (let i in qImages) {
+      qi.push(<ImageListItem key={`a-${i}`}><img src={qImages[i]} alt="qImage-in-Answer" style={{ width: 50 }} /></ImageListItem>);
+    }
+
+    //add the given answer
+    qi.push(<ImageListItem key="givenAnswer">
+        <img src={aImages[row.given]} 
+        className={row.correct === row.given ? "correctBorder" : "wrongBorder"} 
+        alt="givenAnswer" 
+        style={{ width: 50 }} />
+      </ImageListItem>)
+
+    return <ImageList cols={3} >
+      {qi}
+    </ImageList>
+  }
+
   return (
     <PopupState variant="popper" popupId="demo-popup-popper">
       {(popupState) => (
         <div>
-          <Button variant="text" {...bindHover(popupState)} disableRipple><QuestionWithIcon  /></Button>
+          <Button variant="text" {...bindHover(popupState)} disableRipple>View Details</Button>
           <Popper {...bindPopper(popupState)} transition placement="right">
             {({ TransitionProps }) => (
               <Fade {...TransitionProps} timeout={350}>
-                <Paper sx={{ p: 1, width: '40vh' }} elevation={3}>
-                  <Grid container columns={12} gap={6} >
+                <Paper sx={{ p: 1, width: '45vh' }} elevation={3}>
+                  <Grid container columns={12} gap={6} sx={{ display: 'flex', justifyContent: "center", alignItems: "center" }}>
                     <Grid item xs={5}>
                       <Typography variant="h7">Correct Answer</Typography>
                       {qImages && renderQuestionImages()}
                     </Grid>
                     <Grid item xs={5}>
                       <Typography variant="h7">Your Answer</Typography>
-                      {qImages && renderQuestionImages()}
+                      {aImages && renderAnswerImages()}
                     </Grid>
 
 

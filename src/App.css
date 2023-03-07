@@ -505,3 +505,12 @@ a:active {
 .MuiToggleButton-root{
   border: 1px solid rgba(0, 0, 0, 0.5)
 }
+
+/* For popper in results */
+.correctBorder{
+  border: 4px solid green;
+}
+
+.wrongBorder{
+  border: 4px solid #ef5350;
+}
