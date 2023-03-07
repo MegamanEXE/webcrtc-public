@@ -1,9 +1,8 @@
-import { Chip, Fab, FormLabel, IconButton, ImageList, ImageListItem, ImageListItemBar, Stack, Typography } from "@mui/material";
+import { Chip, Fab, FormLabel, IconButton, ImageList, ImageListItem, Stack, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import AddIcon from '@mui/icons-material/Add';
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import produce from "immer";
-import { DeleteForever } from "@mui/icons-material";
 import ModalImage from "./ModalImage";
 
 
@@ -21,7 +20,7 @@ export default function TestModalMatrix(props) {
 
   
 
-  //Updates view to match data from API
+  //UPDATE VIEW TO MATCH API
   useEffect(() => {
     const qi = testData.questions[selectedQuestion - 1].questionImages || {};
     setQMatrix({ ...qMatrix, ...qi })
@@ -39,17 +38,20 @@ export default function TestModalMatrix(props) {
     setSelectedChip(x);
   }, [selectedQuestion]);
 
+  //HANDLE QUESTION UPLOAD
   const handleQUpload = (e, i) => {
     let uploadedImage = e.target.files[0];
     setQMatrix({ ...qMatrix, [`${i}`]: URL.createObjectURL(uploadedImage) });
   }
 
+  //HANDLE ANSWER UPLOAD
   const handleAUpload = (e, i) => {
     let uploadedImage = e.target.files[0];
     setAMatrix({ ...aMatrix, [`${i}`]: URL.createObjectURL(uploadedImage) });
   }
   //Yes, these two above could be merged with one extra param, I just like to be more explicit like this
 
+  //UPDATE QUESTION MATRIX WITH NEW UPLOADED IMAGE
   useEffect(() => {
     const newState = produce(testData, (draft) => {
       draft.questions[selectedQuestion - 1].questionImages = qMatrix;
@@ -57,7 +59,15 @@ export default function TestModalMatrix(props) {
     props.setTestData(newState); 
   },[qMatrix]);
 
-  //Update correct answer
+  //UPDATE ANSWER MATRIX WITH NEW UPLOADED IMAGE
+  useEffect(() => {
+    const newState = produce(testData, (draft) => {
+      draft.questions[selectedQuestion - 1].answerImages = aMatrix;
+    })
+    props.setTestData(newState);
+  }, [aMatrix]);
+
+  //UPDATE CORRECT ANSWER
   useEffect(() => {
     const newState = produce(testData, (draft) => {
       draft.questions[selectedQuestion - 1]["correct_answer"] = markedSolution;
@@ -65,11 +75,12 @@ export default function TestModalMatrix(props) {
     props.setTestData(newState);
   },[markedSolution]);
 
+  //HANDLE DIFFICULTY
   const handleDifficulty = (k) => {
     setSelectedChip(k);
   }
 
-  //Update difficulty in API
+  //UPDATE DIFFICULTY IN API
   useEffect(() => {
     const newState = produce(testData, (draft) => {
       if (difficultyChips[selectedChip - 1]!==undefined)
@@ -78,6 +89,8 @@ export default function TestModalMatrix(props) {
     props.setTestData(newState);
   }, [selectedChip]);
 
+
+  //RENDER QUESTIONS
   const generateQMatrix = () => {
     let qs = []
     for (let i = 1; i <= 8; i++) {
@@ -117,7 +130,7 @@ export default function TestModalMatrix(props) {
   }
 
 
-
+  //RENDER ANSWERS
   const generateAMatrix = () => {
     let as = []
     for (let i = 1; i <= 8; i++) {

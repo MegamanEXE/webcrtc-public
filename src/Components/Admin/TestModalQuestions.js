@@ -2,6 +2,7 @@ import { Button, IconButton, List, ListItem, ListItemButton, ListSubheader, Typo
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { GridAddIcon } from "@mui/x-data-grid";
 import { useEffect, useState } from "react";
+import produce from "immer";
 
 export default function TestModalQuestions(props) {
 
@@ -14,18 +15,22 @@ export default function TestModalQuestions(props) {
   const emptyInitialStates = { "1":"", "2":"", "3":"", "4":"","5":"", "6":"","7":"", "8":"" };
 
   const handleListItemClick = (q) => {
-    console.log(q);
     setSelectedQuestion(q);
   };
 
   const handleDeleteQuestion = (name, id) => {
-    console.log(`Deleting id:${id}, ${name}`)
+    // console.log(`Deleting id:${id}, ${name}`)
+    props.setTestData(td => produce(td, d=>{
+      d["questions"].splice(id,1);
+    }));
 
   }
 
   const handleAddQuestion = () => {
     const newIndex = td.length + 1;
     const newQ = { "number":newIndex, "correct_answer":-1, "questionImages":emptyInitialStates, "answerImages":emptyInitialStates }
+
+    //I did not know of immer at this point of time. I completed handleDeleteQuestion at the end which is why it's using immer.
     props.setTestData({ ...props.testData, "questions": [...props.testData.questions, newQ] });
   };
 
