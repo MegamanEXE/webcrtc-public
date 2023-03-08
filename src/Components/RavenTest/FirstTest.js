@@ -95,7 +95,10 @@ export default function FirstTest(props) {
       qs.push(<ImageListItem border="4px dashed transparent" key={`q${k + 1}`} className="questionImage"><img src={qi[k]} alt={`q${k + 1}`} /></ImageListItem>);
     }
 
-    return qs;
+    return <ImageList sx={{ overflow: 'hidden', }} cols={3} gap={20}>
+      {qs}
+      <Box border="4px dashed grey" key="filler" width="84px"><img className='questionImage' src={`${currentTestData["questions"][questionNumber - 1]["answerImages"][selectedAnswer]}`} alt="" /></Box>
+    </ImageList>
   }
 
   const renderAnswers = () => {
@@ -105,7 +108,7 @@ export default function FirstTest(props) {
       as.push(<AnswerOption key={`a${k + 1}`} src={ai[k]} id={`a${k + 1}`} selectedAnswer={selectedAnswer} setSelectedAnswer={setSelectedAnswer} />);
     }
 
-    return as;
+    return <ImageList sx={{ overflow: 'hidden' }} cols={4} gap={16} >{as}</ImageList>
   }
 
   return (
@@ -121,13 +124,7 @@ export default function FirstTest(props) {
 
             <Typography sx={{ fontWeight: '700', size: '24px' }}>Question {questionNumber}</Typography>
             <Box className='actualQuestion'>
-              <ImageList sx={{ overflow: 'hidden', }} cols={3} gap={20}>
                 {currentTestData && renderQuestions()}
-                
-                {currentTestData &&
-                  <Box border="4px dashed grey" key="filler" width="84px"><img className='questionImage' src={`${currentTestData["questions"][questionNumber - 1]["answerImages"][selectedAnswer]}`} alt="" /></Box>
-                }
-              </ImageList>
             </Box>
           </Box>
         </Box>
@@ -140,10 +137,7 @@ export default function FirstTest(props) {
           <Grid item>
             <Box className='actualAnswers'>
               <Typography sx={{ fontWeight: '700', size: '24px', }}>Which of these fit the best?</Typography>
-
-              <ImageList sx={{ overflow: 'hidden' }} cols={4} gap={16} >
                 {currentTestData && renderAnswers()}
-              </ImageList>
             </Box>
           </Grid>
 
