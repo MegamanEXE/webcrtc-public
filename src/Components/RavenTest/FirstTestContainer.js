@@ -21,7 +21,7 @@ export default function FirstTestContainer() {
   const [timerStart, setTimerStart] = useState(false); //flag which starts the timers when true
 
   const userAnswers = useRef({}); // "1":5 i.e. questionNumber:answer format, Needed in FirstTest.js and Results.js
-  const results = useRef(null); // {score:_, totalQuestions:_} Include more data if needed
+  const results = useRef(null); // {score:_, totalQuestions:_, details: {questionNumber:_, given:_, correct:_, qImages:_, aImages:_}} 
   
 
   const defaultTime = 480;
@@ -45,7 +45,7 @@ export default function FirstTestContainer() {
     <StyledEngineProvider injectFirst>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <Box display="flex" sx={{minHeight: '100vh', width: '100%' }}> {/* Body start */}
+        <Box display="flex" sx={{minHeight: '100vh', width: '100%' }}> 
 
           <Grid container display='flex' direction='column'>
             <Grid item sx={{ order: 1 }}><FirstTestHeader timer={defaultTime} timerStart={timerStart} onTimeUp={onTimeUp} /></Grid>

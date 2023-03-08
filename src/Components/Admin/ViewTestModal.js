@@ -12,6 +12,11 @@ import PopupState, { bindMenu, bindTrigger } from "material-ui-popup-state";
 import { GrDocumentWord, GrDocumentPdf } from "react-icons/gr";
 import { getImageSize } from "react-image-size";
 import mergeImages from "merge-images";
+import { Document, Packer, Paragraph, TextRun } from "docx";
+// import * as fs from 'fs';
+import ReactPDF, { Page, pdf, Text, View } from "@react-pdf/renderer";
+import RavenTestResults from "./RavenTestResults";
+
 
 const style = {
   position: 'absolute',
@@ -28,6 +33,7 @@ const style = {
 export function ViewTestModal(props){
   const rowData = props.rowData.current; //the main data to show. Is a ref
   const [imageData, setImageData] = useState(null)
+  const [toggleTest, setToggleTest] = useState("ravenTest"); //"ravenTest" or "createTest"
 
 
   //LOAD IMAGES FROM API/mockTestResults_Images
@@ -38,6 +44,11 @@ export function ViewTestModal(props){
   }, [imageData]);
 
   //MERGE IMAGES INTO ONE FOR EXPORT
+  const handleExport = (popupState) => {
+    joinImages();
+    popupState.close();
+  }
+
   const joinImages = () => {
     if (!imageData) return;
 
@@ -55,9 +66,9 @@ export function ViewTestModal(props){
           { src: images['7'], x: 0, y: (height + gap)*2 },
           { src: images['8'], x: width + gap, y: (height + gap) * 2 },
           { src: images['9'], x: (width + gap) * 2, y: (height + gap) * 2 },
-        ], { width: width * 3 + (3 * gap), height: height * 3 + (3 * gap) })
+        ], { width: width * 3 + (3 * gap), height: height * 3 + (3 * gap) }) //Set final image size
           .then(b64 => {
-            console.log(b64);
+            // console.log(b64);
             const downloadLink = document.createElement("a");
             downloadLink.href = b64;
             downloadLink.download = "userMatrix-"+rowData.id;
@@ -66,14 +77,78 @@ export function ViewTestModal(props){
       });
   }
 
-  const handleExport = (popupState) => {
-    joinImages();
+  
+  ///////////////////////////////////////
+
+
+  //GENERATE WORD FILE
+  const handleGenerateWord = (popupState) => {
+    generateWordFile();
     popupState.close();
   }
 
+  const generateWordFile =() => {
+    const doc = new Document({
+      sections: [
+        {
+          properties: {},
+          children: [
+            new Paragraph({
+              children: [
+                new TextRun("Hello World"),
+                new TextRun({
+                  text: "Foo Bar",
+                  bold: true,
+                }),
+                new TextRun({
+                  text: "\tGithub is the best",
+                  bold: true,
+                }),
+              ],
+            }),
+          ],
+        },
+      ],
+    });
+
+    // Packer.toBuffer(doc).then((buffer) => {
+    //   fs.writeFileSync("My Document.docx", buffer);
+    // });
+  }
+  
+  //GENERATE PDF FILE
+  const handleGeneratePDF = (popupState) => {
+    generatePDFFile();
+    popupState.close();
+  }
+
+  const generatePDFFile = async () => {
+    const Doc = () => (
+      <Document>
+        <Page size="A4">
+          <View >
+            <Text>Test Details</Text>
+          </View>
+          <View>
+            <Text>Submitted Matrix</Text>
+          </View>
+        </Page>
+      </Document>
+    );
+
+  // ReactPDF.render(<Doc />, `${__dirname}/assets/example.pdf`);
+    // let blobPDF = await pdf(Doc())
+    // blobPDF.updateContainer(Doc())
+    // const result = await pdf.toBlob()
+    // console.log(result)
+
+  }
+/////////////////////////////////////
+
 
   //LEFT HALF
-  const submissionimages = () => {
+  //CREATE TEST
+  const createTestImages = () => {
     if(!imageData) return;
 
     // console.log(rowData)
@@ -91,8 +166,15 @@ export function ViewTestModal(props){
         />
       </Grid>);
     }
-    return si;
+    return <Grid container rowSpacing={3} columns={9} sx={{ justifyContent: 'center', alignItems: 'center' }}>{si}</Grid>;
   }
+
+  //RAVEN TEST
+  const ravenTest = () => {
+      return <RavenTestResults testID={rowData.id} />
+  }
+
+
 
   //RIGHT HALF
   const testDetails = () => {
@@ -150,8 +232,8 @@ export function ViewTestModal(props){
                 Generate Report
               </Button>
               <Menu {...bindMenu(popupState)}>
-                <MenuItem onClick={popupState.close}><ListItemIcon><GrDocumentWord /></ListItemIcon>Word</MenuItem>
-                <MenuItem onClick={popupState.close}><ListItemIcon><GrDocumentPdf /></ListItemIcon>PDF</MenuItem>
+                <MenuItem disabled onClick={() => handleGenerateWord(popupState)}><ListItemIcon><GrDocumentWord /></ListItemIcon>Word</MenuItem>
+                <MenuItem disabled onClick={() => handleGeneratePDF(popupState)}><ListItemIcon><GrDocumentPdf /></ListItemIcon>PDF</MenuItem>
               </Menu>
             </>
           )}
@@ -194,9 +276,7 @@ export function ViewTestModal(props){
               <Box flexGrow={1} sx={{display:'flex', flexDirection:'row'}}>
 
                 <Box id="previewMatrix" style={{margin:'inherit'}}>
-                  <Grid container rowSpacing={3} columns={9} sx={{ justifyContent: 'center', alignItems: 'center' }}>
-                    {submissionimages()}
-                  </Grid>
+                    {toggleTest==="createTest" ? createTestImages() : ravenTest()}
                 </Box>
 
                 <Box id="testDetails">

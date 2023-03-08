@@ -1,7 +1,6 @@
 import { Cancel, CheckCircle } from "@mui/icons-material";
 import { Button, Fade, Grid, ImageList, ImageListItem, Paper, Popper, Stack, Typography } from "@mui/material";
 import PopupState, { bindHover, bindPopper, bindToggle } from "material-ui-popup-state";
-import { nanoid } from "nanoid";
 import { useState } from "react";
 
 
@@ -10,19 +9,7 @@ export function QuestionPopper(props) {
   const row = props.row;
   const qImages = props.qImages;
   const aImages = props.aImages;
-
-  const QuestionWithIcon = () => {
-    return row.correct === row.given ?
-      <Stack direction="row" alignItems="center" gap={1}>
-        <CheckCircle color='success' fontSize='small' />
-        Q{row.questionNumber}
-      </Stack>
-      :
-      <Stack direction="row" alignItems="center" gap={1}>
-        <Cancel color='error' fontSize='small' />
-        Q{row.questionNumber}
-      </Stack>
-  }
+  const disablePortal = props.disablePortal || false; //Admin's RavenTestResults wants disablePortal, FirstTestResults does not
 
   //QUESTION IMAGES
   const renderQuestionImages = () => {
@@ -64,7 +51,7 @@ export function QuestionPopper(props) {
       {(popupState) => (
         <div>
           <Button variant="text" {...bindHover(popupState)} disableRipple>View Details</Button>
-          <Popper {...bindPopper(popupState)} transition placement="right">
+          <Popper {...bindPopper(popupState)} transition placement="right" disablePortal={disablePortal}>
             {({ TransitionProps }) => (
               <Fade {...TransitionProps} timeout={350}>
                 <Paper sx={{ p: 1, width: '45vh' }} elevation={3}>
@@ -74,7 +61,8 @@ export function QuestionPopper(props) {
                       {qImages && renderQuestionImages()}
                     </Grid>
                     <Grid item xs={5}>
-                      <Typography variant="h7">Your Answer</Typography>
+                      {/* Minor detail; 'Submitted Answer' is for Admin panel */}
+                      {disablePortal ? <Typography variant="h7">Submitted Answer</Typography> : <Typography variant="h7">Your Answer</Typography>}
                       {aImages && renderAnswerImages()}
                     </Grid>
 
