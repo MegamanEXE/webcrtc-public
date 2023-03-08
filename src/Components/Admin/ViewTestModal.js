@@ -10,6 +10,8 @@ import mockTestResults_Images from "../../data/mockTestResults_Images.json"
 import { Code, DeleteForever, Photo } from "@mui/icons-material";
 import PopupState, { bindMenu, bindTrigger } from "material-ui-popup-state";
 import { GrDocumentWord, GrDocumentPdf } from "react-icons/gr";
+import { getImageSize } from "react-image-size";
+import mergeImages from "merge-images";
 
 const style = {
   position: 'absolute',
@@ -35,12 +37,46 @@ export function ViewTestModal(props){
     setImageData(mockTestResults_Images[idx]);
   }, [imageData]);
 
+  //MERGE IMAGES INTO ONE FOR EXPORT
+  const joinImages = () => {
+    if (!imageData) return;
+
+    const images = imageData["createTest"].submission;
+    const gap = 8;
+    getImageSize(imageData["createTest"].submission['1'])
+      .then(({ width, height }) => {
+        mergeImages([
+          { src: images['1'], x: 0, y: 0 },
+          { src: images['2'], x: width+gap, y: 0 },
+          { src: images['3'], x: (width + gap)*2, y: 0 },
+          { src: images['4'], x: 0, y: height + gap },
+          { src: images['5'], x: width + gap, y: height + gap },
+          { src: images['6'], x: (width + gap)*2, y: height + gap },
+          { src: images['7'], x: 0, y: (height + gap)*2 },
+          { src: images['8'], x: width + gap, y: (height + gap) * 2 },
+          { src: images['9'], x: (width + gap) * 2, y: (height + gap) * 2 },
+        ], { width: width * 3 + (3 * gap), height: height * 3 + (3 * gap) })
+          .then(b64 => {
+            console.log(b64);
+            const downloadLink = document.createElement("a");
+            downloadLink.href = b64;
+            downloadLink.download = "userMatrix-"+rowData.id;
+            downloadLink.click();
+          })
+      });
+  }
+
+  const handleExport = (popupState) => {
+    joinImages();
+    popupState.close();
+  }
+
 
   //LEFT HALF
   const submissionimages = () => {
     if(!imageData) return;
 
-    console.log(rowData)
+    // console.log(rowData)
     let si = [];
     for (let i = 1; i <= 9; i++) {
       si.push(<Grid item className="gridMatrix" key={`submission-${i}`} xs={3} >
@@ -100,7 +136,7 @@ export function ViewTestModal(props){
                 Export
               </Button>
               <Menu {...bindMenu(popupState)}>
-                <MenuItem onClick={popupState.close}><ListItemIcon><Photo fontSize="small" /></ListItemIcon>Picture</MenuItem>
+                <MenuItem onClick={()=>handleExport(popupState)}><ListItemIcon><Photo fontSize="small" /></ListItemIcon>Picture</MenuItem>
                 {/* <MenuItem onClick={popupState.close}><ListItemIcon><Code fontSize="small" /></ListItemIcon>  XML</MenuItem> */}
               </Menu>
             </>
