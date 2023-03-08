@@ -3,18 +3,16 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
 import ListSubheader from '@mui/material/ListSubheader';
-import { Button, Card, CardActions, CardContent, CardHeader, Divider, ListItemButton, Paper, Table, TableBody, TableCell, TableContainer, TableRow, TextField } from '@mui/material';
+import { Button, Card, CardActions, CardContent, CardHeader, ListItemButton, Table, TableBody, TableCell, TableContainer, TableRow, TextField } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { useEffect, useState } from 'react';
 import { styled } from '@mui/material/styles';
 
-import mockUserData from '../../data/mockUserData.json'
 import mockQuizQuestions from '../../data/mockQuizQuestions.json'
-import { Edit, Settings } from '@mui/icons-material';
+import { Edit } from '@mui/icons-material';
 import TestModal from './TestModal';
 
 export default function IntelligenceTests() {

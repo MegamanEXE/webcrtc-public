@@ -5,8 +5,6 @@ import '../../App.css'
 import Toolbox from "./Toolbox";
 import RightBar from "./RightBar"
 import produce from "immer";
-import { nanoid } from "nanoid";
-import { DEFAULTS, SHAPE_TYPES } from "./ShapesData";
 import Matrix from "./Matrix";
 import { SubmitModal } from "./SubmitModal";
 import { useCallback } from "react";

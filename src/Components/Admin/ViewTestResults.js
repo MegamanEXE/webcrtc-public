@@ -4,14 +4,21 @@ import Typography from '@mui/material/Typography';
 import { DataGrid, GridToolbar, GridToolbarContainer, GridToolbarColumnsButton, GridToolbarFilterButton, GridToolbarDensitySelector, GridToolbarQuickFilter } from '@mui/x-data-grid';
 import mockResultData from '../../data/mockTestResults.json'
 import { Link } from 'react-router-dom';
-
-{/* TODO: Make ViewTest/Delete work when I actually make the component*/}
+import { ViewTestModal } from './ViewTestModal';
+import { useRef, useState } from 'react';
 
 
 export default function ViewTestResults() {
+  const [modalOpen, setModalOpen] = useState(false);
+  const rowData = useRef(null);
+
   const viewDeleteColumn = (row) => {
-    return <Box sx={{ color: '#5C54D6', fontWeight:'bold'}}>
-      <Link onClick={()=>console.log(row.name)}>View Test</Link>
+    return <Box sx={{ color: '#5C54D6', fontWeight: 'bold' }}>
+      <Link onClick={() => {
+          rowData.current = row;
+          setModalOpen(true);
+        }}
+      >View Test</Link>
       {', '}
       <Link>Delete</Link>
     </Box>
@@ -50,6 +57,7 @@ export default function ViewTestResults() {
           componentsProps={{ toolbar:{showQuickFilter: true, quickFilterProps:{debounceMs:500}} }} 
           sx={{border:0}} />
       </Box>
+      {modalOpen && <ViewTestModal modalOpen={modalOpen} setModalOpen={setModalOpen} rowData={rowData} />}
     </Box>
   )
 }

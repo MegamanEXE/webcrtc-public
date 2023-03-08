@@ -514,3 +514,10 @@ a:active {
 .wrongBorder{
   border: 4px solid #ef5350;
 }
+
+#testDetails{
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  padding: 3em;
+}
