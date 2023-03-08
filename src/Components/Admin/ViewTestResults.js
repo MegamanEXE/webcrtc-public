@@ -6,11 +6,36 @@ import mockResultData from '../../data/mockTestResults.json'
 import { Link } from 'react-router-dom';
 import { ViewTestModal } from './ViewTestModal';
 import { useRef, useState } from 'react';
+import { useEffect } from 'react';
+import produce from 'immer';
 
 
 export default function ViewTestResults() {
+  const [DATA, setDATA] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
   const rowData = useRef(null);
+
+  //LOAD DATA FROM API
+  useEffect(() => {
+    setDATA(mockResultData);
+  },[]);
+
+  //UPDATE IN API HERE
+  useEffect(() => {
+     //Server code here 
+  },[DATA]);
+
+  //HANDLE DELETE
+  const handleDelete = (row) => {
+    //Delete from mockTestResults
+    setDATA(old => produce(old, d => {
+      const idx = d.findIndex(r => r.id === row.id);
+      if (idx !== -1) d.splice(idx, 1);
+    }))
+    //Delete from mockTestResults_Images
+    // const idx = mockTestResults_Images.findIndex(i => i.id === rowData.id);
+    // setImageData(mockTestResults_Images[idx]);
+  }
 
   const viewDeleteColumn = (row) => {
     return <Box sx={{ color: '#5C54D6', fontWeight: 'bold' }}>
@@ -20,7 +45,7 @@ export default function ViewTestResults() {
         }}
       >View Test</Link>
       {', '}
-      <Link>Delete</Link>
+      <Link onClick={()=>handleDelete(row)}>Delete</Link>
     </Box>
   }
 
@@ -50,14 +75,14 @@ export default function ViewTestResults() {
     <Box className='ViewResultsContainer'>
       <Typography variant="h6">View Test Results</Typography>
       <Box height={'84vh'} sx={{'& .MuiDataGrid-columnHeaderTitle':{fontWeight:600} }}>
-        <DataGrid 
-          rows={mockResultData} 
+        {DATA && <DataGrid 
+          rows={DATA} 
           columns={columns} 
           components={{Toolbar: CustomToolbar}}
           componentsProps={{ toolbar:{showQuickFilter: true, quickFilterProps:{debounceMs:500}} }} 
-          sx={{border:0}} />
+          sx={{border:0}} />}
       </Box>
-      {modalOpen && <ViewTestModal modalOpen={modalOpen} setModalOpen={setModalOpen} rowData={rowData} />}
+      {modalOpen && <ViewTestModal modalOpen={modalOpen} setModalOpen={setModalOpen} rowData={rowData} setDATA={setDATA} />}
     </Box>
   )
 }

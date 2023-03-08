@@ -6,7 +6,6 @@ import mockTestResults_Images from "../../data/mockTestResults_Images.json"
 import mockTestResults from "../../data/mockTestResults.json"
 import mockQuizQuestions from "../../data/mockQuizQuestions.json"
 import { useEffect, useRef, useState } from "react";
-import PopupState, { bindHover, bindPopper, bindToggle } from "material-ui-popup-state";
 
 
 export default function RavenTestResults(props)  {
@@ -33,7 +32,6 @@ export default function RavenTestResults(props)  {
         qImages: testData.questions[parseInt(a) - 1].questionImages,
         aImages: testData.questions[parseInt(a) - 1].answerImages,
       }
-      console.log(`Pushing ${entry}, Length: ${d.length}`);
       tempArr.push(entry)
     }
 
@@ -42,9 +40,7 @@ export default function RavenTestResults(props)  {
   }, [testID]);
 
   const populateTable = () => {
-    console.log('d in populateTable', d)
-    d.map(r => console.log(r))
-
+    //Note: without disablePortal, the popper will render beneath the modal 
     return d.map((row) => (
       <TableRow
         key={row['questionNumber']}

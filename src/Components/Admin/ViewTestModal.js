@@ -16,6 +16,7 @@ import { Document, Packer, Paragraph, TextRun } from "docx";
 // import * as fs from 'fs';
 import ReactPDF, { Page, pdf, Text, View } from "@react-pdf/renderer";
 import RavenTestResults from "./RavenTestResults";
+import produce from "immer";
 
 
 const style = {
@@ -32,8 +33,11 @@ const style = {
 
 export function ViewTestModal(props){
   const rowData = props.rowData.current; //the main data to show. Is a ref
+  const setDATA = props.setDATA; //for delete button
   const [imageData, setImageData] = useState(null)
-  const [toggleTest, setToggleTest] = useState("ravenTest"); //"ravenTest" or "createTest"
+
+  const TEST_NAME = ["ravenTest","createTest"]
+  const [toggleTest, setToggleTest] = useState(TEST_NAME[1]); //"ravenTest" or "createTest"
 
 
   //LOAD IMAGES FROM API/mockTestResults_Images
@@ -242,6 +246,22 @@ export function ViewTestModal(props){
     </>);
   }
 
+  //HANDLE DELETE
+  const handleDelete = () => {
+    console.log(`Deleting Test ID: ${rowData.id}`);
+    //Delete from mockTestResults
+    setDATA(old => produce(old, d => {
+      const idx = d.findIndex(r => r.id === rowData.id);
+      console.log(`Found ${idx}`)
+      if (idx !== -1) d.splice(idx, 1);
+    }))
+    //Delete from mockTestResults_Images
+    const idx = mockTestResults_Images.findIndex(i => i.id === rowData.id);
+    // setImageData(mockTestResults_Images[idx]);
+
+    props.setModalOpen(false);
+  }
+
 
   return (
     <>
@@ -272,11 +292,15 @@ export function ViewTestModal(props){
 
 
 
-            <Box id="modalContent" flexGrow={1}>
-              <Box flexGrow={1} sx={{display:'flex', flexDirection:'row'}}>
+            <Box id="modalContent" flexGrow={1} sx={{position:'relative'}}>
 
+              <Button size="small" variant="outlined" sx={{position:"absolute", top:17, left:17}}
+                onClick={()=>setToggleTest(t => t===TEST_NAME[0] ? TEST_NAME[1] : TEST_NAME[0])}
+              >Switch to {toggleTest===TEST_NAME[0] ? 'Created Test' : 'Raven Test' }</Button>
+              
+              <Box flexGrow={1} sx={{display:'flex', flexDirection:'row'}}> 
                 <Box id="previewMatrix" style={{margin:'inherit'}}>
-                    {toggleTest==="createTest" ? createTestImages() : ravenTest()}
+                    {toggleTest===TEST_NAME[1] ? createTestImages() : ravenTest()}
                 </Box>
 
                 <Box id="testDetails">
@@ -292,7 +316,7 @@ export function ViewTestModal(props){
 
             
             <Box id="modalActions">
-              <Button color="error"><DeleteForever /><strong>Delete Test</strong></Button>
+              <Button color="error" onClick={handleDelete}><DeleteForever /><strong>Delete Test</strong></Button>
             </Box>
             
 
