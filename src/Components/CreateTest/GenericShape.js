@@ -178,8 +178,12 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
 
           d.rotation = node.rotation();
 
-          d.width = clamp(node.width() * scaleX, LIMITS.RECT.MIN, LIMITS.RECT.MAX);
-          d.height = clamp(node.height() * scaleY, LIMITS.RECT.MIN, LIMITS.RECT.MAX);
+          // d.width = clamp(node.width() * scaleX, LIMITS.RECT.MIN, LIMITS.RECT.MAX);
+          // d.height = clamp(node.height() * scaleY, LIMITS.RECT.MIN, LIMITS.RECT.MAX);
+
+          //This solves the flip->transform bug
+          d.width = node.width() * scaleX;
+          d.height = node.height() * scaleY;
 
         }
       }));
@@ -219,7 +223,7 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
 
       transformerRef.current.nodes([shapeRef.current]);
       shapeNode.current = shapeRef.current
-      transformerRef.current.forceUpdate();
+      // transformerRef.current.forceUpdate();
       transformerRef.current.getLayer().batchDraw();
     }
   }, [isSelected]);
@@ -297,7 +301,6 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
     case SHAPE_TYPES.SQUARE:
       return <>
         <Rect ref={shapeRef} {...props} {...defaultProps} />
-        <Circle radius={7} fill="red" x={props.x} y={props.y} />
         {isSelected && (<Transformer anchorSize={5} rotateAnchorOffset={20} borderDash={[6, 2]} ref={transformerRef} rotationSnaps={snaps} boundBoxFunc={boundBoxCallbackForRectangle} />)}
         
       </>

@@ -126,25 +126,9 @@ export default function Toolbox(props) {
 
       const nodeBefore = props.shapeNode.current; //DOM Konva node
       const oldScaleX = nodeBefore.scaleX();
-      // const cr = nodeBefore.getClientRect();
-
-      // nodeBefore.offsetX(nodeBefore.width()/2)
-      // nodeBefore.scaleX(-oldScaleX);
-      // nodeBefore.offsetX(0)
-
-      //This should be enough
+   
       updateAttribute("scaleX", -oldScaleX);
-      
-      const nodeAfter = props.shapeNode.current;
-
-      updateAttribute("x", nodeAfter.x());
-      updateAttribute("y", nodeAfter.y());
-      updateAttribute("rotation", nodeAfter.rotation());
-
-      updateAttribute("width", shape.width);
-      updateAttribute("height", shape.height);
-
-      // console.log(`old: ${nodeBefore.x()}. new: ${nodeAfter.x()}`)
+  
     
     }  
   }
