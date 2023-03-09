@@ -122,10 +122,13 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
     if (shapeIdx !== -1) {
       setShapes(prevState => produce(prevState, (draft) => {
         let d = draft[matrixNumber][shapeIdx];
+        const cr = node.getClientRect()
+
         d.x = node.x();
         d.y = node.y();
-        d.offsetX = node.offsetX();
-        d.offsetY = node.offsetY();
+
+        d.offsetX = node.offsetX()*scaleX;
+        d.offsetY = node.offsetY()*scaleY;
 
         //Handle specific cases here
         if (d.type === SHAPE_TYPES.CIRCLE) {
@@ -216,6 +219,7 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
 
       transformerRef.current.nodes([shapeRef.current]);
       shapeNode.current = shapeRef.current
+      transformerRef.current.forceUpdate();
       transformerRef.current.getLayer().batchDraw();
     }
   }, [isSelected]);
@@ -270,6 +274,7 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
   const defaultProps = {
     draggable: true,
     isSelected: isSelected,
+    shadowForStrokeEnabled: false, //optimization
     onClick :handleSelect,
     onTap: handleSelect, 
     onDragStart: handleSelect,
@@ -292,6 +297,7 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
     case SHAPE_TYPES.SQUARE:
       return <>
         <Rect ref={shapeRef} {...props} {...defaultProps} />
+        <Circle radius={7} fill="red" x={props.x} y={props.y} />
         {isSelected && (<Transformer anchorSize={5} rotateAnchorOffset={20} borderDash={[6, 2]} ref={transformerRef} rotationSnaps={snaps} boundBoxFunc={boundBoxCallbackForRectangle} />)}
         
       </>
