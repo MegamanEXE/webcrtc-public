@@ -8,12 +8,14 @@ import { ViewTestModal } from './ViewTestModal';
 import { useRef, useState } from 'react';
 import { useEffect } from 'react';
 import produce from 'immer';
+import { useConfirm } from 'material-ui-confirm';
 
 
 export default function ViewTestResults() {
   const [DATA, setDATA] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
   const rowData = useRef(null);
+  const confirm = useConfirm(); //Confirmation dialog
 
   //LOAD DATA FROM API
   useEffect(() => {
@@ -27,14 +29,23 @@ export default function ViewTestResults() {
 
   //HANDLE DELETE
   const handleDelete = (row) => {
-    //Delete from mockTestResults
-    setDATA(old => produce(old, d => {
-      const idx = d.findIndex(r => r.id === row.id);
-      if (idx !== -1) d.splice(idx, 1);
-    }))
-    //Delete from mockTestResults_Images
-    // const idx = mockTestResults_Images.findIndex(i => i.id === rowData.id);
-    // setImageData(mockTestResults_Images[idx]);
+
+    confirm({title:'Confirm Deletion', description: `Are you sure you want to delete Test#${row.id}` }
+    ).then(() => {
+      //Delete from mockTestResults
+      setDATA(old => produce(old, d => {
+        const idx = d.findIndex(r => r.id === row.id);
+        if (idx !== -1) d.splice(idx, 1);
+      }))
+      //Delete from mockTestResults_Images
+      // const idx = mockTestResults_Images.findIndex(i => i.id === rowData.id);
+      // setImageData(mockTestResults_Images[idx]);
+    }).catch(() => {
+      console.log("Deletion cancelled");
+    }
+
+    );
+
   }
 
   const viewDeleteColumn = (row) => {

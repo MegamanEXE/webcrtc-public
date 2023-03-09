@@ -17,6 +17,7 @@ import { Document, Packer, Paragraph, TextRun } from "docx";
 import ReactPDF, { Page, pdf, Text, View } from "@react-pdf/renderer";
 import RavenTestResults from "./RavenTestResults";
 import produce from "immer";
+import { useConfirm } from "material-ui-confirm";
 
 
 const style = {
@@ -34,7 +35,8 @@ const style = {
 export function ViewTestModal(props){
   const rowData = props.rowData.current; //the main data to show. Is a ref
   const setDATA = props.setDATA; //for delete button
-  const [imageData, setImageData] = useState(null)
+  const [imageData, setImageData] = useState(null);
+  const confirm = useConfirm();
 
   const TEST_NAME = ["ravenTest","createTest"]
   const [toggleTest, setToggleTest] = useState(TEST_NAME[1]); //"ravenTest" or "createTest"
@@ -248,18 +250,22 @@ export function ViewTestModal(props){
 
   //HANDLE DELETE
   const handleDelete = () => {
-    console.log(`Deleting Test ID: ${rowData.id}`);
-    //Delete from mockTestResults
-    setDATA(old => produce(old, d => {
-      const idx = d.findIndex(r => r.id === rowData.id);
-      console.log(`Found ${idx}`)
-      if (idx !== -1) d.splice(idx, 1);
-    }))
-    //Delete from mockTestResults_Images
-    const idx = mockTestResults_Images.findIndex(i => i.id === rowData.id);
-    // setImageData(mockTestResults_Images[idx]);
+    confirm({ title: 'Confirm Deletion', description: `Are you sure you want to delete Test#${rowData.id}` }
+    ).then(() => {
+      //Delete from mockTestResults
+      setDATA(old => produce(old, d => {
+        const idx = d.findIndex(r => r.id === rowData.id);
+        console.log(`Found ${idx}`)
+        if (idx !== -1) d.splice(idx, 1);
+      }))
+      //Delete from mockTestResults_Images
+      const idx = mockTestResults_Images.findIndex(i => i.id === rowData.id);
+      // setImageData(mockTestResults_Images[idx]);
 
-    props.setModalOpen(false);
+      props.setModalOpen(false);
+    }).catch(() => {
+      console.log("Deletion cancelled");
+    }); 
   }
 
 
