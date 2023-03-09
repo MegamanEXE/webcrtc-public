@@ -105,10 +105,19 @@ export default function Matrix(props) {
       stageRef.current.setPointersPositions(event);
       const coords = stageRef.current.getPointerPosition();
 
+      const stageTransform = stageRef.current.getAbsoluteTransform().copy();
+      const position = stageTransform.invert().point(coords);
+
+
       //Refactoring magic 2.0 reduced it to this, check OLD VERSIONS of this for an eyebleed
+      // createShape({
+      //   x: coords.x,
+      //   y: coords.y,
+      //   shapeType: type
+      // });
       createShape({
-        x: coords.x,
-        y: coords.y,
+        x: position.x,
+        y: position.y,
         shapeType: type
       });
 
@@ -152,21 +161,7 @@ export default function Matrix(props) {
   }
 
   const EXPERIMENT_doubleClick = () => {
-    if (stageSizeToggle) {
-      // stageRef.current.width(300);
-      // stageRef.current.height(300);
-      // stageRef.current.scaleX(scaleInc);
-      // stageRef.current.scaleY(scaleInc);
-      // stageSizeToggle.current = !stageSizeToggle.current;
-      setStageSizeToggle(s => !s)
-      
-    } else {
-      // stageRef.current.width(matrix_size);
-      // stageRef.current.height(matrix_size);
-      // stageRef.current.scaleX(1);
-      // stageRef.current.scaleY(1);
-      setStageSizeToggle(s => !s)
-    }
+      setStageSizeToggle(s => !s)    
   }
 
   useEffect(() => {
@@ -186,7 +181,17 @@ export default function Matrix(props) {
     if([TOOLS.NORMAL_BRUSH, TOOLS.MAGIC_BRUSH].includes(props.tool)){
       isDrawing.current = true;
       const pos = stageRef.current.getPointerPosition();
-      setFreehandLines([...freehandLines, { points: [pos.x, pos.y] }]); //starting point
+
+
+      //Whereever you see this, this is to account for the scale of the stage
+      const stageTransform = stageRef.current.getAbsoluteTransform().copy();
+      const position = stageTransform.invert().point(pos);
+
+
+
+      // setFreehandLines([...freehandLines, { points: [pos.x, pos.y] }]); //starting point
+      setFreehandLines([...freehandLines, { points: [position.x, position.y] }]); //starting point
+
     }
 
     //Deletion tool
@@ -215,9 +220,13 @@ export default function Matrix(props) {
 
       const stage = stageRef.current;
       const point = stage.getPointerPosition();
+      const stageTransform = stageRef.current.getAbsoluteTransform().copy();
+      const position = stageTransform.invert().point(point);
       let lastLine = freehandLines[freehandLines.length - 1];
 
-      lastLine.points = lastLine.points.concat([point.x, point.y]);
+      lastLine.points = lastLine.points.concat([position.x, position.y]);
+
+      // lastLine.points = lastLine.points.concat([point.x, point.y]);
 
       // Smoothing
       let lastPoint = {
@@ -226,7 +235,8 @@ export default function Matrix(props) {
       };
 
       if (dist(lastPoint, point) > 3) {
-        lastLine.points = lastLine.points.concat([point.x, point.y]);
+        // lastLine.points = lastLine.points.concat([point.x, point.y]);
+        lastLine.points = lastLine.points.concat([position.x, position.y]);
       }
       // replace last
       freehandLines.splice(freehandLines.length - 1, 1, lastLine);
@@ -316,14 +326,14 @@ export default function Matrix(props) {
   return (
     <Box id={props.id} className={props.selectedMatrix === matrixNumber ? "matrix selected" : "matrix"} ref={divRef}
       onDragOver={handleDragOver} onDrop={handleDrop}
-      sx={stageSizeToggle ? { width: 300, height: 300 } : { width: matrix_size, height: matrix_size } }
+      sx={stageSizeToggle ? { width: matrix_size*2, height: matrix_size*2 } : { width: matrix_size, height: matrix_size } }
     >
       <Stage ref={stageRef} className="stage" scaleX={stageSizeToggle ? scaleInc : 1} scaleY={stageSizeToggle ? scaleInc : 1}
         width={dimensions.width} height={dimensions.height} onDblClick={EXPERIMENT_doubleClick}
         onClick={handleCanvasClick} onMouseDown={handleMouseDown} onMousemove={handleMouseMove} onMouseup={handleMouseUp} onContextMenu={handleContextMenu}>
         <Layer className="layer" ref={layerRef}>
 
-          <Rect class="bg-color-rect" width={stageSizeToggle ? 300 : matrix_size} height={stageSizeToggle ? 300 : matrix_size} x={0} y={0} fill="white" />{/* background color, do not remove */}
+          <Rect class="bg-color-rect" width={stageSizeToggle ? matrix_size*2 : matrix_size} height={stageSizeToggle ? matrix_size*2 : matrix_size} x={0} y={0} fill="white" />{/* background color, do not remove */}
 
           {props.shapes.map(s => <GenericShape key={s.id}
             selectedShapeID={selectedShapeID} setSelectedShapeID={setSelectedShapeID}

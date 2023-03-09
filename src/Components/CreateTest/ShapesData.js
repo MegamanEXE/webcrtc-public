@@ -567,11 +567,11 @@ export const DEFAULTS = {
 
 export const LIMITS = {
   RECT: {
-    MAX: 180,
+    MAX: 250,
     MIN: 10,
   },
   CIRCLE: {
-    MAX: 180,
+    MAX: 250,
     MIN: 10,
   },
 };
