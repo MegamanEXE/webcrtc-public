@@ -216,9 +216,11 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
   //Add transformer nodes to selected shape
   useEffect(() => {
     if (isSelected) {
-      
-
       transformerRef.current.useSingleNodeRotation(false); 
+
+      //Special cases
+      if ([SHAPE_TYPES.VERTICAL_LINE, SHAPE_TYPES.TILTED_LINE].includes(props.type))
+        transformerRef.current.useSingleNodeRotation(true); 
 
       transformerRef.current.nodes([shapeRef.current]);
       shapeNode.current = shapeRef.current
