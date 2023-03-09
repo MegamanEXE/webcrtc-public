@@ -105,6 +105,7 @@ export default function Matrix(props) {
       stageRef.current.setPointersPositions(event);
       const coords = stageRef.current.getPointerPosition();
 
+      //Accounts for scale
       const stageTransform = stageRef.current.getAbsoluteTransform().copy();
       const position = stageTransform.invert().point(coords);
 
@@ -182,12 +183,9 @@ export default function Matrix(props) {
       isDrawing.current = true;
       const pos = stageRef.current.getPointerPosition();
 
-
       //Whereever you see this, this is to account for the scale of the stage
       const stageTransform = stageRef.current.getAbsoluteTransform().copy();
       const position = stageTransform.invert().point(pos);
-
-
 
       // setFreehandLines([...freehandLines, { points: [pos.x, pos.y] }]); //starting point
       setFreehandLines([...freehandLines, { points: [position.x, position.y] }]); //starting point
@@ -200,9 +198,7 @@ export default function Matrix(props) {
       //Deletion handled in GenericShape's handleSelect()
 
       
-    }
-
-    
+    } 
   };
 
   const handleMouseMove = (e) => {
@@ -293,13 +289,21 @@ export default function Matrix(props) {
         const strokeBoundingBox = tempLine.getClientRect();
         const drawLocation = { x: strokeBoundingBox.x + strokeBoundingBox.width / 2, y: strokeBoundingBox.y + strokeBoundingBox.height / 2 }
 
+        const stageTransform = stageRef.current.getAbsoluteTransform().copy();
+        const position = stageTransform.invert().point(drawLocation);
+
         if (!MAGIC_BRUSH_SCALING_ENABLED) {
           if (result) createShape({ ...drawLocation, shapeType: result });
         } else {
           if (result) {
             const multiplier = strokeBoundingBox.width / ShapeObject[result].width;
+            // createShapeExtraAttr({
+            //   ...drawLocation, shapeType: result,
+            //   width: ShapeObject[result].width + (ShapeObject[result].width * multiplier),
+            //   height: ShapeObject[result].height + (ShapeObject[result].height * multiplier)
+            // });
             createShapeExtraAttr({
-              ...drawLocation, shapeType: result,
+              x:position.x, y:position.y, shapeType: result,
               width: ShapeObject[result].width + (ShapeObject[result].width * multiplier),
               height: ShapeObject[result].height + (ShapeObject[result].height * multiplier)
             });
