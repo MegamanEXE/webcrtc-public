@@ -12,8 +12,13 @@ import IconButton from '@mui/material/IconButton';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { useEffect, useLayoutEffect, useState } from 'react';
+import { enqueueSnackbar, useSnackbar } from 'notistack';
+
 
 import componentLibraries from '../../data/componentLibraries.json'
+import componentLibrary_template from '../../data/componentLibrary_template.json' //use to create new LoC
+
+import { useConfirm } from 'material-ui-confirm';
 
 export default function ManageLoCs() {
   const [DATA, setDATA] = useState([]);
@@ -30,10 +35,19 @@ export default function ManageLoCs() {
   const [subcomponents, setSubcomponents] = useState([]);
   const [subcomponentChecked, setSubcomponentChecked] = useState([]);
 
+  const { enqueueSnackbar } = useSnackbar(); //Little alerts that show on the bottom left
+  const confirm = useConfirm(); //Confirmation dialog
+
+
   //Read data from whereever
   useEffect(()=>{
     setDATA(componentLibraries);
   },[]);
+
+  //UPDATE API HERE
+  useEffect(() => {
+
+  }, [DATA])
 
   //Get LoC names
   useEffect(() => {
@@ -45,7 +59,7 @@ export default function ManageLoCs() {
   }, [DATA]);
 
   const markEnabledComponents = () => {
-    if (selectedLoC === undefined || selectedLoC["components"] === undefined) return; //starting to hate React at this point 
+    if (selectedLoC === undefined || selectedLoC["components"] === undefined) return; //starting to hate React at this point. UPDATE 10-Mar-2023: React's alright
     let ticked = [];
     for (const [k, v] of Object.entries(selectedLoC["components"])) {
       if (selectedLoC["components"][k].enabled === true) {
@@ -73,18 +87,43 @@ export default function ManageLoCs() {
   useEffect(()=>{ markEnabledComponents();},[selectedLoC]);
 
   const handleDeleteLoC = (name, idx) => {
-    console.log(`Deleting id:${idx}, ${name}`);
-    setDATA(DATA.filter(r => r["loc_name"] !== name));
-    
+    confirm({ title: 'Confirm Deletion', description: `Are you sure you want to delete the component library: ${name}?` }
+    ).then(() => {
+      console.log(`Deleting id:${idx}, ${name}`);
+      setDATA(DATA.filter(r => r["loc_name"] !== name));
+
+      //Delete ID from API
+      const newData = DATA.filter(r => r["loc_name"] !== name)
+      setDATA(newData);
+      enqueueSnackbar(`${name} deleted`, { variant: 'success' });
+    }).catch(() => {
+      console.log('Deletion cancelled');
+    });    
   }
 
-  const handleAddClient = (e) => {
+  const handleAddLoC = (e) => {
     if(e.key === 'Enter'){
-      setLoCs([...LoCs, addLoCTextField]);
-      console.log(`Adding ${addLoCTextField}`);
-      setAddLoCTextField('');
-      
+      handleAddButton();
     }
+  }
+
+  const handleAddButton = (e) => {
+    if (LoCs.includes(addLoCTextField)) {
+      console.log('already exists')
+      enqueueSnackbar(`${addLoCTextField} already exists.`, { variant: 'error' });
+      return;
+    }
+    setLoCs([...LoCs, addLoCTextField]);
+    //Add to API as well
+    setDATA([...DATA,
+    {
+      id: DATA.length + 1,
+      loc_name: addLoCTextField,
+      components: componentLibrary_template.components
+    }]);
+
+    console.log(`Adding ${addLoCTextField}`);
+    setAddLoCTextField('');
   }
 
   //Populates first list
@@ -225,9 +264,9 @@ export default function ManageLoCs() {
             value={addLoCTextField}
             size='small'
             margin='dense'
-            InputProps={{ endAdornment: <IconButton ><AddCircleIcon /></IconButton> }}
+            InputProps={{ endAdornment: <IconButton onClick={handleAddButton}><AddCircleIcon /></IconButton> }}
             onChange = {(e)=>setAddLoCTextField(e.target.value)}
-            onKeyPress = {handleAddClient}
+            onKeyPress = {handleAddLoC}
             
             fullWidth /></Box>
         </Box>

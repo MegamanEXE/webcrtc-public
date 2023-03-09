@@ -1,0 +1,25 @@
+{
+    "id":1,
+    "loc_name":"Default components",
+    "components": {
+      "Lines":{ "enabled":true, 
+                "shapes":{"vertical":true, "tilted":true, "c-shaped":true, "8-shaped":true, "S-shaped": true}},
+      "Rectangles":{"enabled":true, 
+                    "shapes":{"square":true, "diamond":true, "tall-fat":true, "tall-thin":true, "tilted":true, "folded":true, "tall":true, "C-shaped":true, "top-left corner":true, "star":true, "star-medium":true,"star-thin": true}},
+      "Crossed":{ "enabled":true, 
+                  "shapes":{"plus":true, "cross":true, "coordinate-system":true}},
+      "Circles":{ "enabled": true,
+                  "shapes":{"circle":true,"semi-circle":true,"c-shaped":true,"20-minutes":true,"quarter":true,"10-minutes":true,"oval-vertical":true,"oval-tilted":true,"oval-folded":true}},
+      "Triangles":{ "enabled":true, 
+                    "shapes":{"simple":true, "squashed":true, "right-angle":true, "obtuse":true, "triangle-small":true, "triangle-big":true, "right-angle-tall":true, "obtuse-tall":true, "obtuse-folded":true, "simple-tall":true}},
+      "Hexagons":{"enabled":true, 
+                  "shapes":{"hexagon":true, "semi-hexagon":true, "C-shaped":true, "rhombus":true}},
+      "Dots":{"enabled":true, 
+              "shapes":{"hollow":true, "filled":true, "4-hollow":true, "4-filled":true, "square-hollow":true, "square-filled":true, "4-square-hollow":true, "4-square-filled":true}},
+      "Textures":{"enabled":true, 
+                  "shapes":{"none":true, "filled":true, "diagonals-right":true, "diagonals-left":true, "crossing-diagonals":true, "horizontal-lines":true, "vertical-lines":true, "crossed-lines":true, "dense":true, "grey":true, "spirals-right":true, "spirals-left":true,"spirals-crossed":true}},
+      "Modifiers":{ "enabled":true,
+                    "shapes":{"bold":true,"dashed":true}}
+    }
+  }
+ 

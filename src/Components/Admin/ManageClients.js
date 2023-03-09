@@ -3,17 +3,18 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
 import ListSubheader from '@mui/material/ListSubheader';
 import { Button, Card, CardActions, CardContent, CardHeader, Divider, ListItemButton, Paper, Table, TableBody, TableCell, TableContainer, TableRow, TextField } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { useEffect, useState } from 'react';
-import { styled } from '@mui/material/styles';
 
 import mockUserData from '../../data/mockUserData.json'
 import { json, Link } from 'react-router-dom';
+import { useSnackbar } from 'notistack';
+import { useConfirm } from 'material-ui-confirm';
+import { dblClick } from '@testing-library/user-event/dist/click';
 
 export default function ManageClients() {
   // let clients = [`Dexter's Lab`, 'Bare Bears', 'Amazing World', 'Gravity Falls'];
@@ -28,27 +29,56 @@ export default function ManageClients() {
   const [addClientTextField, setAddClientTextField] = useState('');
   const [selectedUser, setSelectedUser] = useState({}); {/* uses the entire data row */}
 
+  const { enqueueSnackbar } = useSnackbar(); //Little alerts that show on the bottom left
+  const confirm = useConfirm(); //Confirmation dialog
+
+
   //Read data from whereever
   useEffect(()=>{
     setDATA(mockUserData);
   },[]);
+
+  //UPDATE API HERE
+  useEffect(() => {
+    
+  },[DATA])
 
   const handleListItemClick = (client) => {
     setSelectedClient(client);
   };
 
   const handleDeleteClient = (name, id) => {
-    console.log(`Deleting id:${id}, ${name}`)
+    confirm({ title: 'Confirm Deletion', description: `Are you sure you want to delete the client: ${name}?` }
+    ).then(() => {
+      console.log(`Deleting id:${id}, ${name}`)
+      setClients(clients.filter(c => c !== name));
+      //Delete ID from API
+      const newData = DATA.filter(r => r.client !== name)
+      setDATA(newData);
+      enqueueSnackbar(`${name} deleted`,{variant:'success'});
+    }).catch(() => {
+      console.log('Deletion cancelled');
+    });
+
     
   }
 
   const handleAddClient = (e) => {
     if(e.key === 'Enter'){
+      handleAddButton()
+    }
+  }
+
+  const handleAddButton = (e) => {
+    if(clients.includes(addClientTextField)){
+      console.log('already exists')
+      enqueueSnackbar(`${addClientTextField} already exists.`, {variant:'error'});
+      return;
+    }
+
       setClients([...clients, addClientTextField]);
       console.log(`Adding ${addClientTextField}`);
       setAddClientTextField('');
-      
-    }
   }
 
   const selectableItems = () => {
@@ -149,7 +179,7 @@ export default function ManageClients() {
             value={addClientTextField}
             size='small'
             margin='dense'
-            InputProps={{ endAdornment: <IconButton ><AddCircleIcon /></IconButton> }}
+              InputProps={{ endAdornment: <IconButton onClick={handleAddButton}><AddCircleIcon /></IconButton> }}
             onChange = {(e)=>setAddClientTextField(e.target.value)}
             onKeyPress = {handleAddClient}
             
