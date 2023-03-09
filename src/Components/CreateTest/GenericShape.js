@@ -216,10 +216,9 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
   //Add transformer nodes to selected shape
   useEffect(() => {
     if (isSelected) {
-      //Make the rotation anchor always above top. Currently bugged;
-      //the transformer goes to minimum height if flip is used
+      
 
-      // transformerRef.current.useSingleNodeRotation(false); 
+      transformerRef.current.useSingleNodeRotation(false); 
 
       transformerRef.current.nodes([shapeRef.current]);
       shapeNode.current = shapeRef.current
