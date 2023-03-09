@@ -14,6 +14,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import CountrySelect from './CountrySelect';
+import { useState } from 'react';
 
 const theme = crtcTheme();
 
@@ -22,15 +23,31 @@ export default function SignUp() {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
         console.log({
+            firstName: data.get('firstName'),
+            lastName: data.get('lastName'),
             email: data.get('email'),
             password: data.get('password'),
+            'confirm-password': data.get('confirm-password'),
+            age: age,
+            educationLevel: education,
+            country: country,
+            occupation: data.get('occupation')
+
         });
     };
 
-    const [education, setEducation] = React.useState('');
+    const [education, setEducation] = useState('');
     const handleEducation = (event) => {
         setEducation(event.target.value);
     }
+
+    const [country, setCountry] = useState('');
+    const handleCountry = (i) => {
+        setCountry(i);
+    }
+
+    const [age, setAge] = useState('');
+    
     
 
     return (
@@ -109,7 +126,8 @@ export default function SignUp() {
 
                             <Grid item xs={4}>
                                 <TextField
-                                    id="outlined-number"
+                                    id="age"
+                                    onChange={(e)=>setAge(e.target.value)}
                                     label="Age"
                                     type="number"
                                     InputLabelProps={{
@@ -146,7 +164,7 @@ export default function SignUp() {
                             <Grid item xs={3}></Grid>
 
                             <Grid item xs={9}>
-                                <CountrySelect></CountrySelect>
+                                <CountrySelect handleCountry={handleCountry} />
                             </Grid>
 
                             <Grid item xs={3}></Grid>
