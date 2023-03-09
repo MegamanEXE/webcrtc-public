@@ -28,10 +28,14 @@ export default function Matrix(props) {
   const divRef = useRef(null);
   const stageRef = useRef(null);
   const layerRef = useRef(null);
-
+  // const stageSizeToggle = useRef(false);
+  const [stageSizeToggle, setStageSizeToggle] = useState(false)
+  
   const matrix_size = 150;
   const matrixNumber = props.id.split("-")[1]
   const MAGIC_BRUSH_SCALING_ENABLED = false;
+  const scaleInc = 2;
+
 
 
   //$P recognizer
@@ -146,6 +150,28 @@ export default function Matrix(props) {
     isDrawing.current = false;
     stageNode.current = stageRef.current;
   }
+
+  const EXPERIMENT_doubleClick = () => {
+    if (stageSizeToggle) {
+      // stageRef.current.width(300);
+      // stageRef.current.height(300);
+      // stageRef.current.scaleX(scaleInc);
+      // stageRef.current.scaleY(scaleInc);
+      // stageSizeToggle.current = !stageSizeToggle.current;
+      setStageSizeToggle(s => !s)
+      
+    } else {
+      // stageRef.current.width(matrix_size);
+      // stageRef.current.height(matrix_size);
+      // stageRef.current.scaleX(1);
+      // stageRef.current.scaleY(1);
+      setStageSizeToggle(s => !s)
+    }
+  }
+
+  useEffect(() => {
+    handleResize()
+  },[stageSizeToggle]);
 
   //////////////////////////////////////
   //Freehand drawing
@@ -290,14 +316,14 @@ export default function Matrix(props) {
   return (
     <Box id={props.id} className={props.selectedMatrix === matrixNumber ? "matrix selected" : "matrix"} ref={divRef}
       onDragOver={handleDragOver} onDrop={handleDrop}
-      sx={{ width: matrix_size, height: matrix_size }}
+      sx={stageSizeToggle ? { width: 300, height: 300 } : { width: matrix_size, height: matrix_size } }
     >
-      <Stage ref={stageRef} className="stage" 
-        width={dimensions.width} height={dimensions.height} 
+      <Stage ref={stageRef} className="stage" scaleX={stageSizeToggle ? scaleInc : 1} scaleY={stageSizeToggle ? scaleInc : 1}
+        width={dimensions.width} height={dimensions.height} onDblClick={EXPERIMENT_doubleClick}
         onClick={handleCanvasClick} onMouseDown={handleMouseDown} onMousemove={handleMouseMove} onMouseup={handleMouseUp} onContextMenu={handleContextMenu}>
         <Layer className="layer" ref={layerRef}>
 
-          <Rect class="bg-color-rect" width={matrix_size} height={matrix_size} x={0} y={0} fill="white" />{/* background color, do not remove */}
+          <Rect class="bg-color-rect" width={stageSizeToggle ? 300 : matrix_size} height={stageSizeToggle ? 300 : matrix_size} x={0} y={0} fill="white" />{/* background color, do not remove */}
 
           {props.shapes.map(s => <GenericShape key={s.id}
             selectedShapeID={selectedShapeID} setSelectedShapeID={setSelectedShapeID}
