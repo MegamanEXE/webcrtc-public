@@ -30,7 +30,7 @@ export default function ViewTestResults() {
   //HANDLE DELETE
   const handleDelete = (row) => {
 
-    confirm({title:'Confirm Deletion', description: `Are you sure you want to delete Test#${row.id}` }
+    confirm({title:'Confirm Deletion', description: `Are you sure you want to delete Test#${row.id}?` }
     ).then(() => {
       //Delete from mockTestResults
       setDATA(old => produce(old, d => {

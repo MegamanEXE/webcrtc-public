@@ -250,7 +250,7 @@ export function ViewTestModal(props){
 
   //HANDLE DELETE
   const handleDelete = () => {
-    confirm({ title: 'Confirm Deletion', description: `Are you sure you want to delete Test#${rowData.id}` }
+    confirm({ title: 'Confirm Deletion', description: `Are you sure you want to delete Test#${rowData.id}?` }
     ).then(() => {
       //Delete from mockTestResults
       setDATA(old => produce(old, d => {
@@ -296,8 +296,6 @@ export function ViewTestModal(props){
             </Box>
 
 
-
-
             <Box id="modalContent" flexGrow={1} sx={{position:'relative'}}>
 
               <Button size="small" variant="outlined" sx={{position:"absolute", top:17, left:17}}
@@ -316,8 +314,6 @@ export function ViewTestModal(props){
 
 
             </Box>
-
-
 
 
             

@@ -14,6 +14,8 @@ import { styled } from '@mui/material/styles';
 import mockQuizQuestions from '../../data/mockQuizQuestions.json'
 import { Edit } from '@mui/icons-material';
 import TestModal from './TestModal';
+import produce from 'immer';
+import { useConfirm } from 'material-ui-confirm';
 
 export default function IntelligenceTests() {
    const [DATA, setDATA] = useState([]);
@@ -23,7 +25,8 @@ export default function IntelligenceTests() {
   const [addTestTextField, setAddTestTextField] = useState('');
   const [selectedTest, setSelectedTest] = useState({}); {/* uses the entire data row */ }
   const [modalOpen, setModalOpen] = useState(false);
-  let stl = selectedTest.length; //temporary; testing if this works
+
+  const confirm = useConfirm();
 
   //Read data from whereever
   useEffect(() => {
@@ -61,7 +64,7 @@ export default function IntelligenceTests() {
     return tests.map((test, index) => (
       <ListItem
         key={test}
-        secondaryAction={selectedTestName === test && (<IconButton edge="end" onClick={() => handleDeleteClient(test, index)}><DeleteForeverIcon /></IconButton>)}
+        secondaryAction={selectedTestName === test && (<IconButton edge="end" onClick={deleteTest}><DeleteForeverIcon /></IconButton>)}
         disablePadding
       >
         <ListItemButton
@@ -101,13 +104,27 @@ export default function IntelligenceTests() {
     </TableBody>
   }
 
-  const deleteCurrentUser = () => {
-    console.log(`Deleting ${selectedTest["name"]}`);
-    setDATA(DATA.filter(r => r["id"] !== selectedTest["id"]));
+  const deleteTest = () => {
+    if (Object.keys(selectedTest).length === 0) return;
+
+    confirm({ title: 'Confirm Deletion', description: `Are you sure you want to delete ${selectedTest['test_name']}?` }
+    ).then(() => {
+      console.log(`Deleting ${selectedTest["test_name"]}`);
+      setDATA(old => produce(old, d => {
+        delete d[selectedTest['test_name']]
+      }));
+
+      setSelectedTest({});
+    }).catch(() => {
+      console.log("Deletion cancelled");
+    }); 
+
   }
 
   const openTest = () => {
-    setModalOpen(true)
+    if (Object.keys(selectedTest).length === 0) return;
+    
+    setModalOpen(true) 
   }
 
   return (
@@ -157,8 +174,8 @@ export default function IntelligenceTests() {
 
             </CardContent>
             <CardActions disableSpacing >
-              <Button size="small" onClick={() => openTest()} sx={{ marginLeft: 'auto' }}><Edit />Modify</Button>
-              <Button size="small" color="error" onClick={() => deleteCurrentUser()} ><DeleteForeverIcon /> Delete Test</Button>
+              <Button size="small" onClick={openTest} sx={{ marginLeft: 'auto' }}><Edit />Modify</Button>
+              <Button size="small" color="error" onClick={deleteTest} ><DeleteForeverIcon /> Delete Test</Button>
               
             </CardActions>
           </Card>
