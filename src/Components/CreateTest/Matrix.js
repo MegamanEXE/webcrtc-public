@@ -19,6 +19,7 @@ export default function Matrix(props) {
   const [freehandLines, setFreehandLines] = useState([]);
 
   const selectedShapeID = props.selectedShapeID;
+  const selectedMatrix = props.selectedMatrix;
   const setSelectedShapeID = props.setSelectedShapeID;
   const setSelectedMatrix = props.setSelectedMatrix;
   const clipboard = props.clipboard;
@@ -164,6 +165,12 @@ export default function Matrix(props) {
   const EXPERIMENT_doubleClick = () => {
       setStageSizeToggle(s => !s)    
   }
+
+  //Only enlarges one matrix at a time
+  useEffect(() => {
+    if(selectedMatrix!==matrixNumber)
+      setStageSizeToggle(false)
+  },[selectedMatrix]);
 
   useEffect(() => {
     handleResize()
