@@ -4,8 +4,7 @@ import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import { Dialog, DialogActions, DialogContent, DialogTitle, IconButton } from '@mui/material';
-import { GridCloseIcon } from '@mui/x-data-grid';
+import { IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import TestModalQuestions from './TestModalQuestions';
 import TestModalSettings from './TestModalSettings';
@@ -92,20 +91,18 @@ export default function TestModal({ setModalOpen, modalOpen, selectedTest,  setS
         </Box>
 
 
-
-
         <Box id="modalContent" flexGrow={1}>
+
           <Box id="testSettings">
-            <TestModalSettings commentsRef={commentsRef} locRef={locRef} selectedTest={selectedTest} />
+            <TestModalSettings commentsRef={commentsRef} locRef={locRef} selectedTest={selectedTest} setSelectedTest={setSelectedTest} />
           </Box>
+
           <Box id="mainContent">
             <Box id="leftFrame"><TestModalQuestions {...passProps} /></Box>
             <Box id="rightFrame"><TestModalMatrix {...passProps} /></Box>
           </Box>
 
         </Box>
-
-
 
 
         <Box id="modalActions">

@@ -1,10 +1,11 @@
-import { Label } from "@mui/icons-material";
-import { Accordion, AccordionDetails, AccordionSummary, Chip, FormControl, FormLabel, InputLabel, MenuItem, Select, TextField, Typography } from "@mui/material";
-import { Box, Stack } from "@mui/system";
+import { Accordion, AccordionDetails, AccordionSummary, Chip, FormControl, FormLabel, MenuItem, Select, TextField, Typography } from "@mui/material";
+import { Box } from "@mui/system";
 import { useState } from "react";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import componentLibraries from '../../data/componentLibraries.json'
+import mockQuizQuestions from '../../data/mockQuizQuestions.json'
 import { useEffect } from "react";
+import produce from "immer";
 
 
 
@@ -12,9 +13,13 @@ export default function TestModalSettings(props) {
   const [derivedFrom, setDerivedFrom] = useState("None");
   const [loc, setLoC] = useState("None");
 
+
   const commentsRef = props.commentsRef;
   const locRef = props.locRef;
   const selectedTest = props.selectedTest;
+  const setSelectedTest = props.setSelectedTest;
+
+  const API = mockQuizQuestions; //change source in production
 
   //INITIALLY USE VALUES FROM API
   useEffect(() => {
@@ -23,8 +28,36 @@ export default function TestModalSettings(props) {
     document.getElementById("testTime").value = selectedTest["time"];
   },[]);
 
+  //LoCs DROPDOWN
   const populateLoCs = () => {
     return componentLibraries.map(loc => <MenuItem key={loc['loc_name']} value={loc['loc_name']}>{loc["loc_name"]}</MenuItem>);
+  }
+
+  //DERIVE FROM DROPDOWN
+  const populateDerivedFrom = () => {
+    return Object.keys(API).map(t => <MenuItem key={t} value={t} disabled={selectedTest["test_name"] === t}>{t}</MenuItem>)
+  }
+
+  //DERIVE
+  const handleDerivation = (e) => {
+    if(e.target.value === -1) { //None
+      //Remove questions which have a 'derivedFrom' property
+      setSelectedTest(prev => produce(prev, d => {
+        d.questions = d.questions.filter(q => !q.hasOwnProperty('derivedFrom'))
+      }));
+    }
+
+
+    const testName = e.target.value;
+    setDerivedFrom(testName);
+
+    //Append questions from said test, add some extra attributes for future features if required
+    //questionNumber is useless and never used throughout the program but whatever, will throw it a bone
+    const offset = selectedTest.questions.length;
+    const derivedQuestions = API[testName].questions.map(q => { return { ...q, derivedFrom: testName, "number": q.number + offset } });
+    setSelectedTest(prev => produce(prev, d=>{
+      d.questions.push(...derivedQuestions);
+    }));
   }
 
   return (<>
@@ -44,9 +77,10 @@ export default function TestModalSettings(props) {
                 <Select
                   id="select_derived"
                   value={derivedFrom}
-                  onChange={(e) => setDerivedFrom(e.target.value)}
+                  onChange={handleDerivation}
                 >
-                  <MenuItem disabled value={10}>None</MenuItem>
+                  <MenuItem value={-1}>None</MenuItem>
+                  {populateDerivedFrom()}
                 </Select>
               </FormControl>
             </Box>
