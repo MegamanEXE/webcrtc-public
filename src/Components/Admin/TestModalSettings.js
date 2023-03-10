@@ -10,7 +10,7 @@ import produce from "immer";
 
 
 export default function TestModalSettings(props) {
-  const [derivedFrom, setDerivedFrom] = useState("None");
+  const [derivedFrom, setDerivedFrom] = useState(-1);
   const [loc, setLoC] = useState("None");
 
 
@@ -26,6 +26,7 @@ export default function TestModalSettings(props) {
     setLoC(selectedTest["loc_name"]); 
     document.getElementById("comments").value = selectedTest["comments"];
     document.getElementById("testTime").value = selectedTest["time"];
+    if(selectedTest.hasOwnProperty('derivedFrom') && selectedTest.derivedFrom !== -1) setDerivedFrom(selectedTest.derivedFrom);
   },[]);
 
   //LoCs DROPDOWN
@@ -40,24 +41,27 @@ export default function TestModalSettings(props) {
 
   //DERIVE
   const handleDerivation = (e) => {
-    if(e.target.value === -1) { //None
+    if (e.target.value === -1) { //None
       //Remove questions which have a 'derivedFrom' property
       setSelectedTest(prev => produce(prev, d => {
+        delete d.derivedFrom;
         d.questions = d.questions.filter(q => !q.hasOwnProperty('derivedFrom'))
       }));
+      setDerivedFrom(-1);
+      
+    } else {
+      const testName = e.target.value;
+      setDerivedFrom(testName);
+
+      //Append questions from said test, add some extra attributes for future features if required
+      //questionNumber is useless and never used throughout the program but whatever, will throw it a bone
+      const offset = selectedTest.questions.length;
+      const derivedQuestions = API[testName].questions.map(q => { return { ...q, derivedFrom: testName, "number": q.number + offset } });
+      setSelectedTest(prev => produce(prev, d => {
+        d['derivedFrom'] = testName;
+        d.questions.push(...derivedQuestions);
+      }));
     }
-
-
-    const testName = e.target.value;
-    setDerivedFrom(testName);
-
-    //Append questions from said test, add some extra attributes for future features if required
-    //questionNumber is useless and never used throughout the program but whatever, will throw it a bone
-    const offset = selectedTest.questions.length;
-    const derivedQuestions = API[testName].questions.map(q => { return { ...q, derivedFrom: testName, "number": q.number + offset } });
-    setSelectedTest(prev => produce(prev, d=>{
-      d.questions.push(...derivedQuestions);
-    }));
   }
 
   return (<>
