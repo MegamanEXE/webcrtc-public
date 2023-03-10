@@ -19,6 +19,7 @@ import componentLibraries from '../../data/componentLibraries.json'
 import componentLibrary_template from '../../data/componentLibrary_template.json' //use to create new LoC
 
 import { useConfirm } from 'material-ui-confirm';
+import produce from 'immer';
 
 export default function ManageLoCs() {
   const [DATA, setDATA] = useState([]);
@@ -168,13 +169,48 @@ export default function ManageLoCs() {
       }
 
       setComponentChecked(newChecked);
+      updateComponentInAPI(value, newChecked);
     };
 
     const handleComponentClicked = (c) => {
       setSelectedComponent(c);
       setSubcomponents(Object.keys(selectedLoC["components"][c]["shapes"])); // Name and shame this heckin line of code that consumed half a day of my life
       markEnabledSubcomponents(c);
-      
+    }
+
+    //Component updated in API/view here
+    const updateComponentInAPI = (c, newChecked) => {
+      const difference = components.filter(x => !newChecked.includes(x)); //basically ['a','b'] - ['a'] = ['b']
+      console.log(difference)
+
+      //Update API
+      setDATA(prev => produce(prev,d=>{
+        const idx = d.findIndex(r => r['loc_name'] === selectedLoCName);
+        if (idx !== -1) {
+
+          components.forEach(sc => {
+            if (difference.includes(c)) {
+              d[idx].components[c].enabled = false;
+            } else {
+              d[idx].components[c].enabled = true;
+            }
+          })
+        }
+      }));
+
+      //Update View
+      setSelectedLoC(prev => produce(prev, d => {
+          components.forEach(sc => {
+            if (difference.includes(c)) {
+              d.components[c].enabled = false;
+            } else {
+              d.components[c].enabled = true;
+            }
+          })
+        
+      }));
+      enqueueSnackbar(`${selectedLoCName} updated`, { variant: 'success' })
+
     }
 
     
@@ -202,6 +238,7 @@ export default function ManageLoCs() {
 
   //Returns Sub-components under selected LoC
   const generateSubcomponentsList = () => {
+    //I did not write this; default MUI checkbox code. atrocious honestly
     const handleToggle = (value) => () => {
       const currentIndex = subcomponentChecked.indexOf(value);
       const newChecked = [...subcomponentChecked];
@@ -213,6 +250,7 @@ export default function ManageLoCs() {
       }
 
       setSubcomponentChecked(newChecked);
+      enqueueSnackbar(`${selectedLoCName} updated`, { variant: 'success' })
     };
     
 
@@ -237,6 +275,38 @@ export default function ManageLoCs() {
       </ListItem>)
     )
   }
+
+
+
+  //UPDATE SUB-COMPONENT IN API
+  useEffect(() => {
+    let difference = subcomponents.filter(x => !subcomponentChecked.includes(x)); //basically ['a','b'] - ['a'] = ['b']
+
+    setDATA(prev => produce(prev, d => {
+      const idx = d.findIndex(r => r['loc_name'] === selectedLoCName);
+      if (idx !== -1) {
+        subcomponents.forEach(sc => {
+          if(difference.includes(sc)){
+            d[idx].components[selectedComponent].shapes[sc] = false;
+          } else {
+            d[idx].components[selectedComponent].shapes[sc] = true;
+          }
+        })
+      }
+    }));
+
+    //Also update current view
+    setSelectedLoC(prev => produce(prev, d => {
+        //only difference being we don't need to search for its index
+        subcomponents.forEach(sc => {
+          if (difference.includes(sc)) {
+            d.components[selectedComponent].shapes[sc] = false;
+          } else {
+            d.components[selectedComponent].shapes[sc] = true;
+          }
+        })
+    }));
+  }, [subcomponentChecked, subcomponents])
 
   return (
     <Box className='clientsContainer'>
