@@ -5,6 +5,7 @@ import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import { useState } from "react";
 import zIndex from "@mui/material/styles/zIndex";
 import produce from "immer";
+import Image from "mui-image";
 
 export default function ModalImage(props) {
   const [hovered, setHovered] = useState(false);
@@ -46,11 +47,13 @@ export default function ModalImage(props) {
       onMouseLeave={handleMouseLeave}
 
     >
-      <img
+      <Image
         alt={props.alt}
         width="96px"
         style={{ objectFit: "contain", maxHeight: "80px" }}
         src={props.src}
+        duration={50}
+        showLoading
       />
 
       <Box hidden={!hovered} sx={{ position: 'absolute', left: 0, top: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>

@@ -60,7 +60,12 @@ export default function TestModal({ setModalOpen, modalOpen, selectedTest,  setS
     setModalOpen(false);
   }
 
-
+  const passProps = {
+    testData: selectedTest,
+    setTestData: setSelectedTest,
+    selectedQuestion: selectedQuestion,
+    setSelectedQuestion: setSelectedQuestion,
+  }
 
   return (<Modal
     className="testModal"
@@ -94,8 +99,8 @@ export default function TestModal({ setModalOpen, modalOpen, selectedTest,  setS
             <TestModalSettings commentsRef={commentsRef} locRef={locRef} selectedTest={selectedTest} />
           </Box>
           <Box id="mainContent">
-            <Box id="leftFrame"><TestModalQuestions testData={selectedTest} selectedQuestion={selectedQuestion} setSelectedQuestion={setSelectedQuestion} setTestData={setSelectedTest} /></Box>
-            <Box id="rightFrame"><TestModalMatrix testData={selectedTest} selectedQuestion={selectedQuestion} setSelectedQuestion={setSelectedQuestion} setTestData={setSelectedTest} /></Box>
+            <Box id="leftFrame"><TestModalQuestions {...passProps} /></Box>
+            <Box id="rightFrame"><TestModalMatrix {...passProps} /></Box>
           </Box>
 
         </Box>
