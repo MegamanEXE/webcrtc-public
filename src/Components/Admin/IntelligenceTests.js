@@ -117,6 +117,7 @@ export default function IntelligenceTests() {
       >
         <ListItemButton
           onClick={(event) => handleListItemClick(test)}
+          onDoubleClick={openTest}
           selected={selectedTestName === test}
         >
           {test}
