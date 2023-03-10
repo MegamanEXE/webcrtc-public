@@ -12,13 +12,16 @@ import { useEffect, useState } from 'react';
 import { styled } from '@mui/material/styles';
 
 import mockQuizQuestions from '../../data/mockQuizQuestions.json'
+import IntelligenceTest_template from '../../data/IntelligenceTest_template.json'
 import { Edit } from '@mui/icons-material';
 import TestModal from './TestModal';
 import produce from 'immer';
 import { useConfirm } from 'material-ui-confirm';
+import { useSnackbar } from 'notistack';
+
 
 export default function IntelligenceTests() {
-   const [DATA, setDATA] = useState([]);
+   const [DATA, setDATA] = useState({});
 
   const [selectedTestName, setSelectedTestName] = useState("");
   const [tests, setTests] = useState([]);
@@ -26,6 +29,7 @@ export default function IntelligenceTests() {
   const [selectedTest, setSelectedTest] = useState({}); {/* uses the entire data row */ }
   const [modalOpen, setModalOpen] = useState(false);
 
+  const { enqueueSnackbar } = useSnackbar();
   const confirm = useConfirm();
 
   //Read data from whereever
@@ -41,23 +45,67 @@ export default function IntelligenceTests() {
     setTests(generateTestList().sort());
   }, [DATA]);
 
+  //REFLECT CHANGES IN DATA WHEN selectedTest IS MODIFIED IN THE MODAL
+  useEffect(() => {
+    if(Object.keys(selectedTest).length === 0) return;
+
+    setDATA({...DATA, [selectedTestName]:selectedTest});
+  },[selectedTest]);
+
   const handleListItemClick = (test) => {
     setSelectedTestName(test);
     setSelectedTest(DATA[test]);
   };
 
-  const handleDeleteClient = (name, id) => {
-    console.log(`Deleting id:${id}, ${name}`)
+
+  const handleAddTest = (e) => {
+    if (e.key === 'Enter') {
+      handleAddButton();
+    }
+  }
+
+  const handleAddButton = () => {
+    if (tests.includes(addTestTextField)) {
+      console.log('already exists')
+      enqueueSnackbar(`${addTestTextField} already exists.`, { variant: 'error' });
+      return;
+    }
+    setTests([...tests, addTestTextField]);
+    console.log(`Adding ${addTestTextField}`);
+    
+
+    //Add to API
+    //VERY IMPORTANT. Check mockQuizQuestions.json to see how it should look like in final form
+    //It's an object in the format { "test_name": {id:..., test_name:..., ...}, "test_name2": {id:..., test_name:..., ...} }
+    let template = IntelligenceTest_template;
+    template['test_name'] = addTestTextField;
+    setDATA({...DATA, [addTestTextField]:template});
+
+    setAddTestTextField('');
+  }
+
+  const deleteTest = () => {
+    if (Object.keys(selectedTest).length === 0) return;
+
+    confirm({ title: 'Confirm Deletion', description: `Are you sure you want to delete ${selectedTest['test_name']}?` }
+    ).then(() => {
+      console.log(`Deleting ${selectedTest["test_name"]}`);
+      setDATA(old => produce(old, d => {
+        delete d[selectedTest['test_name']]
+      }));
+
+      setSelectedTest({});
+      enqueueSnackbar(`${selectedTest["test_name"]} deleted`, {variant:'success'});
+    }).catch(() => {
+      console.log("Deletion cancelled");
+    });
 
   }
 
-  const handleAddClient = (e) => {
-    if (e.key === 'Enter') {
-      setTests([...tests, addTestTextField]);
-      console.log(`Adding ${addTestTextField}`);
-      setAddTestTextField('');
+  const openTest = () => {
+    if (Object.keys(selectedTest).length === 0) return;
 
-    }
+    setModalOpen(true)
   }
 
   const selectableItems = () => {
@@ -104,28 +152,7 @@ export default function IntelligenceTests() {
     </TableBody>
   }
 
-  const deleteTest = () => {
-    if (Object.keys(selectedTest).length === 0) return;
-
-    confirm({ title: 'Confirm Deletion', description: `Are you sure you want to delete ${selectedTest['test_name']}?` }
-    ).then(() => {
-      console.log(`Deleting ${selectedTest["test_name"]}`);
-      setDATA(old => produce(old, d => {
-        delete d[selectedTest['test_name']]
-      }));
-
-      setSelectedTest({});
-    }).catch(() => {
-      console.log("Deletion cancelled");
-    }); 
-
-  }
-
-  const openTest = () => {
-    if (Object.keys(selectedTest).length === 0) return;
-    
-    setModalOpen(true) 
-  }
+  
 
   return (
     <Box className='clientsContainer'>
@@ -154,9 +181,9 @@ export default function IntelligenceTests() {
               value={addTestTextField}
               size='small'
               margin='dense'
-              InputProps={{ endAdornment: <IconButton ><AddCircleIcon /></IconButton> }}
+              InputProps={{ endAdornment: <IconButton onClick={handleAddButton}><AddCircleIcon /></IconButton> }}
               onChange={(e) => setAddTestTextField(e.target.value)}
-              onKeyPress={handleAddClient}
+              onKeyPress={handleAddTest}
 
               fullWidth /></Box>
         </Box>
@@ -183,7 +210,7 @@ export default function IntelligenceTests() {
       </Box>
 
 
-      {modalOpen && selectedTest && <TestModal setModalOpen={setModalOpen} modalOpen={modalOpen} testData={selectedTest} setTestData={setSelectedTest}  />}
+      {modalOpen && selectedTest && <TestModal setModalOpen={setModalOpen} modalOpen={modalOpen} selectedTest={selectedTest} setSelectedTest={setSelectedTest}  />}
     </Box>
   )
 }

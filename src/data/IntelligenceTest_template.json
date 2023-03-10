@@ -1,0 +1,34 @@
+{
+  "id": -1,
+  "test_name": "",
+  "loc_name": "Standard Component Library",
+  "time": 20,
+  "comments": "New Intelligence Test",
+  "questions": [
+    {
+      "number": 1,
+      "correct_answer": -1,
+      "difficulty": "Easy",
+      "questionImages": {
+        "1": "",
+        "2": "",
+        "3": "",
+        "4": "",
+        "5": "",
+        "6": "",
+        "7": "",
+        "8": ""
+      },
+      "answerImages": {
+        "1": "",
+        "2": "",
+        "3": "",
+        "4": "",
+        "5": "",
+        "6": "",
+        "7": "",
+        "8": ""
+      }
+    }
+  ]
+}

@@ -24,15 +24,18 @@ const style = {
   boxShadow: 24,
 };
 
-export default function TestModal({ setModalOpen, modalOpen, testData, setTestData }) {
+export default function TestModal({ setModalOpen, modalOpen, selectedTest,  setSelectedTest }) {
   const [selectedQuestion, setSelectedQuestion] = useState(1);
 
+  const commentsRef = useRef(null); //in settings
+  const locRef = useRef(null); //in settings
+
   let firstTimeOpened = useRef(false); 
-  let unalteredTestData = useRef(testData); //if modifications are not saved
+  let unalteredTestData = useRef(selectedTest); //if modifications are not saved
   useEffect(() => {
     if(!firstTimeOpened.current){
       firstTimeOpened.current = true;
-      unalteredTestData.current = testData;
+      unalteredTestData.current = selectedTest;
     }   
   },);
 
@@ -42,12 +45,18 @@ export default function TestModal({ setModalOpen, modalOpen, testData, setTestDa
   }
 
   const handleCancel = () => {
-    setTestData(unalteredTestData.current);
+    setSelectedTest(unalteredTestData.current);
     setModalOpen(false);
   }
 
+  //UPDATE IN API HERE
   const handleSave = () => {
-    /* TODO: publish changes to API */
+    if(commentsRef.current.value !== ""){
+      setSelectedTest({...selectedTest, comments:commentsRef.current.value});
+    }
+    if(locRef.current){
+      setSelectedTest({ ...selectedTest, loc_name:locRef.current });
+    }
     setModalOpen(false);
   }
 
@@ -69,7 +78,7 @@ export default function TestModal({ setModalOpen, modalOpen, testData, setTestDa
       <Box sx={style} id="modalMainContainer" component="div">
 
         <Box id="modalHeader" >
-          <Box>Standard APM Test</Box>
+          <Box>{selectedTest["test_name"]}</Box>
           <Box>
             <IconButton size="small" aria-label="close" onClick={handleClose} sx={{ position: 'absolute', right: 5, top: 5 }}>
               <CloseIcon />
@@ -82,11 +91,11 @@ export default function TestModal({ setModalOpen, modalOpen, testData, setTestDa
 
         <Box id="modalContent" flexGrow={1}>
           <Box id="testSettings">
-            <TestModalSettings />
+            <TestModalSettings commentsRef={commentsRef} locRef={locRef} selectedTest={selectedTest} />
           </Box>
           <Box id="mainContent">
-            <Box id="leftFrame"><TestModalQuestions testData={testData} selectedQuestion={selectedQuestion} setSelectedQuestion={setSelectedQuestion} setTestData={setTestData} /></Box>
-            <Box id="rightFrame"><TestModalMatrix testData={testData} selectedQuestion={selectedQuestion} setSelectedQuestion={setSelectedQuestion} setTestData={setTestData} /></Box>
+            <Box id="leftFrame"><TestModalQuestions testData={selectedTest} selectedQuestion={selectedQuestion} setSelectedQuestion={setSelectedQuestion} setTestData={setSelectedTest} /></Box>
+            <Box id="rightFrame"><TestModalMatrix testData={selectedTest} selectedQuestion={selectedQuestion} setSelectedQuestion={setSelectedQuestion} setTestData={setSelectedTest} /></Box>
           </Box>
 
         </Box>
