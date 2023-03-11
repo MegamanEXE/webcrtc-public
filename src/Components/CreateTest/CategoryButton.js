@@ -6,6 +6,7 @@ import { useState } from "react";
 export function CategoryButton(props) {
   const icon = props.icon;
   const value = props.name;
+  const disablePortal = props.disablePortal || false; //For the admin version
 
   //change bindToggle back to bindHover after fixing layout
   return (
@@ -13,7 +14,7 @@ export function CategoryButton(props) {
       {(popupState) => (
         <div>
           <ToggleButton {...bindHover(popupState)} size="large" value={value}>{icon}</ToggleButton>
-          <Popper {...bindPopper(popupState)} transition placement="right-start">
+          <Popper {...bindPopper(popupState)} transition placement="right-start" disablePortal={disablePortal} sx={{zIndex:100}}>
             {({ TransitionProps }) => (
               <Fade {...TransitionProps} timeout={350}>
                 <Paper sx={{ p: 1, width: '15vh' }} elevation={3}>

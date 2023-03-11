@@ -10,6 +10,7 @@ import TestModalQuestions from './TestModalQuestions';
 import TestModalSettings from './TestModalSettings';
 import TestModalMatrix from './TestModalMatrix';
 import { useEffect, useRef, useState } from 'react';
+import { DrawMatrixModal } from './Admin_CreateTestModal/DrawMatrixModal';
 
 const style = {
   position: 'absolute',
@@ -25,6 +26,8 @@ const style = {
 
 export default function TestModal({ setModalOpen, modalOpen, selectedTest,  setSelectedTest }) {
   const [selectedQuestion, setSelectedQuestion] = useState(1);
+
+  // const [childModalOpen, setChildModalOpen] = useState(false);
 
   const commentsRef = useRef(null); //in settings
   const locRef = useRef(null); //in settings
@@ -60,10 +63,8 @@ export default function TestModal({ setModalOpen, modalOpen, selectedTest,  setS
   }
 
   const passProps = {
-    testData: selectedTest,
-    setTestData: setSelectedTest,
-    selectedQuestion: selectedQuestion,
-    setSelectedQuestion: setSelectedQuestion,
+    testData: selectedTest, setTestData: setSelectedTest,
+    selectedQuestion: selectedQuestion, setSelectedQuestion: setSelectedQuestion,
   }
 
   return (<Modal
@@ -111,8 +112,12 @@ export default function TestModal({ setModalOpen, modalOpen, selectedTest,  setS
         </Box>
 
 
+      {/* {childModalOpen && <DrawMatrixModal childModalOpen={childModalOpen} setChildModalOpen={setChildModalOpen} />} */}
       </Box>
+
     </Fade>
+
+    
 
   </Modal>
   )

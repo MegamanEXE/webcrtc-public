@@ -1,9 +1,10 @@
-import { Chip, Fab, FormLabel, IconButton, ImageList, ImageListItem, Stack, Typography } from "@mui/material";
+import { Button, Chip, Fab, FormLabel, IconButton, ImageList, ImageListItem, Stack, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import AddIcon from '@mui/icons-material/Add';
 import { useEffect, useState } from "react";
 import produce from "immer";
 import ModalImage from "./ModalImage";
+import { DrawMatrixModal } from "./Admin_CreateTestModal/DrawMatrixModal";
 
 
 export default function TestModalMatrix(props) {
@@ -13,6 +14,11 @@ export default function TestModalMatrix(props) {
   const [aMatrix, setAMatrix] = useState({ "1": "", "2": "", "3": "", "4": "", "5": "", "6": "", "7": "", "8": "" });
   const [markedSolution, setMarkedSolution] = useState(-1);
   const [selectedChip, setSelectedChip] = useState(1);
+
+  //Draw matrix modal stuff
+  const [childModalOpen, setChildModalOpen] = useState(false);
+  const [caller, setCaller] = useState({isQuestion:false,idx:-1}); //tracks who invoked the childModal so the drawn image is saved in the proper place
+
 
   const difficultyChips = [
     { key: 1, label: "Easy", color: "primary" }, { key: 2, label: "Medium", color: "secondary" }, { key: 3, label: "Hard", color: "error" }
@@ -90,6 +96,18 @@ export default function TestModalMatrix(props) {
   }, [selectedChip]);
 
 
+  //HANDLE DRAWING MATRIX INSTEAD OF UPLOADING 
+  const handleDrawMatrix = (isQ, idx) => {
+    setCaller({isQuestion:isQ, idx:idx})
+    setChildModalOpen(true)
+  }
+
+
+//TEMP
+  // <Fab size="small" className="questionAddImageBtn">
+  //   <IconButton component="label"><input id={`q-${i}`} type="file" accept="image/*" onChange={(e) => handleQUpload(e, i)} hidden /><AddIcon sx={{ color: '#9f9f9f' }} /></IconButton>
+  // </Fab>
+
   //RENDER QUESTIONS
   const generateQMatrix = () => {
     let qs = []
@@ -101,9 +119,8 @@ export default function TestModalMatrix(props) {
               // <img alt={`qMatrix-${i}`} width="96px" style={{ objectFit: "contain", maxHeight: "96px" }} src={qMatrix[`${i}`]} />
               <ModalImage isQuestion={true} alt={`qMatrix-${i}`} src={qMatrix[`${i}`]} setQMatrix={setQMatrix} idx={i}  />
               :
-              <Fab size="small" className="questionAddImageBtn">
-                <IconButton component="label"><input id={`q-${i}`} type="file" accept="image/*" onChange={(e) => handleQUpload(e, i)} hidden /><AddIcon sx={{ color: '#9f9f9f' }} /></IconButton>
-              </Fab>
+              
+                <Button onClick={()=>handleDrawMatrix(true,i)}>Draw matrix</Button>
             }
           </Box>
         </ImageListItem>
@@ -182,6 +199,10 @@ export default function TestModalMatrix(props) {
     <Box id="modal-matrixContainer">
       {questionMatrix()}
       {answerMatrix()}
+      {childModalOpen && <DrawMatrixModal childModalOpen={childModalOpen} setChildModalOpen={setChildModalOpen} 
+        setQMatrix={setQMatrix} setAMatrix={setAMatrix}
+        caller={caller}
+      />}
     </Box>
   );
 }
