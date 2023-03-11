@@ -18,14 +18,13 @@ const style = {
   boxShadow: 24,
 };
 
-export function DrawMatrixModal({childModalOpen, setChildModalOpen, setQMatrix, setAMatrix, caller}){
+export function DrawMatrixModal({childModalOpen, setChildModalOpen, setQMatrix, setAMatrix, caller, clipboard, setClipboard}){
 
 
   const [screenshots, setScreenshots] = useState({
     '1': null,
   });
 
-  const [clipboard, setClipboard] = useState([]);
 
   const passProps={
     setModalOpen:setChildModalOpen,

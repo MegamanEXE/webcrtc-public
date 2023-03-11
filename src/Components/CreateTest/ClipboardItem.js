@@ -14,6 +14,8 @@ export default function ClipboardItem(props){
   const data = props.data;
   const idx = parseInt(props.id.split('-')[1])
 
+  const matrix_size = 150;
+
 
   const [hovered, setHovered] = useState(false);
   const handleClick = (e) => {
@@ -45,7 +47,7 @@ export default function ClipboardItem(props){
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}>
 
-        <img src={props.src} id={props.id} alt="clipboard-item"  />
+        <img src={props.src} id={props.id} alt="clipboard-item" width={matrix_size}  />
 
         <Box 
           id="hoverDiv"

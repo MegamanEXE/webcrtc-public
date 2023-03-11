@@ -108,7 +108,7 @@ export default function AdminCanvas({ setModalOpen, screenshots, setScreenshots,
         <Box p={1.5}>
           <Box id="yesNo">
             <Button variant="contained" color="success" onClick={handleSubmit}>Save</Button>
-            <Button variant="outlined">Cancel</Button>
+            <Button variant="outlined" onClick={() => setModalOpen(false)}>Cancel</Button>
           </Box>
         </Box>
 

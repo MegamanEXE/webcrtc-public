@@ -21,6 +21,7 @@ export default function TestModalMatrix(props) {
   //Draw matrix modal stuff
   const [childModalOpen, setChildModalOpen] = useState(false);
   const [caller, setCaller] = useState({isQuestion:false,idx:-1}); //tracks who invoked the childModal so the drawn image is saved in the proper place
+  const [clipboard, setClipboard] = useState([]);
 
 
   const difficultyChips = [
@@ -128,12 +129,14 @@ export default function TestModalMatrix(props) {
                       </Fab>
                       <Menu {...bindMenu(popupState)}>
 
-                        <MenuItem><Button startIcon={<UploadFile />} onClick={() => { inputFileRef.current.click(); }}>
-                          <input ref={inputFileRef} id={`q-${i}`} type="file" accept="image/*" onChange={(e) => handleQUpload(e, i)} hidden /> Upload Image
-                        </Button></MenuItem>
+                        <MenuItem>
+                          <Button fullWidth startIcon={<UploadFile />} onClick={() => { inputFileRef.current.click(); }} style={{ color: '#2b2b2b' }}>
+                            <input ref={inputFileRef} id={`q-${i}`} type="file" accept="image/*" onChange={(e) => handleQUpload(e, i)} hidden /> Upload Image
+                          </Button>
+                        </MenuItem>
 
                         <MenuItem>
-                          <Button startIcon={<Mode />} onClick={() => { handleDrawMatrix(true, i); popupState.close(); }}>
+                          <Button fullWidth startIcon={<Mode />} onClick={() => { handleDrawMatrix(true, i); popupState.close(); }} style={{ color: '#2b2b2b', textAlign:'left' }}>
                             Draw
                           </Button>
                         </MenuItem>
@@ -186,14 +189,14 @@ export default function TestModalMatrix(props) {
                       <Fab size="small" className="questionAddImageBtn" {...bindTrigger(popupState)}>
                         <IconButton component="label"><AddIcon sx={{ color: '#9f9f9f' }} /></IconButton>
                       </Fab>
-                      <Menu {...bindMenu(popupState)}>
+                    <Menu {...bindMenu(popupState)}>
 
-                        <MenuItem><Button startIcon={<UploadFile />} onClick={() => { inputFileRef.current.click(); }}>
+                      <MenuItem><Button fullWidth startIcon={<UploadFile />} onClick={() => { inputFileRef.current.click(); }} style={{ color: '#2b2b2b' }} >
                           <input ref={inputFileRef} id={`a-${i}`} type="file" accept="image/*" onChange={(e) => handleAUpload(e, i)} hidden /> Upload Image
                         </Button></MenuItem>
 
                         <MenuItem>
-                          <Button startIcon={<Mode />} onClick={() => { handleDrawMatrix(true, i); popupState.close(); }}>
+                        <Button fullWidth startIcon={<Mode />} onClick={() => { handleDrawMatrix(false, i); popupState.close(); }} style={{ color: '#2b2b2b' }} >
                             Draw
                           </Button>
                         </MenuItem>
@@ -243,6 +246,7 @@ export default function TestModalMatrix(props) {
       {childModalOpen && <DrawMatrixModal childModalOpen={childModalOpen} setChildModalOpen={setChildModalOpen} 
         setQMatrix={setQMatrix} setAMatrix={setAMatrix}
         caller={caller}
+        clipboard={clipboard} setClipboard={setClipboard}
       />}
     </Box>
   );
