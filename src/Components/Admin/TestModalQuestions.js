@@ -1,4 +1,4 @@
-import { Button, IconButton, List, ListItem, ListItemButton, ListSubheader, Typography } from "@mui/material";
+import { Box, Button, IconButton, List, ListItem, ListItemButton, ListSubheader, Typography } from "@mui/material";
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { GridAddIcon } from "@mui/x-data-grid";
 import { useEffect, useState } from "react";
@@ -54,18 +54,20 @@ export default function TestModalQuestions(props) {
   }
 
   return (<>
-  <List
-    className='listShadow'
-    sx={{ width: '100%', overflow: 'auto' }}
-    subheader={
-      <ListSubheader className='listSubheader'><Typography variant='subtitle2' fontWeight='bold' color='white' p="8px 16px">Questions</Typography></ListSubheader>
-    }
-  >
+    <Box sx={{ maxHeight: '64.5vh', overflowY: 'auto' }}>
+      <List
+        className='listShadow'
+        sx={{ width: '100%' }}
+        subheader={
+          <ListSubheader className='listSubheader'><Typography variant='subtitle2' fontWeight='bold' color='white' p="8px 16px">Questions</Typography></ListSubheader>
+        }
+      >
 
-    {selectableItems()}
+        {selectableItems()}
 
-  </List>
-  <Button onClick={()=>handleAddQuestion()} className="addQuestionItemBtn" variant="contained" fullWidth sx={{backgroundColor:'#e0e0e0', my:1}}><GridAddIcon sx={{color:'#676767'}} /></Button>
+      </List>
+    </Box>
+      <Button onClick={() => handleAddQuestion()} className="addQuestionItemBtn" variant="contained" fullWidth sx={{ backgroundColor: '#e0e0e0', my: 1 }}><GridAddIcon sx={{ color: '#676767' }} /></Button>
   </>)
 }
 

@@ -1,10 +1,13 @@
-import { Button, Chip, Fab, FormLabel, IconButton, ImageList, ImageListItem, Stack, Typography } from "@mui/material";
+/* eslint-disable no-loop-func */
+import { Button, Chip, Fab, FormLabel, IconButton, ImageList, ImageListItem, ListItemIcon, ListItemText, Menu, MenuItem, Stack, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import AddIcon from '@mui/icons-material/Add';
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import produce from "immer";
 import ModalImage from "./ModalImage";
 import { DrawMatrixModal } from "./Admin_CreateTestModal/DrawMatrixModal";
+import PopupState, { bindMenu, bindTrigger } from "material-ui-popup-state";
+import { Mode, Upload, UploadFile } from "@mui/icons-material";
 
 
 export default function TestModalMatrix(props) {
@@ -46,6 +49,7 @@ export default function TestModalMatrix(props) {
 
   //HANDLE QUESTION UPLOAD
   const handleQUpload = (e, i) => {
+    console.log(e,i)
     let uploadedImage = e.target.files[0];
     setQMatrix({ ...qMatrix, [`${i}`]: URL.createObjectURL(uploadedImage) });
   }
@@ -103,11 +107,7 @@ export default function TestModalMatrix(props) {
   }
 
 
-//TEMP
-  // <Fab size="small" className="questionAddImageBtn">
-  //   <IconButton component="label"><input id={`q-${i}`} type="file" accept="image/*" onChange={(e) => handleQUpload(e, i)} hidden /><AddIcon sx={{ color: '#9f9f9f' }} /></IconButton>
-  // </Fab>
-
+  const inputFileRef = useRef(null);
   //RENDER QUESTIONS
   const generateQMatrix = () => {
     let qs = []
@@ -117,10 +117,33 @@ export default function TestModalMatrix(props) {
           <Box className="modal-questionMatrix">
             {qMatrix[`${i}`] ?
               // <img alt={`qMatrix-${i}`} width="96px" style={{ objectFit: "contain", maxHeight: "96px" }} src={qMatrix[`${i}`]} />
-              <ModalImage isQuestion={true} alt={`qMatrix-${i}`} src={qMatrix[`${i}`]} setQMatrix={setQMatrix} idx={i}  />
+              <ModalImage isQuestion={true} alt={`qMatrix-${i}`} src={qMatrix[`${i}`]} setQMatrix={setQMatrix} idx={i} />
               :
-              
-                <Button onClick={()=>handleDrawMatrix(true,i)}>Draw matrix</Button>
+              <>
+                <PopupState variant="popover" popupId="demo-popup-menu">
+                  {(popupState) => (
+                    <>
+                      <Fab size="small" className="questionAddImageBtn" {...bindTrigger(popupState)}>
+                        <IconButton component="label"><AddIcon sx={{ color: '#9f9f9f' }} /></IconButton>
+                      </Fab>
+                      <Menu {...bindMenu(popupState)}>
+
+                        <MenuItem><Button startIcon={<UploadFile />} onClick={() => { inputFileRef.current.click(); }}>
+                          <input ref={inputFileRef} id={`q-${i}`} type="file" accept="image/*" onChange={(e) => handleQUpload(e, i)} hidden /> Upload Image
+                        </Button></MenuItem>
+
+                        <MenuItem>
+                          <Button startIcon={<Mode />} onClick={() => { handleDrawMatrix(true, i); popupState.close(); }}>
+                            Draw
+                          </Button>
+                        </MenuItem>
+                      </Menu>
+                    </>
+                  )}
+                </PopupState>
+
+              </>
+
             }
           </Box>
         </ImageListItem>
@@ -157,9 +180,27 @@ export default function TestModalMatrix(props) {
             {aMatrix[`${i}`] ?
               <ModalImage isQuestion={false} alt={`aMatrix-${i}`} src={aMatrix[`${i}`]} setMarkedSolution={setMarkedSolution} setAMatrix={setAMatrix} idx={i} />
               :
-              <Fab size="small" className="questionAddImageBtn">
-                <IconButton component="label"><input id={`a-${i}`} type="file" accept="image/*" onChange={(e) => handleAUpload(e, i)} hidden /><AddIcon sx={{ color: '#9f9f9f' }} /></IconButton>
-              </Fab>
+              <PopupState variant="popover" popupId="demo-popup-menu">
+                  {(popupState) => (
+                    <>
+                      <Fab size="small" className="questionAddImageBtn" {...bindTrigger(popupState)}>
+                        <IconButton component="label"><AddIcon sx={{ color: '#9f9f9f' }} /></IconButton>
+                      </Fab>
+                      <Menu {...bindMenu(popupState)}>
+
+                        <MenuItem><Button startIcon={<UploadFile />} onClick={() => { inputFileRef.current.click(); }}>
+                          <input ref={inputFileRef} id={`a-${i}`} type="file" accept="image/*" onChange={(e) => handleAUpload(e, i)} hidden /> Upload Image
+                        </Button></MenuItem>
+
+                        <MenuItem>
+                          <Button startIcon={<Mode />} onClick={() => { handleDrawMatrix(true, i); popupState.close(); }}>
+                            Draw
+                          </Button>
+                        </MenuItem>
+                      </Menu>
+                    </>
+                  )}
+                </PopupState>
             }
           </Box>
 

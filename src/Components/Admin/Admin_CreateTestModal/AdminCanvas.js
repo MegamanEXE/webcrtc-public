@@ -57,10 +57,11 @@ export default function AdminCanvas({ setModalOpen, screenshots, setScreenshots,
     if(caller){
       if (caller.isQuestion) {
         setQMatrix(qm => ({ ...qm, [`${caller.idx}`]: globalStageNodes.current['1'].toDataURL() }));
+      } else {
+        setAMatrix(am => ({ ...am, [`${caller.idx}`]: globalStageNodes.current['1'].toDataURL() }));
       }
     }
 
-    
     setModalOpen(false);
   }
   
