@@ -11,10 +11,14 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { useEffect, useState } from 'react';
 
 import mockUserData from '../../data/mockUserData.json'
+import mockResultData from '../../data/mockTestResults.json'
+
 import { json, Link } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 import { useConfirm } from 'material-ui-confirm';
 import { dblClick } from '@testing-library/user-event/dist/click';
+import { ViewTestModal } from './ViewTestModal';
+import { useRef } from 'react';
 
 export default function ManageClients() {
   // let clients = [`Dexter's Lab`, 'Bare Bears', 'Amazing World', 'Gravity Falls'];
@@ -27,15 +31,20 @@ export default function ManageClients() {
   const [clients, setClients] = useState([]);
   const [candidates, setCandidates] = useState([]);
   const [addClientTextField, setAddClientTextField] = useState('');
-  const [selectedUser, setSelectedUser] = useState({}); {/* uses the entire data row */}
+  const [selectedUser, setSelectedUser] = useState(null); {/* uses the entire data row */}
 
   const { enqueueSnackbar } = useSnackbar(); //Little alerts that show on the bottom left
   const confirm = useConfirm(); //Confirmation dialog
 
+  const [modalOpen, setModalOpen] = useState(false);
+  const [testDATA, setTestDATA] = useState(null); //test view modal
+  // const [rowData, setRowData] = useState(null);
+  const rowData = useRef(null);
 
   //Read data from whereever
   useEffect(()=>{
     setDATA(mockUserData);
+    setTestDATA(mockResultData);
   },[]);
 
   //UPDATE API HERE
@@ -115,13 +124,31 @@ export default function ManageClients() {
       return DATA.filter((r) => r["client"] === selectedClient);
     }
     setCandidates(generateCandidates());
-  },[candidates, selectedClient, DATA]);
+  },[selectedClient, DATA]);
 
   const generateCandidatesList = () => {
     return candidates.map((c)=><ListItemButton key={c["id"]} onClick={()=>setSelectedUser(c)}>{c["name"]}</ListItemButton>);
   }
 
-  // TODO: Problem child, test-IDs annoyed JSON.parse()
+  const testIDs = () => {
+    const read = JSON.parse(selectedUser["test-IDs"]);
+    console.log(read)
+    return read.map((t,i) => <>
+      <Link onClick={()=> {
+        const temp = testDATA.find(rd => rd.id === t);
+        console.log(temp)
+        // setRowData(temp); 
+        rowData.current = temp
+        setModalOpen(true)}}
+      >
+          {t}
+      </Link>
+      {i !== read.length-1 ? ", " : null}
+       
+
+    </>);
+  }
+
   const generateDetails = () => {
     return <TableBody>
       <TableRow>
@@ -142,7 +169,7 @@ export default function ManageClients() {
       </TableRow>
       <TableRow>
         <TableCell align='right' style={{ width: '35%', fontWeight: 'bold' }}>Test IDs:</TableCell>
-        <TableCell>{selectedUser["test-IDs"]}</TableCell> 
+        <TableCell>{testIDs()}</TableCell> 
       </TableRow>
     </TableBody>
   }
@@ -213,23 +240,26 @@ export default function ManageClients() {
         {/* LIST 3 */}
         <Box display='flex' width="30%" className='userDetailsCard'>
           <Card sx={{width:'100%'}} >
-            <CardHeader title={selectedUser["name"]} />
-            <CardContent>
-              <TableContainer>
-                <Table size='small' sx={{ '& .MuiTableCell-root': { border: 0, py:0.2, px:0.5 } }}>
+            {selectedUser && <>
+              <CardHeader title={selectedUser["name"]} />
+              <CardContent>
+                <TableContainer>
+                  <Table size='small' sx={{ '& .MuiTableCell-root': { border: 0, py: 0.2, px: 0.5 } }}>
                     {generateDetails()}
-                </Table>
-              </TableContainer>
-              
-            </CardContent>
-            <CardActions disableSpacing >
-              <Button size="small" color="error" onClick={()=>deleteCurrentUser()} sx={{ marginLeft: 'auto' }}><DeleteForeverIcon /> Delete User</Button>
-            </CardActions>
+                  </Table>
+                </TableContainer>
+
+              </CardContent>
+              <CardActions disableSpacing >
+                <Button size="small" color="error" onClick={() => deleteCurrentUser()} sx={{ marginLeft: 'auto' }}><DeleteForeverIcon /> Delete User</Button>
+              </CardActions>
+            </>}
+            
           </Card>
         </Box>
       </Box>
 
-      
+      {rowData && modalOpen && <ViewTestModal modalOpen={modalOpen} setModalOpen={setModalOpen} rowData={rowData} setDATA={setTestDATA} />}
     </Box>
   )
 }
