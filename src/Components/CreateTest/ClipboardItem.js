@@ -1,5 +1,5 @@
-import { Close, Delete } from "@mui/icons-material";
-import { Button, Fab, Grid, IconButton } from "@mui/material";
+import { Close } from "@mui/icons-material";
+import { Fab, Grid } from "@mui/material";
 import { Box } from "@mui/system";
 import produce from "immer";
 import { nanoid } from "nanoid";

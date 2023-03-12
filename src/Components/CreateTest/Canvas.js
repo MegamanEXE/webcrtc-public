@@ -64,9 +64,15 @@ export default function Canvas(props) {
   const [modalOpen, setModalOpen] = useState(false);
 
   
-  // const tool = useRef(TOOLS.MAGIC_BRUSH); //can only be null or TOOLS.NORMAL_BRUSH/TOOLS.MAGIC_BRUSH
   const [tool, setTool] = useState(TOOLS.SELECT); //can only be values from TOOLS.
-  const prevTool = useRef(null);
+  const otherTool = useRef(null); //any tool besides Select i.e. Brush and Magic Brush right now
+
+  //Set otherTool
+  useEffect(() => {
+    if ([TOOLS.NORMAL_BRUSH, TOOLS.MAGIC_BRUSH].includes(tool)) {
+      otherTool.current = tool;
+    }
+  }, [tool]);
 
 
   const passProps = {
@@ -76,6 +82,7 @@ export default function Canvas(props) {
     shapeNode: shapeNode, stageNode: stageNode,
     clipboard: clipboard, setClipboard: setClipboard,
     tool: tool, setTool:setTool,
+    otherTool: otherTool
   }
 
   //Take screenshots and open modal
@@ -101,6 +108,7 @@ export default function Canvas(props) {
           clipboard={clipboard} setClipboard={setClipboard}
           globalStageNodes={globalStageNodes}
           tool={tool} setTool={setTool}
+          otherTool={otherTool}
         />
       </Grid>);
     }

@@ -37,7 +37,7 @@ const boundBoxCallbackForLine = (oldBox, newBox) => {
 const snaps = [0, 45, 90, 135, 180, 225, 270, 315];
 
 //XD. In hindsight, should not have done it like this
-export default function GenericShape({ selectedShapeID, setSelectedShapeID, matrixNumber, setSelectedMatrix, shapes, setShapes, layerRef, shapeNode, isDrawing, tool, setTool, ...props }) {
+export default function GenericShape({ selectedShapeID, setSelectedShapeID, matrixNumber, setSelectedMatrix, shapes, setShapes, layerRef, shapeNode, isDrawing, tool, setTool, otherTool, ...props }) {
   const [isSelected, setIsSelected] = useState(false);
 
   
@@ -190,32 +190,38 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
     }
 
   }
+  //testing
+  //Make things not draggable while a brush is active
+  
+
+
+  //if a brush is selected, somehow disable handle select and drag etc
+
 
   //Mark active
   useEffect(() => {
     setIsSelected(selectedShapeID === props.id)
-  }, [selectedShapeID, tool])
+  }, [selectedShapeID])
+
+  
 
   // Important pattern that somehow resolves the first click issue.
   const handleSelect = useCallback((event) => {
-    event.cancelBubble = true;
-    setTool(TOOLS.SELECT);
     
-    if (tool === TOOLS.DELETE) {
-      deleteShape();
-    } else {
+    if(tool === TOOLS.SELECT){
+      event.cancelBubble = true;
       setSelectedMatrix(matrixNumber);
       setSelectedShapeID(props.id);
       setIsSelected(selectedShapeID === props.id)
-    }
-  
-
-  }, [selectedShapeID]
+    }  
+    
+  }, [selectedShapeID,tool]
   );
 
   //Add transformer nodes to selected shape
   useEffect(() => {
     if (isSelected) {
+
       transformerRef.current.useSingleNodeRotation(false); 
 
       //Special cases
@@ -224,25 +230,33 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
 
       transformerRef.current.nodes([shapeRef.current]);
       shapeNode.current = shapeRef.current
-      // transformerRef.current.forceUpdate();
       transformerRef.current.getLayer().batchDraw();
     }
   }, [isSelected]);
 
   //Event handler for moving shapes
   const handleDrag = useCallback((event) => {
-    setTool(TOOLS.SELECT);
-    if (tool === TOOLS.DELETE) {
-      deleteShape();
-      return;
+    event.cancelBubble = true;
+
+    if (tool === TOOLS.SELECT) {
+      moveShape(props.id, event);
     }
-    moveShape(props.id, event);
   }, [props.id]);
 
   //Event handler for transforming shapes
   const handleTransform = useCallback((event) => {
     transformShape(shapeRef.current, props.id, event);
   }, [props.id]);
+
+  // //Go back to whatever tool was being used before shape was selected
+  // useEffect(() => {
+  //     if(tool === TOOLS.SELECT && !isSelected){
+  //       if(props.otherTool.current)
+  //         setTool(props.otherTool.current);
+  //     }
+
+    
+  // },[isSelected]);
 
   //Custom shapes do not have natural transformer bounding boxes so they are manually defined like this
   //Do not be discouraged from this, this is more about manually adusting the box when NECESSARY, it wasn't always explicitly defined like this
@@ -277,7 +291,7 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
   }
 
   const defaultProps = {
-    draggable: true,
+    draggable: (tool === TOOLS.SELECT),
     isSelected: isSelected,
     shadowForStrokeEnabled: false, //optimization
     onClick :handleSelect,
@@ -290,8 +304,6 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
   
   //MAIN return
   switch (props.type) {
-    
-    //Note: freehand_stroke does not have {...defaultProps} or a transformer, that is intentional
     case SHAPE_TYPES.FREEHAND_STROKE:
       return <>
         <Line ref={shapeRef} {...props} {...defaultProps} />

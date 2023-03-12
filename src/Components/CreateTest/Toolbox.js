@@ -61,6 +61,7 @@ export default function Toolbox(props) {
   const clipboard = props.clipboard;
   const setClipboard = props.setClipboard;
   const stageNode = props.stageNode;
+  const otherTool = props.otherTool;
 
   const tooltipPlace = "top";
 
@@ -117,9 +118,6 @@ export default function Toolbox(props) {
   //FLIP HORIZONTAL
   //Note: Seems easy enough but this caused me to refactor the code which resulted in a reduction of a few hundred lines 
   //of code to make this work as expected
-
-  //TODO: Does it what it should, but buggy sometimes, fixing this should enable me to use 
-  //useSingleNodeRotation(false) in GenericShape
   const handleFlipHorizontal = () => {
     if (selectedShapeID !== null) {
       const shape = shapes[selectedMatrix].find(s => s.id === selectedShapeID);

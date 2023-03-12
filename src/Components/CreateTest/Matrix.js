@@ -17,6 +17,7 @@ import Konva from "konva";
 export default function Matrix(props) {
   const [dimensions, setDimensions] = useState({ width: null, height: null });
   const [freehandLines, setFreehandLines] = useState([]);
+  const [stageSizeToggle, setStageSizeToggle] = useState(false)
 
   const selectedShapeID = props.selectedShapeID;
   const selectedMatrix = props.selectedMatrix;
@@ -29,8 +30,6 @@ export default function Matrix(props) {
   const divRef = useRef(null);
   const stageRef = useRef(null);
   const layerRef = useRef(null);
-  // const stageSizeToggle = useRef(false);
-  const [stageSizeToggle, setStageSizeToggle] = useState(false)
   
   const matrix_size = 150;
   const matrixNumber = props.id.split("-")[1]
@@ -353,7 +352,8 @@ export default function Matrix(props) {
             shapes={props.shapes} setShapes={props.setShapes}
             layerRef={layerRef}
             shapeNode={props.shapeNode}
-            isDrawing={isDrawing} tool={props.tool} setTool={props.setTool}
+            isDrawing={isDrawing} 
+            tool={props.tool} setTool={props.setTool} otherTool={props.otherTool}
             {...s} />)}
 
           {freehandLines.map((line, i) => (
