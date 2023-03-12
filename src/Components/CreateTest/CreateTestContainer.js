@@ -10,7 +10,7 @@ import CreateTestInstructions from "./CreateTestInstructions";
 const theme = crtcTheme();
 
 export default function CreateTestContainer() {
-  const [screen, setScreen] = useState("canvas"); //instructions,canvas. Should be "instructions" in final
+  const [screen, setScreen] = useState("instructions"); //instructions,canvas. Should be "instructions" in final
   const [timerStart, setTimerStart] = useState(false); //flag which starts the timers when true
 
   //Handle time up
