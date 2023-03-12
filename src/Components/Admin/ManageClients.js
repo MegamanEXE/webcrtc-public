@@ -148,8 +148,17 @@ export default function ManageClients() {
   }
   
   const deleteCurrentUser = () => {
-    console.log(`Deleting ${selectedUser["name"]}`);
-    setDATA(DATA.filter(r=>r["id"]!==selectedUser["id"]));
+    confirm({ title: 'Confirm Deletion', description: `Are you sure you want to delete the user: ${selectedUser["name"]}?` }
+    ).then(() => {
+      setDATA(DATA.filter(r => r["id"] !== selectedUser["id"]));
+      setSelectedUser({});
+
+      enqueueSnackbar(`${selectedUser["name"]} deleted`, { variant: 'success' });
+    }).catch(() => {
+      console.log('Deletion cancelled');
+    });
+
+
   }
 
   return (
