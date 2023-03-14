@@ -3,6 +3,7 @@
   "test_name": "",
   "loc_name": "Standard Component Library",
   "time": 20,
+  "is_default_test": false,
   "comments": "New Intelligence Test",
   "questions": [
     {

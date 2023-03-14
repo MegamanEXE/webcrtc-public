@@ -4,6 +4,7 @@
     "test_name": "Standard APM Test",
     "loc_name": "Standard Component Library",
     "time":20,
+    "is_default_test": true,
     "comments":"The default test to show unless stated otherwise",
     "questions": [
       {
