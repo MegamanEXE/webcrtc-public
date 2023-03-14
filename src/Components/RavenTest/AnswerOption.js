@@ -9,7 +9,7 @@ export default function AnswerOption({src,id,setSelectedAnswer,selectedAnswer}) 
 
     return (
         <ImageListItem key={id} onClick={(e) => handleClick(id,e)} sx={{maxWidth:'100%'}}>
-            <img src={src} className={`answerImage ${id===("a"+selectedAnswer) ? 'answerBorder':''}`} alt="Answer Option" />
+            <img src={src} style={{ width: 85 }} className={`answerImage ${id===("a"+selectedAnswer) ? 'answerBorder':''}`} alt="Answer Option" />
         </ImageListItem> 
     );
 }

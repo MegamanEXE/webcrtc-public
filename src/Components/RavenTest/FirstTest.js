@@ -92,12 +92,12 @@ export default function FirstTest(props) {
     let qs = [];
     const qi = currentTestData["questions"][questionNumber - 1]["questionImages"];
     for (let k in qi){
-      qs.push(<ImageListItem border="4px dashed transparent" key={`q${k + 1}`} className="questionImage"><img src={qi[k]} alt={`q${k + 1}`} /></ImageListItem>);
+      qs.push(<ImageListItem border="4px dashed transparent" key={`q${k + 1}`} className="questionImage"><img src={qi[k]} alt={`q${k + 1}`} style={{width:85}} /></ImageListItem>);
     }
 
     return <ImageList sx={{ overflow: 'hidden', }} cols={3} gap={20}>
       {qs}
-      <Box border="4px dashed grey" key="filler" width="84px"><img className='questionImage' src={`${currentTestData["questions"][questionNumber - 1]["answerImages"][selectedAnswer]}`} alt="" /></Box>
+      <Box style={{ border: "4px dashed grey" }} key="filler"><img style={{ width: 85 }} className='questionImage' src={`${currentTestData["questions"][questionNumber - 1]["answerImages"][selectedAnswer]}`} alt="" /></Box>
     </ImageList>
   }
 

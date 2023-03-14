@@ -54,7 +54,7 @@ export function QuestionPopper(props) {
           <Popper {...bindPopper(popupState)} transition placement="right" disablePortal={disablePortal}>
             {({ TransitionProps }) => (
               <Fade {...TransitionProps} timeout={350}>
-                <Paper sx={{ p: 1, width: '45vh' }} elevation={3}>
+                <Paper sx={{ p: 1, width: '60vh' }} elevation={3}>
                   <Grid container columns={12} gap={6} sx={{ display: 'flex', justifyContent: "center", alignItems: "center" }}>
                     <Grid item xs={5}>
                       <Typography variant="h7">Correct Answer</Typography>

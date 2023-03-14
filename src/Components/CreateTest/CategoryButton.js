@@ -13,11 +13,11 @@ export function CategoryButton(props) {
     <PopupState variant="popper" popupId="demo-popup-popper">
       {(popupState) => (
         <div>
-          <ToggleButton {...bindHover(popupState)} size="large" value={value}>{icon}</ToggleButton>
+          <ToggleButton {...bindHover(popupState)} value={value}>{icon}</ToggleButton>
           <Popper {...bindPopper(popupState)} transition placement="right-start" disablePortal={disablePortal} sx={{zIndex:100}}>
             {({ TransitionProps }) => (
               <Fade {...TransitionProps} timeout={350}>
-                <Paper sx={{ p: 1, width: '15vh' }} elevation={3}>
+                <Paper sx={{ p: 1, width: '20vh' }} elevation={3}>
                   <Grid container columns={12} gap={1} sx={{ justifyContent: 'center' }}>
 
                     {props.children.map((c,i) => <Grid key={`${value}-${i}`} item xs={5} sx={{ textAlign: 'center' }}>

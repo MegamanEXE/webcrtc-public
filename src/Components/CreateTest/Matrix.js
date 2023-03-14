@@ -31,7 +31,7 @@ export default function Matrix(props) {
   const stageRef = useRef(null);
   const layerRef = useRef(null);
   
-  const matrix_size = 150;
+  const matrix_size = 125;
   const matrixNumber = props.id.split("-")[1]
   const MAGIC_BRUSH_SCALING_ENABLED = false;
   const scaleInc = 2;

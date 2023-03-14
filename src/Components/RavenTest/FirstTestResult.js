@@ -71,7 +71,7 @@ export default function FirstTestResult(props) {
       <Box className='resultsContainer'>
         <Typography sx={{ fontWeight:700, size: '24px'}}>First part of the test is complete! </Typography>
 
-        <Typography variant='h2' sx={{fontWeight: 800}}>RESULTS</Typography>
+        <Typography variant='h4' sx={{fontWeight: 800}}>RESULTS</Typography>
 
         <Typography variant='h5'>You got <strong>{results.current.score}/{results.current.totalQuestions}</strong> questions correct</Typography>
 

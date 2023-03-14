@@ -17,8 +17,14 @@ export default function CreateTestInstructions(props) {
           <br /><br />
 
           You only need to create the 3x3 question matrix, not the 8 solutions. You have 10 minutes.
-          <br />
+          <br /><br />
           Note: You can right-click a shape to delete it.
+          <br />
+          If you're used to the default shapes in the toolbox, you can use the "Magic Brush" tool to quickly
+          draw in shapes. 
+          <br />
+          You can also double-click a matrix to enlarge it for easier working.
+          
         </Box>
 
 
