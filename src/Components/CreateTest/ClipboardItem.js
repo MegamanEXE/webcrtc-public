@@ -14,7 +14,7 @@ export default function ClipboardItem(props){
   const data = props.data;
   const idx = parseInt(props.id.split('-')[1])
 
-  const matrix_size = 150;
+  const matrix_size = 125;
 
 
   const [hovered, setHovered] = useState(false);

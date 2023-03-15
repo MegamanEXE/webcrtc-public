@@ -248,7 +248,7 @@ export default function Toolbox(props) {
     // console.log(event.currentTarget)
     let type = event.currentTarget.attributes.shape.value;
 
-    const matrix_size = 150; //Match this up with matrix_size in Matrix.js. Not needed generally.
+    const matrix_size = 125; //Match this up with matrix_size in Matrix.js. Not needed generally.
 
     //Not needed apparently; Looks better without
     const randPadding = matrix_size/4;

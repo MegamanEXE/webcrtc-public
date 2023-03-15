@@ -41,6 +41,8 @@ export function ViewTestModal(props){
   const TEST_NAME = ["ravenTest","createTest"]
   const [toggleTest, setToggleTest] = useState(TEST_NAME[1]); //"ravenTest" or "createTest"
 
+  const matrix_size = 125;
+
 
   //LOAD IMAGES FROM API/mockTestResults_Images
   useEffect(() => {
@@ -163,7 +165,7 @@ export function ViewTestModal(props){
       si.push(<Grid item className="gridMatrix" key={`submission-${i}`} xs={3} >
         <Image src={imageData["createTest"].submission[`${i}`]} 
           bgColor={"lightgray"}
-          width="150px" height="150px"
+          width={matrix_size} height={matrix_size}
           style={{ border: '2px solid gray' }}
           alt={`subImage-${i}`}
           showLoading
@@ -303,7 +305,7 @@ export function ViewTestModal(props){
               >Switch to {toggleTest===TEST_NAME[0] ? 'Created Test' : 'Raven Test' }</Button>
               
               <Box flexGrow={1} sx={{display:'flex', flexDirection:'row'}}> 
-                <Box id="previewMatrix" style={{margin:'inherit'}}>
+                <Box id="previewMatrix" style={{margin:'inherit'}} p={4.5}>
                     {toggleTest===TEST_NAME[1] ? createTestImages() : ravenTest()}
                 </Box>
 

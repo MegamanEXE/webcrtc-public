@@ -32,7 +32,7 @@ export default function AdminMatrix(props) {
   // const stageSizeToggle = useRef(false);
   const [stageSizeToggle, setStageSizeToggle] = useState(true) //Here it's true by default
   
-  const matrix_size = 150;
+  const matrix_size = 125;
   const matrixNumber = props.id.split("-")[1]
   const MAGIC_BRUSH_SCALING_ENABLED = false;
   const scaleInc = 2;
