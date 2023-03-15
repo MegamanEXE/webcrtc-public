@@ -93,7 +93,7 @@ export default function ManageClients() {
   const selectableItems = () => {
     return clients.map((client, index) => (
       <ListItem
-        key={client}
+        key={index}
         secondaryAction={selectedClient === client && (<IconButton edge="end" onClick={() => handleDeleteClient(client, index)}><DeleteForeverIcon /></IconButton>)}
         disablePadding
       >
@@ -132,12 +132,11 @@ export default function ManageClients() {
 
   const testIDs = () => {
     const read = JSON.parse(selectedUser["test-IDs"]);
-    console.log(read)
+    if(!read) return;
+
     return read.map((t,i) => <>
-      <Link onClick={()=> {
+      <Link key={i} onClick={()=> {
         const temp = testDATA.find(rd => rd.id === t);
-        console.log(temp)
-        // setRowData(temp); 
         rowData.current = temp
         setModalOpen(true)}}
       >
