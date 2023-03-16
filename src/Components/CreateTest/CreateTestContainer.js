@@ -34,7 +34,7 @@ export default function CreateTestContainer() {
         <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', width: '100%' }}>
 
           <Box sx={{ display: 'flex', order: 1 }}>
-            <FirstTestHeader timer={600} timerStart={timerStart} onTimeUp={onTimeUp} />
+            <FirstTestHeader timer={1200} timerStart={timerStart} onTimeUp={onTimeUp} />
           </Box>
 
           <Box sx={{display:'flex', flexGrow:1, order:2}}>

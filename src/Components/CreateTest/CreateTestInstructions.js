@@ -16,7 +16,7 @@ export default function CreateTestInstructions(props) {
 
           <br /><br />
 
-          You only need to create the 3x3 question matrix, not the 8 solutions. You have 10 minutes.
+          You only need to create the 3x3 question matrix, not the 8 solutions. You have 20 minutes.
           <br /><br />
           Note: You can right-click a shape to delete it.
           <br />
