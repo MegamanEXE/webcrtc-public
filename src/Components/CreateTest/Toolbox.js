@@ -1,4 +1,4 @@
-import { Brush, Circle, CircleOutlined, ContentPaste, CopyAll, Delete, DiamondOutlined, DoNotDisturbAlt, Hexagon, HexagonOutlined, HighlightAlt, Icecream, LineStyle, Padding, RotateRight, SelectAll, Square, SquareOutlined, Texture } from "@mui/icons-material";
+import { Brush, Circle, CircleOutlined, ContentPaste, CopyAll, Delete, DiamondOutlined, DoNotDisturbAlt, Hexagon, HexagonOutlined, HighlightAlt, Icecream, LineStyle, Padding, RotateRight, SelectAll, ShapeLine, Square, SquareOutlined, Texture } from "@mui/icons-material";
 import { Button, Fade, Grid, IconButton, Menu, MenuItem, Paper, Popover, Popper, ToggleButton, Tooltip, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import produce from "immer";
@@ -270,7 +270,7 @@ export default function Toolbox(props) {
     
   }
 
-
+//TODO: MAKE S-SHAPED ICON
   return (
     <Box p={1.5} sx={{ height: '100%' }}>
       <Paper sx={{ height: '100%', p: 1.5 }}>
@@ -280,6 +280,7 @@ export default function Toolbox(props) {
             <ToggleButton size="large" value={SHAPE_TYPES.VERTICAL_LINE} shape={SHAPE_TYPES.VERTICAL_LINE} draggable onDragStart={handleDragStart} onClick={handleClick}><VerticalLineIcon /></ToggleButton>
             <ToggleButton size="large" value={SHAPE_TYPES.TILTED_LINE} shape={SHAPE_TYPES.TILTED_LINE} draggable onDragStart={handleDragStart} onClick={handleClick}><TiltedLineIcon /></ToggleButton>
             <ToggleButton size="large" value={SHAPE_TYPES.C_LINE} shape={SHAPE_TYPES.C_LINE} draggable onDragStart={handleDragStart} onClick={handleClick}> <CLineIcon /> </ToggleButton>
+            {/* <ToggleButton size="large" value={SHAPE_TYPES.S_LINE} shape={SHAPE_TYPES.S_LINE} draggable onDragStart={handleDragStart} onClick={handleClick}>S</ToggleButton> */}
             <ToggleButton size="large" value={SHAPE_TYPES.EIGHT_LINE} shape={SHAPE_TYPES.EIGHT_LINE} draggable onDragStart={handleDragStart} onClick={handleClick}><EightLineIcon /></ToggleButton>
           </CategoryButton>
 
@@ -356,7 +357,7 @@ export default function Toolbox(props) {
             <Tooltip title="Select" placement={tooltipPlace} arrow><ToggleButton size="large" value={TOOLS.SELECT} shape={TOOLS.SELECT} selected={props.tool === TOOLS.SELECT} onClick={handleBrush}><HighlightAlt /></ToggleButton></Tooltip>
             <Tooltip title="Brush" placement={tooltipPlace} arrow><ToggleButton size="large" value={TOOLS.NORMAL_BRUSH} shape={TOOLS.NORMAL_BRUSH} selected={props.tool === TOOLS.NORMAL_BRUSH} onClick={handleBrush}><Brush /></ToggleButton></Tooltip>
             <Tooltip title="Magic Brush" placement={tooltipPlace} arrow><ToggleButton size="large" value={TOOLS.MAGIC_BRUSH} shape={TOOLS.MAGIC_BRUSH} selected={props.tool === TOOLS.MAGIC_BRUSH} onClick={handleBrush}><RxMagicWand size={customIconSize} /></ToggleButton></Tooltip>
-            <Tooltip title="Delete" placement={tooltipPlace} arrow><ToggleButton disabled size="large" value={TOOLS.DELETE} shape={TOOLS.DELETE} selected={props.tool === TOOLS.DELETE} onClick={handleBrush}><Delete /></ToggleButton></Tooltip>
+            {/* <Tooltip title="Delete" placement={tooltipPlace} arrow><ToggleButton disabled size="large" value={TOOLS.DELETE} shape={TOOLS.DELETE} selected={props.tool === TOOLS.DELETE} onClick={handleBrush}><Delete /></ToggleButton></Tooltip> */}
 
           </Box>
 

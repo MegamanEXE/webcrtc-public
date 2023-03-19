@@ -15,25 +15,34 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import CountrySelect from './CountrySelect';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { enqueueSnackbar, useSnackbar } from 'notistack';
+
+
 
 const theme = crtcTheme();
 
 export default function SignUp() {
+    const navigate = useNavigate();
+    const { enqueueSnackbar } = useSnackbar();
+
     const handleSubmit = (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        console.log({
-            firstName: data.get('firstName'),
-            lastName: data.get('lastName'),
-            email: data.get('email'),
-            password: data.get('password'),
-            'confirm-password': data.get('confirm-password'),
-            age: age,
-            educationLevel: education,
-            country: country,
-            occupation: data.get('occupation')
+        // console.log({
+        //     firstName: data.get('firstName'),
+        //     lastName: data.get('lastName'),
+        //     email: data.get('email'),
+        //     password: data.get('password'),
+        //     'confirm-password': data.get('confirm-password'),
+        //     age: age,
+        //     educationLevel: education,
+        //     country: country,
+        //     occupation: data.get('occupation')
 
-        });
+        // });
+        enqueueSnackbar(`Account created`, { variant: 'success' }); //won't work, perhaps these should be combined into one container 
+        navigate('/', { replace: true });
     };
 
     const [education, setEducation] = useState('');
