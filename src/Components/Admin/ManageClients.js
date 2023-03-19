@@ -131,21 +131,21 @@ export default function ManageClients() {
   }
 
   const testIDs = () => {
-    const read = JSON.parse(selectedUser["test-IDs"]);
-    if(!read) return;
+    if (selectedUser["test-IDs"]) {
+      let read = JSON.parse(selectedUser["test-IDs"]);
 
-    return read.map((t,i) => <>
-      <Link key={i} onClick={()=> {
-        const temp = testDATA.find(rd => rd.id === t);
-        rowData.current = temp
-        setModalOpen(true)}}
-      >
+      return read.map((t, i) => <>
+        <Link key={i} onClick={() => {
+          const temp = testDATA.find(rd => rd.id === t);
+          rowData.current = temp
+          setModalOpen(true)
+        }}
+        >
           {t}
-      </Link>
-      {i !== read.length-1 ? ", " : null}
-       
-
-    </>);
+        </Link>
+        {i !== read.length - 1 ? ", " : null}
+      </>)
+    };
   }
 
   const generateDetails = () => {
