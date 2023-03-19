@@ -22,7 +22,7 @@ export default function FirstTest(props) {
   const [currentTestData, setCurrentTestData] = useState();
   
   const [questionNumber, setQuestionNumber] = useState(1);
-  const [selectedAnswer, setSelectedAnswer] = useState(-1);
+  const [selectedAnswer, setSelectedAnswer] = useState(null);
 
   const [progress, setProgress] = useState(0); //Progress bar
 
@@ -92,12 +92,19 @@ export default function FirstTest(props) {
     let qs = [];
     const qi = currentTestData["questions"][questionNumber - 1]["questionImages"];
     for (let k in qi){
-      qs.push(<ImageListItem border="4px dashed transparent" key={`q${k + 1}`} className="questionImage"><img src={qi[k]} alt={`q${k + 1}`} style={{width:85}} /></ImageListItem>);
+      qs.push(<ImageListItem key={`q${k + 1}`} className="questionImage">
+        <img src={qi[k]} alt={`q${k + 1}`} style={{ width: 85, border: "4px solid transparent" }} />
+      </ImageListItem>);
     }
 
     return <ImageList sx={{ overflow: 'hidden', }} cols={3} gap={20}>
       {qs}
-      <Box style={{ border: "4px dashed grey" }} key="filler"><img style={{ width: 85 }} className='questionImage' src={`${currentTestData["questions"][questionNumber - 1]["answerImages"][selectedAnswer]}`} alt="" /></Box>
+      <ImageListItem key="filler">
+        <img style={{ width: 85, border: "4px dashed grey"  }} 
+        className='questionImage' 
+        src={`${currentTestData["questions"][questionNumber - 1]["answerImages"][selectedAnswer]}`} 
+        alt="" />
+      </ImageListItem>
     </ImageList>
   }
 
@@ -105,7 +112,7 @@ export default function FirstTest(props) {
     let as = [];
     const ai = currentTestData["questions"][questionNumber - 1]["answerImages"];
     for (let k in ai) {
-      as.push(<AnswerOption key={`a${k + 1}`} src={ai[k]} id={`a${k + 1}`} selectedAnswer={selectedAnswer} setSelectedAnswer={setSelectedAnswer} />);
+      as.push(<AnswerOption key={k} src={ai[k]} id={k} selectedAnswer={selectedAnswer} setSelectedAnswer={setSelectedAnswer} />);
     }
 
     return <ImageList sx={{ overflow: 'hidden' }} cols={4} gap={16} >{as}</ImageList>
