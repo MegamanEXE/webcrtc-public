@@ -3,15 +3,31 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { DataGrid, GridToolbar, GridToolbarContainer, GridToolbarColumnsButton, GridToolbarFilterButton, GridToolbarDensitySelector, GridToolbarQuickFilter } from '@mui/x-data-grid';
 import mockResultData from '../../data/mockTestResults.json'
+import mockUserData from '../../data/mockUserData.json'
 import { Link } from 'react-router-dom';
-import { useState } from 'react';
-import { Button, IconButton, TextField } from '@mui/material';
+import { useEffect, useState } from 'react';
+import { Button, FormControl, IconButton, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 
 {/* TODO: Make ViewTest/Delete work when I actually make the component*/}
 
 
 export default function ViewDatabase() {
   const [decryptKeyInput, setDecryptKeyInput] = useState("");
+  const [DATA, setDATA] = useState(null);
+  const [dataToggle, setDataToggle] = useState("results"); //results or users
+
+  //LOAD DATA FROM API
+  useEffect(() => {
+    if(dataToggle === "results")
+      setDATA(mockResultData);
+    else if(dataToggle === "users")
+      setDATA(mockUserData);
+  }, [dataToggle]);
+
+  //UPDATE IN API HERE
+  useEffect(() => {
+    //Server code here 
+  }, [DATA]);
 
   const handleDecryption = (e) => {
     e.preventDefault();
@@ -54,6 +70,20 @@ export default function ViewDatabase() {
     { field: 'test', headerName: "Test", headerClassName: 'dataGridHeader', flex:1 },
     { field: 'action', headerName: 'Action', flex:1, renderCell:(row)=> viewDeleteColumn(row.row)}
   ]
+
+  const userColumns = [
+    { field: 'id', headerName: "ID", headerClassName: 'dataGridHeader' },
+    { field: 'name', headerName: "Name", headerClassName: 'dataGridHeader', flex: 1 },
+    { field: 'email', headerName: "Email", headerClassName: 'dataGridHeader', flex: 1.2 },
+    { field: 'age', headerName: "Age", headerClassName: 'dataGridHeader', type: 'number', headerAlign: 'left', align: 'left' },
+    { field: 'gender', headerName: "Gender", headerClassName: 'dataGridHeader' },
+    { field: 'country', headerName: "Country", headerClassName: 'dataGridHeader' },
+    { field: 'occupation', headerName: "Occupation", headerClassName: 'dataGridHeader', flex: 1 },
+    { field: 'education-level', headerName: 'Education Level', headerClassName: 'dataGridHeader', flex: 1 },
+    { field: 'client', headerName: "Client", headerClassName: 'dataGridHeader', flex: 1 },
+    { field: 'test-IDs', headerName: "Test-IDs", headerClassName: 'dataGridHeader', flex: 1 },
+  ]
+
   return (
     <Box className='ViewResultsContainer'>
       <Typography variant="h6">View Database</Typography>
@@ -66,14 +96,32 @@ export default function ViewDatabase() {
           label="Decryption Key" 
           size='small' 
           InputProps={{ endAdornment: <Button type="submit" variant='filled'>Decrypt</Button> }}/>
+
+        <FormControl style={{ float: 'right' }}  sx={{minWidth: 120 }} size="small">
+        <InputLabel id="demo-select-small">Table</InputLabel>
+        <Select           
+          labelId="demo-select-small"
+          id="demo-select-small"
+          value={dataToggle}
+          label="Table"
+          onChange={(e) => { setDataToggle(e.target.value) }}
+        >
+          <MenuItem value="results">Results</MenuItem>
+          <MenuItem value="users">Users</MenuItem>
+        </Select>
+        </FormControl>
         </Box>
+
+      
+
       <Box height={'73vh'} sx={{'& .MuiDataGrid-columnHeaderTitle':{fontWeight:600} }}>
-        <DataGrid 
-          rows={mockResultData} 
-          columns={columns} 
+        {DATA && <DataGrid 
+          rows={DATA} 
+          columns={dataToggle==="results" ? columns : userColumns} 
           components={{Toolbar: CustomToolbar}}
           componentsProps={{ toolbar:{showQuickFilter: true, quickFilterProps:{debounceMs:500}} }} 
           sx={{border:0}} />
+        }
       </Box>
     </Box>
   )
