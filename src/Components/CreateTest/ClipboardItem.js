@@ -47,7 +47,7 @@ export default function ClipboardItem(props){
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}>
 
-        <img src={props.src} id={props.id} alt="clipboard-item" width={matrix_size}  />
+        <img src={props.src} id={props.id} alt="clipboard-item" width={matrix_size-30}  />
 
         <Box 
           id="hoverDiv"
