@@ -132,19 +132,24 @@ export default function ManageClients() {
 
   const testIDs = () => {
     if (selectedUser["test-IDs"]) {
-      let read = JSON.parse(selectedUser["test-IDs"]);
+      try {
+        let read = JSON.parse(selectedUser["test-IDs"]);
 
-      return read.map((t, i) => <>
-        <Link key={i} onClick={() => {
-          const temp = testDATA.find(rd => rd.id === t);
-          rowData.current = temp
-          setModalOpen(true)
-        }}
-        >
-          {t}
-        </Link>
-        {i !== read.length - 1 ? ", " : null}
-      </>)
+        return read.map((t, i) => <>
+          <Link key={i} onClick={() => {
+            const temp = testDATA.find(rd => rd.id === t);
+            rowData.current = temp
+            setModalOpen(true)
+          }}
+          >
+            {t}
+          </Link>
+          {i !== read.length - 1 ? ", " : null}
+        </>)
+      } catch (e) {
+        console.log(e)
+      }
+
     };
   }
 

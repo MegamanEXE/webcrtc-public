@@ -26,7 +26,7 @@ export default function SignIn(props) {
       password: data.get('password'),
     };
     // console.log(formInput)
-    if(formInput.email === "admin" && formInput.password === "admin"){
+    if(formInput.email === "admin@crtc.com" && formInput.password === "admin"){
       navigate('/Admin',{replace:true} );
     } else {
       navigate('/FirstTest',{replace:true});

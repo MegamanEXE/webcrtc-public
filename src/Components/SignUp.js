@@ -188,6 +188,17 @@ export default function SignUp() {
                                 />
                             </Grid>
 
+                            <Grid item xs={12}>
+                                <TextField
+                                    autoComplete="client"
+                                    name="client"
+                                    fullWidth
+                                    id="client"
+                                    label="Institution"
+                                    placeholder="Leave blank if you're a private user"
+                                />
+                            </Grid>
+
                         </Grid>
                         <Button
                             type="submit"

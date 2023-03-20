@@ -13,7 +13,7 @@ import { styled } from '@mui/material/styles';
 
 import mockQuizQuestions from '../../data/mockQuizQuestions.json'
 import IntelligenceTest_template from '../../data/IntelligenceTest_template.json'
-import { Edit } from '@mui/icons-material';
+import { CheckCircle, Edit } from '@mui/icons-material';
 import TestModal from './TestModal';
 import produce from 'immer';
 import { useConfirm } from 'material-ui-confirm';
@@ -108,11 +108,15 @@ export default function IntelligenceTests() {
     setModalOpen(true)
   }
 
+  const setActiveTest = () => {
+    
+  }
+
   const selectableItems = () => {
     return tests.map((test, index) => (
       <ListItem
         key={test}
-        secondaryAction={selectedTestName === test && (<IconButton edge="end" onClick={deleteTest}><DeleteForeverIcon /></IconButton>)}
+        secondaryAction={selectedTestName === test && (<IconButton edge="end" onClick={setActiveTest}><CheckCircle/></IconButton>)}
         disablePadding
       >
         <ListItemButton
