@@ -148,6 +148,7 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
           }
 
           d.points = newPoints;
+          d.rotation = node.rotation();
 
         } else if ([SHAPE_TYPES.C_LINE, SHAPE_TYPES.S_LINE, SHAPE_TYPES.EIGHT_LINE,
         SHAPE_TYPES.FOLDED_RECT].includes(d.type)) {

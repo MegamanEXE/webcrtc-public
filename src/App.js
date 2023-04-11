@@ -3,19 +3,18 @@ import SignUp from "./Components/SignUp"
 import ForgotPassword from "./Components/ForgotPassword"
 import FirstTestContainer from "./Components/RavenTest/FirstTestContainer";
 import FirstTest from "./Components/RavenTest/FirstTest";
-import LayoutTest from "./Components/LayoutTest";
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
 import "@fontsource/roboto";
 import AdminContainer from "./Components/Admin/AdminContainer";
 import Debugger from "./Components/Admin/Debugger";
 import CreateTestContainer from "./Components/CreateTest/CreateTestContainer";
-import { UseServerContext } from "./UseServerContext";
+import { UseServerContext } from "./Components/UseServerContext";
 
 function App() {
   return (
     <>
-      <UseServerContext.Provider value={true}>
+      <UseServerContext.Provider value={{serverEnabled:true, serverAddress:'http://localhost:5000/'}}>
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<SignIn />} />

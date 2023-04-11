@@ -15,7 +15,7 @@ import mockQuizQuestions from "../../data/mockQuizQuestions.json"
 import { useContext, useEffect, useState } from 'react';
 import { useRef } from 'react';
 import axios from 'axios';
-import { UseServerContext } from '../../UseServerContext';
+import { UseServerContext } from '../UseServerContext';
 
 const theme = crtcTheme();
 
@@ -38,11 +38,11 @@ export default function FirstTest(props) {
 
   //Read from API
   useEffect(() => { 
-    if(useServer){
+    if(useServer.serverEnabled){
       console.log("Using server")
-      axios.get("http://localhost:5000/quizQuestions")
+      axios.get(useServer.serverAddress + "quizQuestions")
       .then(res => {
-        console.log(res)
+        // console.log(res)
         setDATA(res.data)
       })
     }
@@ -57,7 +57,7 @@ export default function FirstTest(props) {
   useEffect(() => { 
     if(DATA == null) return;
 
-    if(useServer)
+    if(useServer.serverEnabled)
       setCurrentTestData(DATA[0]["Standard APM Test"]);
     else
       setCurrentTestData(DATA["Standard APM Test"]);

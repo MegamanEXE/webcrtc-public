@@ -19,12 +19,12 @@ import { useConfirm } from 'material-ui-confirm';
 import { dblClick } from '@testing-library/user-event/dist/click';
 import { ViewTestModal } from './ViewTestModal';
 import { useRef } from 'react';
+import { useContext } from 'react';
+
+import { UseServerContext } from '../UseServerContext';
+import axios from 'axios';
 
 export default function ManageClients() {
-  // let clients = [`Dexter's Lab`, 'Bare Bears', 'Amazing World', 'Gravity Falls'];
-  // const candidatesSTATIC = ['Dexter', 'Dee Dee', 'Mandark'];
-
-
   const [DATA, setDATA] = useState([]);
 
   const [selectedClient, setSelectedClient] = useState("");
@@ -38,13 +38,35 @@ export default function ManageClients() {
 
   const [modalOpen, setModalOpen] = useState(false);
   const [testDATA, setTestDATA] = useState(null); //test view modal
-  // const [rowData, setRowData] = useState(null);
   const rowData = useRef(null);
+
+  const useServer = useContext(UseServerContext);
 
   //Read data from whereever
   useEffect(()=>{
-    setDATA(mockUserData);
-    setTestDATA(mockResultData);
+    if(useServer.serverEnabled){
+
+      console.log("Using server")
+      const addr = useServer.serverAddress;
+      
+      axios.get(addr+"userData")
+      .then(res => {
+        // console.log(res)
+        setDATA(res.data)
+      })
+
+      axios.get(addr+"testResults")
+      .then(res => {
+        // console.log(res)
+        setTestDATA(res.data)
+      })
+
+    } else {
+      setDATA(mockUserData);
+      setTestDATA(mockResultData);
+    }
+
+    
   },[]);
 
   //UPDATE API HERE
