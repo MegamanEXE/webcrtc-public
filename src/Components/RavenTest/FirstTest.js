@@ -12,13 +12,15 @@ import ImageListItem from '@mui/material/ImageListItem';
 import AnswerOption from './AnswerOption';
 
 import mockQuizQuestions from "../../data/mockQuizQuestions.json"
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useRef } from 'react';
+import axios from 'axios';
+import { UseServerContext } from '../../UseServerContext';
 
 const theme = crtcTheme();
 
 export default function FirstTest(props) {
-  const [DATA, setDATA] = useState({});
+  const [DATA, setDATA] = useState();
   const [currentTestData, setCurrentTestData] = useState();
   
   const [questionNumber, setQuestionNumber] = useState(1);
@@ -31,14 +33,35 @@ export default function FirstTest(props) {
   const userAnswers = props.userAnswers; //ref
   const results = props.results; //ref
 
-  let selectedAnswerURI = "";
+  const useServer = useContext(UseServerContext);
+
 
   //Read from API
-  useEffect(() => { setDATA(mockQuizQuestions); }, []);
+  useEffect(() => { 
+    if(useServer){
+      console.log("Using server")
+      axios.get("http://localhost:5000/quizQuestions")
+      .then(res => {
+        console.log(res)
+        setDATA(res.data)
+      })
+    }
+    else{
+      console.log("Using mock data")
+      setDATA(mockQuizQuestions);
+    }
+
+  }, []);
 
   //Load relevant test only
   useEffect(() => { 
-    setCurrentTestData(DATA["Standard APM Test"]); 
+    if(DATA == null) return;
+
+    if(useServer)
+      setCurrentTestData(DATA[0]["Standard APM Test"]);
+    else
+      setCurrentTestData(DATA["Standard APM Test"]);
+
   }, [DATA]);
 
   //Stuff to do when relevant data is loaded

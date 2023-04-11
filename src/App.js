@@ -10,21 +10,24 @@ import "@fontsource/roboto";
 import AdminContainer from "./Components/Admin/AdminContainer";
 import Debugger from "./Components/Admin/Debugger";
 import CreateTestContainer from "./Components/CreateTest/CreateTestContainer";
+import { UseServerContext } from "./UseServerContext";
 
 function App() {
   return (
     <>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<SignIn />} />
-          <Route path="/SignUp" element={<SignUp />} />
-          <Route path="/ForgotPassword" element={<ForgotPassword />} />
-          <Route path="/FirstTest" element={<FirstTestContainer />} />
-          <Route path="/Admin" element={<AdminContainer />} />
-          <Route path="/CreateTest" element={<CreateTestContainer />} />
-          <Route path="/Debug" element={<Debugger />} />
-        </Routes>
-      </BrowserRouter>
+      <UseServerContext.Provider value={true}>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<SignIn />} />
+            <Route path="/SignUp" element={<SignUp />} />
+            <Route path="/ForgotPassword" element={<ForgotPassword />} />
+            <Route path="/FirstTest" element={<FirstTestContainer />} />
+            <Route path="/Admin" element={<AdminContainer />} />
+            <Route path="/CreateTest" element={<CreateTestContainer />} />
+            <Route path="/Debug" element={<Debugger />} />
+          </Routes>
+        </BrowserRouter>
+      </UseServerContext.Provider>
     </>
   );
 }
