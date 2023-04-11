@@ -71,7 +71,7 @@ export default function ManageClients() {
 
   //UPDATE API HERE
   useEffect(() => {
-    
+    //sus, will be handled in respective functions I guess
   },[DATA])
 
   const handleListItemClick = (client) => {
@@ -81,11 +81,21 @@ export default function ManageClients() {
   const handleDeleteClient = (name, id) => {
     confirm({ title: 'Confirm Deletion', description: `Are you sure you want to delete the client: ${name}?` }
     ).then(() => {
+
       console.log(`Deleting id:${id}, ${name}`)
       setClients(clients.filter(c => c !== name));
+
       //Delete ID from API
       const newData = DATA.filter(r => r.client !== name)
       setDATA(newData);
+      
+      if(useServer.serverEnabled){
+        axios.post(useServer.serverAddress + "deleteClient", {clientName:name})
+          .then(res => {
+            console.log(res)
+          })
+      }
+
       enqueueSnackbar(`${name} deleted`,{variant:'success'});
     }).catch(() => {
       console.log('Deletion cancelled');
@@ -203,8 +213,18 @@ export default function ManageClients() {
   const deleteCurrentUser = () => {
     confirm({ title: 'Confirm Deletion', description: `Are you sure you want to delete the user: ${selectedUser["name"]}?` }
     ).then(() => {
+
       setDATA(DATA.filter(r => r["id"] !== selectedUser["id"]));
       setSelectedUser({});
+
+      //Delete from API
+      if(useServer.serverEnabled){
+        axios.post(useServer.serverAddress + "deleteUser", {userID:selectedUser["id"]})
+          .then(res => {
+            console.log(res)
+          })
+      }
+
 
       enqueueSnackbar(`${selectedUser["name"]} deleted`, { variant: 'success' });
     }).catch(() => {
