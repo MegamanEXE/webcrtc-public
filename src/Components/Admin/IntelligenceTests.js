@@ -72,6 +72,13 @@ export default function IntelligenceTests() {
     if(Object.keys(selectedTest).length === 0) return;
 
     setDATA({...DATA, [selectedTestName]:selectedTest});
+    //Update in API as well
+    if(useServer.serverEnabled){
+      axios.post(useServer.serverAddress + "updateIntelligenceTest", {selectedTest: selectedTest})
+      .then(res => {
+        console.log(res)
+      })
+    }
   },[selectedTest]);
 
 
