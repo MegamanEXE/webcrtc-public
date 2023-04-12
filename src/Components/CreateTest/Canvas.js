@@ -146,7 +146,14 @@ export default function Canvas(props) {
         <RightBar {...passProps} />
       </Box>
 
-    {modalOpen && <SubmitModal modalOpen={modalOpen} setModalOpen={setModalOpen} screenshots={screenshots} setTimerStart={props.setTimerStart} />}
+    {modalOpen && 
+      <SubmitModal 
+        modalOpen={modalOpen} setModalOpen={setModalOpen} 
+        screenshots={screenshots} 
+        shapes={shapes}
+        setTimerStart={props.setTimerStart}
+      
+      />}
     </Box>
     
     );

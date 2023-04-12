@@ -6,6 +6,9 @@ import Typography from '@mui/material/Typography';
 import { useState } from "react";
 import Image from "mui-image";
 import { CheckCircle } from "@mui/icons-material";
+import { useContext } from 'react';
+import { UseServerContext } from '../UseServerContext';
+import axios from 'axios';
 
 
 const style = {
@@ -22,7 +25,9 @@ const style = {
 
 export function SubmitModal(props){
   const [modalState, setModalState] = useState("submit"); //only "submit" or "thanks"
+  const useServer = useContext(UseServerContext);
   const screenshots = props.screenshots;
+  const shapes = props.shapes;
   const matrix_size = 125;
 
   const submissionimages = () => {
@@ -46,6 +51,14 @@ export function SubmitModal(props){
 
   const submitTest = () => {
     //update in API etc.
+    if(useServer.serverEnabled){
+      console.log("Using server")
+      
+      axios.post(useServer.serverAddress+"submitMatrix",{matrixData:shapes, user_id:-1, test_id:-1, screenshots:screenshots})
+      .then(res => {
+        console.log(res)
+      })
+    }
 
     setModalState("thanks");
   }

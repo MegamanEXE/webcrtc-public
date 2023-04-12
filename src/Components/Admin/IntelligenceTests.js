@@ -9,7 +9,6 @@ import IconButton from '@mui/material/IconButton';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { useEffect, useRef, useState } from 'react';
-import { styled } from '@mui/material/styles';
 
 import mockQuizQuestions from '../../data/mockQuizQuestions.json'
 import IntelligenceTest_template from '../../data/IntelligenceTest_template.json'

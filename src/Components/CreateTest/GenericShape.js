@@ -102,8 +102,11 @@ export default function GenericShape({ selectedShapeID, setSelectedShapeID, matr
     const shapeIdx = shapes.findIndex(s => s.id === id)
     if (shapeIdx !== -1) {
       setShapes(prevState => produce(prevState, (draft) => { //important distinction for future. Note the lack of { before produce(). If you put {, you'll most probably have to write prevState => {return produce(...)}
-        draft[matrixNumber][shapeIdx].x = e.target.x();
-        draft[matrixNumber][shapeIdx].y = e.target.y();
+        if(draft[matrixNumber][shapeIdx] !== undefined){ //extra error handling since there were rare bugs on these lines
+          draft[matrixNumber][shapeIdx].x = e.target.x();
+          draft[matrixNumber][shapeIdx].y = e.target.y();
+        }
+        
       }));
     }
 
