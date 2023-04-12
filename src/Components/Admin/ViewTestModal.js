@@ -18,6 +18,9 @@ import ReactPDF, { Page, pdf, Text, View } from "@react-pdf/renderer";
 import RavenTestResults from "./RavenTestResults";
 import produce from "immer";
 import { useConfirm } from "material-ui-confirm";
+import axios from 'axios';
+import { useContext } from 'react';
+import { UseServerContext } from "../UseServerContext";
 
 
 const style = {
@@ -37,19 +40,32 @@ export function ViewTestModal(props){
   const setDATA = props.setDATA; //for delete button
   const [imageData, setImageData] = useState(null);
   const confirm = useConfirm();
+  const useServer = useContext(UseServerContext);
 
   const TEST_NAME = ["ravenTest","createTest"]
   const [toggleTest, setToggleTest] = useState(TEST_NAME[1]); //"ravenTest" or "createTest"
+
 
   const matrix_size = 125;
 
 
   //LOAD IMAGES FROM API/mockTestResults_Images
   useEffect(() => {
-    //Get submission images only for the current row
-    const idx = mockTestResults_Images.findIndex(i => i.id === rowData.id);
-    setImageData(mockTestResults_Images[idx]);
-  }, [imageData]);
+    if (useServer.serverEnabled) {
+      console.log("Using server")
+      axios.get(useServer.serverAddress + "testResultsImages")
+        .then(res => {
+          console.log(res)
+          const idx = res.data.findIndex(i => i.id === rowData.id);
+          setImageData(res.data[idx]);
+        })
+
+    } else {
+      //Get submission images only for the current row
+      const idx = mockTestResults_Images.findIndex(i => i.id === rowData.id);
+      setImageData(mockTestResults_Images[idx]);
+    }
+  }, []);
 
   //MERGE IMAGES INTO ONE FOR EXPORT
   const handleExport = (popupState) => {
@@ -263,6 +279,13 @@ export function ViewTestModal(props){
       //Delete from mockTestResults_Images
       const idx = mockTestResults_Images.findIndex(i => i.id === rowData.id);
       // setImageData(mockTestResults_Images[idx]);
+
+      if (useServer.serverEnabled) {
+        axios.post(useServer.serverAddress + "deleteTest", {testID: rowData.id})
+          .then(res => {
+            console.log(res)
+          })
+      }
 
       props.setModalOpen(false);
     }).catch(() => {
