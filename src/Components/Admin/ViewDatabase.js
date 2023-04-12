@@ -5,9 +5,10 @@ import { DataGrid, GridToolbar, GridToolbarContainer, GridToolbarColumnsButton, 
 import mockResultData from '../../data/mockTestResults.json'
 import mockUserData from '../../data/mockUserData.json'
 import { Link } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Button, FormControl, IconButton, InputLabel, MenuItem, Select, TextField } from '@mui/material';
-
+import axios from 'axios';
+import { UseServerContext } from '../UseServerContext';
 {/* TODO: Make ViewTest/Delete work when I actually make the component*/}
 
 
@@ -15,13 +16,35 @@ export default function ViewDatabase() {
   const [decryptKeyInput, setDecryptKeyInput] = useState("");
   const [DATA, setDATA] = useState(null);
   const [dataToggle, setDataToggle] = useState("results"); //results or users
+  const useServer = useContext(UseServerContext);
+
 
   //LOAD DATA FROM API
   useEffect(() => {
-    if(dataToggle === "results")
-      setDATA(mockResultData);
-    else if(dataToggle === "users")
-      setDATA(mockUserData);
+    if(useServer.serverEnabled){
+      console.log("Using server")
+
+      if (dataToggle === "results"){
+        axios.get(useServer.serverAddress + "testResults")
+        .then(res => {
+          setDATA(res.data)
+        })
+      } else if (dataToggle === "users"){
+        axios.get(useServer.serverAddress + "userData")
+        .then(res => {
+          setDATA(res.data)
+        })
+      }
+
+    } else {
+      console.log("Using mock data")
+      if (dataToggle === "results")
+        setDATA(mockResultData);
+      else if (dataToggle === "users")
+        setDATA(mockUserData);
+    }
+
+    
   }, [dataToggle]);
 
   //UPDATE IN API HERE

@@ -9,6 +9,9 @@ import { useRef, useState } from 'react';
 import { useEffect } from 'react';
 import produce from 'immer';
 import { useConfirm } from 'material-ui-confirm';
+import { UseServerContext } from '../UseServerContext';
+import axios from 'axios';
+import { useContext } from 'react';
 
 
 export default function ViewTestResults() {
@@ -16,10 +19,22 @@ export default function ViewTestResults() {
   const [modalOpen, setModalOpen] = useState(false);
   const rowData = useRef(null);
   const confirm = useConfirm(); //Confirmation dialog
+  const useServer = useContext(UseServerContext);
+
 
   //LOAD DATA FROM API
   useEffect(() => {
-    setDATA(mockResultData);
+    if(useServer.serverEnabled){
+      console.log("Using server")
+      axios.get(useServer.serverAddress + "testResults")
+        .then(res => {
+          setDATA(res.data)
+        })
+
+    } else {
+      console.log("Using mock data")
+      setDATA(mockResultData);
+    }
   },[]);
 
   //UPDATE IN API HERE
@@ -40,6 +55,14 @@ export default function ViewTestResults() {
       //Delete from mockTestResults_Images
       // const idx = mockTestResults_Images.findIndex(i => i.id === rowData.id);
       // setImageData(mockTestResults_Images[idx]);
+
+      if (useServer.serverEnabled) {
+        axios.post(useServer.serverAddress + "deleteTest", {testID: row.id})
+          .then(res => {
+            console.log(res)
+          })
+      }
+
     }).catch(() => {
       console.log("Deletion cancelled");
     }
