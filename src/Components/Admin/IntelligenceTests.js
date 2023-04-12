@@ -8,7 +8,7 @@ import { Button, Card, CardActions, CardContent, CardHeader, ListItemButton, Tab
 import IconButton from '@mui/material/IconButton';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { styled } from '@mui/material/styles';
 
 import mockQuizQuestions from '../../data/mockQuizQuestions.json'
@@ -18,6 +18,9 @@ import TestModal from './TestModal';
 import produce from 'immer';
 import { useConfirm } from 'material-ui-confirm';
 import { useSnackbar } from 'notistack';
+import { UseServerContext } from '../UseServerContext';
+import axios from 'axios';
+import { useContext } from 'react';
 
 
 export default function IntelligenceTests() {
@@ -31,10 +34,29 @@ export default function IntelligenceTests() {
 
   const { enqueueSnackbar } = useSnackbar();
   const confirm = useConfirm();
+  const useServer = useContext(UseServerContext);
 
   //Read data from whereever
   useEffect(() => {
-    setDATA(mockQuizQuestions);
+    if (useServer.serverEnabled) {
+      console.log("Using server")
+      //I knew eventually that bad decision to make it an object instead of an array would catch up to me; Karma.
+      axios.get(useServer.serverAddress + "quizQuestions")
+        .then(res => {
+          let formattedResponse = {}; //to convert into the format specified in mockQuizQuestions.json
+          console.log(res.data)
+          let resData = res.data;
+          for(let r in resData){
+            delete resData[r]._id
+            formattedResponse = {...formattedResponse, ...resData[r]}
+            // console.log(formattedResponse)
+          }
+          setDATA(formattedResponse)
+        })
+
+    } else {
+      setDATA(mockQuizQuestions);
+    }
   }, []);
 
   //Returns unique test names from JSON data
@@ -51,6 +73,7 @@ export default function IntelligenceTests() {
 
     setDATA({...DATA, [selectedTestName]:selectedTest});
   },[selectedTest]);
+
 
   const handleListItemClick = (test) => {
     setSelectedTestName(test);
@@ -81,6 +104,12 @@ export default function IntelligenceTests() {
     template['test_name'] = addTestTextField;
     setDATA({...DATA, [addTestTextField]:template});
 
+    if (useServer.serverEnabled) {
+      axios.post(useServer.serverAddress + "addIntelligenceTest",{newName:addTestTextField, newData:template}).then(res => {
+        console.log(res)
+      });
+    }
+
     setAddTestTextField('');
   }
 
@@ -93,6 +122,12 @@ export default function IntelligenceTests() {
       setDATA(old => produce(old, d => {
         delete d[selectedTest['test_name']]
       }));
+
+      if (useServer.serverEnabled) {
+        axios.post(useServer.serverAddress + "deleteIntelligenceTest",{test_name:selectedTestName}).then(res => {
+          console.log(res)
+        });
+      }
 
       setSelectedTest({});
       enqueueSnackbar(`${selectedTest["test_name"]} deleted`, {variant:'success'});

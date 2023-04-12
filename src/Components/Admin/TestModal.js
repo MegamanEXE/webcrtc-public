@@ -11,6 +11,9 @@ import TestModalSettings from './TestModalSettings';
 import TestModalMatrix from './TestModalMatrix';
 import { useEffect, useRef, useState } from 'react';
 import { DrawMatrixModal } from './Admin_CreateTestModal/DrawMatrixModal';
+import axios from 'axios';
+import { useContext } from 'react';
+import { UseServerContext } from '../UseServerContext';
 
 const style = {
   position: 'absolute',
@@ -34,6 +37,8 @@ export default function TestModal({ setModalOpen, modalOpen, selectedTest,  setS
 
   let firstTimeOpened = useRef(false); 
   let unalteredTestData = useRef(selectedTest); //if modifications are not saved
+  const useServer = useContext(UseServerContext);
+  
   useEffect(() => {
     if(!firstTimeOpened.current){
       firstTimeOpened.current = true;
@@ -59,6 +64,15 @@ export default function TestModal({ setModalOpen, modalOpen, selectedTest,  setS
     if(locRef.current){
       setSelectedTest({ ...selectedTest, loc_name:locRef.current });
     }
+
+    if(useServer.serverEnabled){
+      axios.post(useServer.serverAddress + "updateIntelligenceTest", {selectedTest: selectedTest})
+      .then(res => {
+        console.log(res)
+      })
+    }
+
+
     setModalOpen(false);
   }
 

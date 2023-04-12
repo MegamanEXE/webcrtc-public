@@ -50,15 +50,38 @@ export default function TestModalMatrix(props) {
 
   //HANDLE QUESTION UPLOAD
   const handleQUpload = (e, i) => {
-    console.log(e,i)
     let uploadedImage = e.target.files[0];
-    setQMatrix({ ...qMatrix, [`${i}`]: URL.createObjectURL(uploadedImage) });
+    // setQMatrix({ ...qMatrix, [`${i}`]: URL.createObjectURL(uploadedImage) });
+
+    //Uploads as base64 image, no URLs involved
+    const reader = new FileReader();
+    reader.readAsDataURL(uploadedImage);
+    reader.onload = function () {
+      const base64String = reader.result;
+      console.log(base64String)
+      setQMatrix({ ...qMatrix, [`${i}`]:base64String });
+    };
+    reader.onerror = function (error) {
+      console.log('Error: ', error);
+    };
   }
 
   //HANDLE ANSWER UPLOAD
   const handleAUpload = (e, i) => {
     let uploadedImage = e.target.files[0];
-    setAMatrix({ ...aMatrix, [`${i}`]: URL.createObjectURL(uploadedImage) });
+    // setAMatrix({ ...aMatrix, [`${i}`]: URL.createObjectURL(uploadedImage) });
+
+    //Uploads as base64 image, no URLs involved
+    const reader = new FileReader();
+    reader.readAsDataURL(uploadedImage);
+    reader.onload = function () {
+      const base64String = reader.result;
+      console.log(base64String)
+      setQMatrix({ ...aMatrix, [`${i}`]:base64String });
+    };
+    reader.onerror = function (error) {
+      console.log('Error: ', error);
+    };
   }
   //Yes, these two above could be merged with one extra param, I just like to be more explicit like this
 
