@@ -11,15 +11,19 @@ import { Button, Checkbox, Divider, ListItemButton, ListItemIcon, TextField } fr
 import IconButton from '@mui/material/IconButton';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import { useEffect, useLayoutEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { enqueueSnackbar, useSnackbar } from 'notistack';
 
 
 import componentLibraries from '../../data/componentLibraries.json'
 import componentLibrary_template from '../../data/componentLibrary_template.json' //use to create new LoC
 
+import axios from 'axios';
+import { UseServerContext } from '../UseServerContext';
+
 import { useConfirm } from 'material-ui-confirm';
 import produce from 'immer';
+import { useContext } from 'react';
 
 export default function ManageLoCs() {
   const [DATA, setDATA] = useState([]);
@@ -39,14 +43,44 @@ export default function ManageLoCs() {
   const { enqueueSnackbar } = useSnackbar(); //Little alerts that show on the bottom left
   const confirm = useConfirm(); //Confirmation dialog
 
+  const useServer = useContext(UseServerContext);
+
+  
 
   //Read data from whereever
   useEffect(()=>{
-    setDATA(componentLibraries);
+    if(useServer.serverEnabled){
+      console.log("Using server")
+      axios.get(useServer.serverAddress + "componentLibraries")
+      .then(res => {
+        console.log(res)
+        setDATA(res.data)
+      })
+    }
+    else{
+      console.log("Using mock data")
+      setDATA(componentLibraries);
+    }
+
   },[]);
 
   //UPDATE API HERE
+
+  //used to skip the call to backend on the first 3 renders; one when empty, one when data is loaded for the first time
+  //To be honest, I don't know when the 3rd render occurs, but putting 3 here makes it work expectedly
+  const renderCount = useRef(0) 
   useEffect(() => {
+    if(useServer.serverEnabled){
+      if(renderCount.current < 3){
+        renderCount.current += 1;
+        return;
+      }
+
+      axios.post(useServer.serverAddress + "updateLoC", {selectedLoC: selectedLoC})
+      .then(res => {
+        console.log(res)
+      })
+    }
 
   }, [DATA])
 
@@ -94,8 +128,13 @@ export default function ManageLoCs() {
       setDATA(DATA.filter(r => r["loc_name"] !== name));
 
       //Delete ID from API
-      const newData = DATA.filter(r => r["loc_name"] !== name)
-      setDATA(newData);
+      if(useServer.serverEnabled){
+        axios.post(useServer.serverAddress + "deleteLoC", {loc_name:name})
+          .then(res => {
+            console.log(res)
+          })
+      }
+
       enqueueSnackbar(`${name} deleted`, { variant: 'success' });
     }).catch(() => {
       console.log('Deletion cancelled');
@@ -115,13 +154,22 @@ export default function ManageLoCs() {
       return;
     }
     setLoCs([...LoCs, addLoCTextField]);
-    //Add to API as well
-    setDATA([...DATA,
-    {
+
+    const newLoC = {
       id: DATA.length + 1,
       loc_name: addLoCTextField,
       components: componentLibrary_template.components
-    }]);
+    }
+
+    //Add to API as well
+    setDATA([...DATA,newLoC]);
+
+    if(useServer.serverEnabled){
+      axios.post(useServer.serverAddress + "addLoC", {newLoC:newLoC})
+        .then(res => {
+          console.log(res)
+        })
+    }
 
     console.log(`Adding ${addLoCTextField}`);
     setAddLoCTextField('');
@@ -177,6 +225,7 @@ export default function ManageLoCs() {
       setSubcomponents(Object.keys(selectedLoC["components"][c]["shapes"])); // Name and shame this heckin line of code that consumed half a day of my life
       markEnabledSubcomponents(c);
     }
+
 
     //Component updated in API/view here
     const updateComponentInAPI = (c, newChecked) => {
