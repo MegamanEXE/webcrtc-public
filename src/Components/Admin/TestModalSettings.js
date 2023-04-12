@@ -2,10 +2,13 @@ import { Accordion, AccordionDetails, AccordionSummary, Chip, FormControl, FormL
 import { Box } from "@mui/system";
 import { useState } from "react";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import componentLibraries from '../../data/componentLibraries.json'
+import mockComponentLibraries from '../../data/componentLibraries.json'
 import mockQuizQuestions from '../../data/mockQuizQuestions.json'
 import { useEffect } from "react";
 import produce from "immer";
+import { UseServerContext } from '../UseServerContext';
+import axios from 'axios';
+import { useContext } from 'react';
 
 
 
@@ -19,7 +22,42 @@ export default function TestModalSettings(props) {
   const selectedTest = props.selectedTest;
   const setSelectedTest = props.setSelectedTest;
 
-  const API = mockQuizQuestions; //change source in production
+  const useServer = useContext(UseServerContext);
+
+  // const API = mockQuizQuestions; //change source in production
+  const [API, setAPI] = useState({});
+  const [componentLibraries, setComponentLibraries] = useState(null)
+
+  //Copied from IntelligenceTests.js
+  //Read data from wherever
+  useEffect(() => {
+    if (useServer.serverEnabled) {
+      console.log("Using server")
+      //Questions
+      axios.get(useServer.serverAddress + "quizQuestions")
+        .then(res => {
+          let formattedResponse = {}; //to convert into the format specified in mockQuizQuestions.json
+          console.log(res.data)
+          let resData = res.data;
+          for(let r in resData){
+            delete resData[r]._id
+            formattedResponse = {...formattedResponse, ...resData[r]}
+            // console.log(formattedResponse)
+          }
+          setAPI(formattedResponse)
+
+          //LoCs
+          axios.get(useServer.serverAddress + "componentLibraries")
+            .then(res => {
+              setComponentLibraries(res.data)
+            })
+        })
+
+    } else {
+      setAPI(mockQuizQuestions);
+      setComponentLibraries(mockComponentLibraries)
+    }
+  }, []);
 
   //INITIALLY USE VALUES FROM API
   useEffect(() => {
@@ -31,7 +69,7 @@ export default function TestModalSettings(props) {
 
   //LoCs DROPDOWN
   const populateLoCs = () => {
-    return componentLibraries.map(loc => <MenuItem key={loc['loc_name']} value={loc['loc_name']}>{loc["loc_name"]}</MenuItem>);
+    return mockComponentLibraries.map(loc => <MenuItem key={loc['loc_name']} value={loc['loc_name']}>{loc["loc_name"]}</MenuItem>);
   }
 
   //DERIVE FROM DROPDOWN
