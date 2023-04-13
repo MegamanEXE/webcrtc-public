@@ -77,7 +77,7 @@ export default function TestModalMatrix(props) {
     reader.onload = function () {
       const base64String = reader.result;
       console.log(base64String)
-      setQMatrix({ ...aMatrix, [`${i}`]:base64String });
+      setAMatrix({ ...aMatrix, [`${i}`]:base64String });
     };
     reader.onerror = function (error) {
       console.log('Error: ', error);

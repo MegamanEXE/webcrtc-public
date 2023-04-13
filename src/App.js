@@ -14,7 +14,7 @@ import { UseServerContext } from "./Components/UseServerContext";
 function App() {
   return (
     <>
-      <UseServerContext.Provider value={{serverEnabled:true, serverAddress:'http://localhost:5000/'}}>
+      <UseServerContext.Provider value={{serverEnabled:false, serverAddress:'http://localhost:5000/'}}>
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<SignIn />} />
