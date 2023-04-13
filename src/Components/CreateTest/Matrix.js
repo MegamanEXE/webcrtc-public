@@ -6,7 +6,6 @@ import produce from "immer";
 import { nanoid } from "nanoid";
 import { DEFAULTS, LIMITS, SHAPE_TYPES, TOOLS } from "./ShapesData";
 import GenericShape from "./GenericShape";
-// import GestureRecognizer from '@2players/dollar1-unistroke-recognizer'
 import { ShapeGestures } from "./ShapeGestures";
 import { PDollarRecognizer } from "./PDollar";
 import { ShapeObject } from "./ShapeObjects";
